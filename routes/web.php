@@ -20,7 +20,8 @@ Route::get('language/{language}', [\App\Http\Controllers\LanguageController::cla
 Route::get('/order/create/{celebration}', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/celebrations/{celebration}', [\App\Http\Controllers\CelebrationController::class, 'show'])->name('celebrations.show');
-
+Route::get('/terms', [\App\Http\Controllers\LegalController::class, 'showTerms'])->name('terms.show');
+Route::get('/privacy-policy', [\App\Http\Controllers\LegalController::class, 'showPrivacyPolicy'])->name('policy.show');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

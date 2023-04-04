@@ -97,7 +97,7 @@
         @yield('content')
     </main>
 </div>
-<footer class="text-center py-4 bg-light">
+<footer class="text-center py-4 bg-light fixed-bottom">
     <div class="container">
         <p>&copy; {{ date('Y') }} Ваш проект. Все права защищены.</p>
     </div>
