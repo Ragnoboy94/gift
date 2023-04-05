@@ -34,5 +34,4 @@ return [
             "Emphasize individuality and attention to details",
         ],
     ],
-    // Add other holidays similarly
 ];

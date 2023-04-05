@@ -4,6 +4,13 @@
     <main>
         <div class="container">
             <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>{{ __('messages.hello') }}</h1>
+                    <p>{{ __('messages.welcome_text') }}</p>
+                </div>
+            </div>
+
+            <div class="row">
                 @foreach ($celebrations as $key => $celebration)
                     <div class="col-md-4">
                         <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#celebrationModal{{$key}}">
@@ -56,7 +63,29 @@
                                                 @endforeach
                                             </ul>
                                             @if (Auth::check())
-                                                <a href="{{ route('order.create', ['celebration' => $key]) }}" class="btn btn-primary">Оформить заказ</a>
+                                                <form method="POST" action="{{ route('order.create', ['celebration' => $key]) }}">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <label for="sum">{{ __('messages.budget') }}</label>
+                                                        <input type="number" name="sum" id="sum" class="form-control" required>
+                                                    </div>
+
+                                                    @if ($celebration['name'] !== '8 марта')
+                                                        <div class="form-group">
+                                                            <label for="gender">{{ __('messages.select_gender') }}</label>
+                                                            <select name="gender" id="gender" class="form-control" required>
+                                                                <option value="male">{{ __('messages.male') }}</option>
+                                                                <option value="female">{{ __('messages.female') }}</option>
+                                                            </select>
+                                                        </div>
+                                                    @endif
+                                                    <div class="form-group">
+                                                        <label for="hobby">{{ __('messages.hobby') }}</label>
+                                                        <textarea name="hobby" id="hobby" class="form-control"></textarea>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary mt-1">{{ __('messages.order_button') }}</button>
+                                                </form>
+
                                             @else
                                                 <a href="{{ route('login') }}" class="btn btn-primary">{{ __('messages.inter_order') }}</a>
                                             @endif

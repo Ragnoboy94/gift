@@ -1,12 +1,13 @@
 <x-guest-layout>
-    <x-language-switcher></x-language-switcher>
+    <x-navbar></x-navbar>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+
         </x-slot>
 
         <x-authentication-card-tabs></x-authentication-card-tabs>
-
     </x-authentication-card>
+    <x-footer></x-footer>
+
 </x-guest-layout>
 

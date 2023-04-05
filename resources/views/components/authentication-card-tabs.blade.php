@@ -11,33 +11,31 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div>
-                <x-label for="email" value="{{ __('auth.email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <div class="mb-3">
+                <label for="email" class="form-label">{{ __('auth.email') }}</label>
+                <input id="email" class="form-control" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username">
             </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('auth.password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+            <div class="mb-3">
+                <label for="password" class="form-label">{{ __('auth.password') }}</label>
+                <input id="password" class="form-control" type="password" name="password" required autocomplete="current-password">
             </div>
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">{{ __('auth.remember_me') }}</span>
-                </label>
+            <div class="mb-3 form-check">
+                <input type="checkbox" id="remember_me" name="remember" class="form-check-input">
+                <label class="form-check-label" for="remember_me">{{ __('auth.remember_me') }}</label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="d-flex justify-content-between">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                    <a class="text-decoration-none text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 me-3" href="{{ route('password.request') }}">
                         {{ __('auth.forgot_password') }}
                     </a>
                 @endif
 
-                <x-button class="ml-4">
+                <button type="submit" class="btn btn-primary">
                     {{ __('auth.login') }}
-                </x-button>
+                </button>
             </div>
         </form>
     </div>
@@ -45,51 +43,47 @@
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
-            <div>
-                <x-label for="name" value="{{ __('auth.name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <div class="mb-3">
+                <label for="name" class="form-label">{{ __('auth.name') }}</label>
+                <input id="name" class="form-control" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name">
             </div>
 
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('auth.email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <div class="mb-3">
+                <label for="email" class="form-label">{{ __('auth.email') }}</label>
+                <input id="email" class="form-control" type="email" name="email" value="{{ old('email') }}" required autocomplete="username">
             </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('auth.password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+            <div class="mb-3">
+                <label for="password" class="form-label">{{ __('auth.password') }}</label>
+                <input id="password" class="form-control" type="password" name="password" required autocomplete="new-password">
             </div>
 
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('auth.confirm_password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">{{ __('auth.confirm_password') }}</label>
+                <input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password">
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
+                <div class="mb-3 form-check">
 
-                            <div class="ml-2">
-                                {!! __('messages.i_agree_to_terms_and_privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('messages.terms_of_service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('messages.privacy_policy').'</a>',
-                                ]) !!}
-                            </div>
-                        </div>
-                    </x-label>
-                </div>
+                        <input type="checkbox" name="terms" id="terms" class="form-check-input" required>
+                        <label class="form-check-label ms-2" for="terms">
+                            {!! __('messages.i_agree_to_terms_and_privacy_policy', [
+                                    'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="text-decoration-none text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('messages.terms_of_service').'</a>',
+                                    'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="text-decoration-none text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('messages.privacy_policy').'</a>',
+                            ]) !!}
+                        </label>
+                    </div>
             @endif
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <div class="d-flex justify-content-between mt-4">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 me-3" href="{{ route('login') }}">
                     {{ __('auth.already_registered') }}
                 </a>
 
-                <x-button class="ml-4">
+                <button type="submit" class="btn btn-primary">
                     {{ __('auth.register') }}
-                </x-button>
+                </button>
             </div>
         </form>
     </div>
