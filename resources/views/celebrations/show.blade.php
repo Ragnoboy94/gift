@@ -11,21 +11,25 @@
                             <img
                                 src="{{ asset('images/' . $celebration['image']) }}"
                                 srcset="{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_small.jpg') }} 320w,
-    {{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_medium.jpg') }} 768w,
-    {{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_large.jpg') }} 1200w"
+{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_medium.jpg') }} 768w,
+{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_large.jpg') }} 1200w"
                                 sizes="(max-width: 767px) 320px,
-       (max-width: 1199px) 768px,
-       1200px"
+   (max-width: 1199px) 768px,
+   1200px"
                                 alt="{{ $celebration['name'] }}"
                                 class="img-fluid"
                             >
                         </div>
                         <div class="col-md-6">
-                            <h2>{{ $celebration['name'] }}</h2>
                             <p>{{ $celebration['description'] }}</p>
+                            <p><b>{{ __('messages.plus') }}:</b></p>
+                            <ul>
+                                @foreach ($celebration['benefits'] as $benefit)
+                                    <li>{{ $benefit }}</li>
+                                @endforeach
+                            </ul>
                             @if (Auth::check())
-                                <a href="{{ route('order.create', ['celebration' => $celebration['id']]) }}"
-                                   class="btn btn-primary">Оформить заказ</a>
+                                <a href="{{ route('order.create', ['celebration' => $key]) }}" class="btn btn-primary">Оформить заказ</a>
                             @else
                                 <a href="{{ route('login') }}" class="btn btn-primary">{{ __('messages.inter_order') }}</a>
                             @endif

@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Подарки на праздники</title>
+    <title>Сервис подарков</title>
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 
     <!-- Styles -->

@@ -14,4 +14,5 @@ return [
     'i_agree_to_terms_and_privacy_policy' => 'Я согласен с :terms_of_service и :privacy_policy',
     'terms_of_service' => 'Условия использования',
     'privacy_policy' => 'Политика конфиденциальности',
+    "plus" => 'Плюсы',
 ];

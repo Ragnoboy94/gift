@@ -14,4 +14,5 @@ return [
     'i_agree_to_terms_and_privacy_policy' => 'I agree to the :terms_of_service and :privacy_policy',
     'terms_of_service' => 'Terms of Service',
     'privacy_policy' => 'Privacy Policy',
+    "plus" => 'Advantages',
 ];
