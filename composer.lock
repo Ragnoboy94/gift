@@ -4,8 +4,79 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4858145dfa5f8b9ec35a3bd7f5beca5",
+    "content-hash": "af40f3469b7b5c498d22487256c98b26",
     "packages": [
+        {
+            "name": "artesaos/seotools",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/artesaos/seotools.git",
+                "reference": "38b1153b7de3cc00b4b62cf39bc19c567cb7da5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/artesaos/seotools/zipball/38b1153b7de3cc00b4b62cf39bc19c567cb7da5e",
+                "reference": "38b1153b7de3cc00b4b62cf39bc19c567cb7da5e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "illuminate/config": "5.8.* || ^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0",
+                "illuminate/support": "5.8.* || ^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0",
+                "php": ">=7.1|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.8.4 || ^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+                "phpspec/phpspec": "~5.1.1 || ^6.0 || ^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Artesaos\\SEOTools\\Providers\\SEOToolsServiceProvider"
+                    ],
+                    "aliases": {
+                        "SEOMeta": "Artesaos\\SEOTools\\Facades\\SEOMeta",
+                        "OpenGraph": "Artesaos\\SEOTools\\Facades\\OpenGraph",
+                        "Twitter": "Artesaos\\SEOTools\\Facades\\TwitterCard",
+                        "JsonLd": "Artesaos\\SEOTools\\Facades\\JsonLd",
+                        "SEO": "Artesaos\\SEOTools\\Facades\\SEOTools"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Artesaos\\SEOTools\\": "src/SEOTools/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vinicius",
+                    "email": "luiz.vinicius73@gmail.com"
+                }
+            ],
+            "description": "SEO Tools for Laravel and Lumen",
+            "keywords": [
+                "JSON-LD",
+                "laravel",
+                "lumen",
+                "metatags",
+                "opengraph",
+                "seo",
+                "seotools",
+                "webmaster"
+            ],
+            "support": {
+                "issues": "https://github.com/artesaos/seotools/issues",
+                "source": "https://github.com/artesaos/seotools"
+            },
+            "time": "2023-02-15T12:13:16+00:00"
+        },
         {
             "name": "bacon/bacon-qr-code",
             "version": "2.0.8",
@@ -5809,6 +5880,74 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.6"
             },
             "time": "2023-01-03T09:29:04+00:00"
+        },
+        {
+            "name": "torann/laravel-meta-tags",
+            "version": "3.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Torann/laravel-meta-tags.git",
+                "reference": "bd6ad602c3ea05f427e5f62ea65649a6ae0be6c9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Torann/laravel-meta-tags/zipball/bd6ad602c3ea05f427e5f62ea65649a6ae0be6c9",
+                "reference": "bd6ad602c3ea05f427e5f62ea65649a6ae0be6c9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": ">=5.1",
+                "illuminate/support": ">=5.1",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.4",
+                "phpstan/phpstan": "^0.12.14",
+                "phpunit/phpunit": "~5.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Torann\\LaravelMetaTags\\MetaTagsServiceProvider"
+                    ],
+                    "aliases": {
+                        "MetaTag": "Torann\\LaravelMetaTags\\Facades\\MetaTag"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Torann\\LaravelMetaTags\\": "src/Torann/LaravelMetaTags/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lito",
+                    "email": "lito@eordes.com"
+                },
+                {
+                    "name": "Daniel Stainback",
+                    "email": "daniel@lyften.com"
+                }
+            ],
+            "description": "A package to manage Header Meta Tags",
+            "keywords": [
+                "head",
+                "laravel",
+                "meta",
+                "meta tags",
+                "tags"
+            ],
+            "support": {
+                "source": "https://github.com/Torann/laravel-meta-tags/tree/3.0.9"
+            },
+            "time": "2021-02-23T14:38:25+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

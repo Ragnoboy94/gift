@@ -35,6 +35,7 @@
                         class="img-fluid d-none d-md-block"
                     >
                 </picture>
+                <p>{{ $celebration->description }}</p>
 
             </div>
         </div>
@@ -52,9 +53,9 @@
                 const map = new ymaps.Map('map', {
                     center: defaultCoords,
                     zoom: 14,
-                    controls: ['zoomControl']
+                    controls: ['zoomControl'],
                 });
-
+                map.options.set('suppressMapOpenBlock', true);
                 const placemark = new ymaps.Placemark(defaultCoords, {}, {
                     draggable: true
                 });
@@ -73,6 +74,17 @@
                     const address = geocode.geoObjects.get(0).properties.get('text');
                     addressInput.value = address;
                     map.setCenter(coords);
+                });
+
+                map.events.add('click', async (e) => {
+                    const coords = e.get('coords');
+                    const geocode = await ymaps.geocode(coords);
+                    const nearest = geocode.geoObjects.get(0);
+                    const nearestCoords = nearest.geometry.getCoordinates();
+                    const address = nearest.properties.get('text');
+                    placemark.geometry.setCoordinates(nearestCoords);
+                    addressInput.value = address;
+                    map.setCenter(nearestCoords);
                 });
             }
         </script>

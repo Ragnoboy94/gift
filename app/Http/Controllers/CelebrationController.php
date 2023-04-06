@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 
 class CelebrationController extends Controller
@@ -10,8 +11,15 @@ class CelebrationController extends Controller
     {
         // Загрузка информации о празднике из базы данных или другого источника
         $celebrationData = $this->getCelebrationData($celebration);
-        $celebrations = trans('celebrations');
-        return view('celebrations.show', ['celebration' => $celebrationData,'celebrations' => $celebrations]);
+        $currentLanguage = app()->getLocale();
+        SEOMeta::setDescription($celebrationData['description']);
+        if ($currentLanguage === 'en') {
+            SEOMeta::setKeywords(['gifts', 'celebration', $celebrationData['name']]);
+        } else {
+            SEOMeta::setKeywords(['подарки', 'праздник', $celebrationData['name']]);
+        }
+
+        return view('celebrations.show', ['celebration' => $celebrationData]);
     }
 
     private function getCelebrationData($celebration)

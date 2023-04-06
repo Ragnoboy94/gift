@@ -184,7 +184,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Livewire\LivewireServiceProvider::class,
-
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -214,7 +214,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'SEOMeta' => Artesaos\SEOTools\Facades\SEOMeta::class,
     ])->toArray(),
 
 ];
