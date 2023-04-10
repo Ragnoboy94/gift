@@ -11,7 +11,7 @@
             </div>
 
             <div class="row">
-                @foreach ($celebrations as $key => $celebration)
+                @foreach ($celebrations_3 as $key => $celebration)
                     <div class="col-md-4">
                         <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#celebrationModal{{$key}}">
                             <img
