@@ -65,7 +65,10 @@ class HomeController extends Controller
     {
         $city_id = session('city_id');
         $city_name = City::find($city_id);
-        $orders = \App\Models\Order::where('city_id', $city_id)->get();
-        return view('elf_dashboard', compact('orders','city_name'));
+        $user_id = auth()->id();
+        $orders = \App\Models\Order::where('city_id', $city_id)
+            ->where('user_id', '!=', $user_id) // исключаем заказы пользователя
+            ->get();
+        return view('elf_dashboard', compact('orders', 'city_name'));
     }
 }
