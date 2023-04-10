@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use Artesaos\SEOTools\Facades\SEOMeta;
-use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
 
 class HomeController extends Controller
@@ -60,5 +60,12 @@ class HomeController extends Controller
             SEOMeta::setKeywords(['подарки', 'сервис подарков', 'уникальный подарок', 'сюрприз', 'праздник', $holidayKeywords]);
         }
         return view('home', ['celebrations_3' => $displayedHolidays]);
+    }
+    public function elfDashboard()
+    {
+        $city_id = session('city_id');
+        $city_name = City::find($city_id);
+        $orders = \App\Models\Order::where('city_id', $city_id)->get();
+        return view('elf_dashboard', compact('orders','city_name'));
     }
 }

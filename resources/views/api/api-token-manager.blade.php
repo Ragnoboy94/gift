@@ -2,25 +2,26 @@
     <!-- Generate API Token -->
     <x-form-section submit="createApiToken">
         <x-slot name="title">
-            {{ __('Create API Token') }}
+            {{ __('api-tokens.create_api_token') }}
         </x-slot>
 
         <x-slot name="description">
-            {{ __('API tokens allow third-party services to authenticate with our application on your behalf.') }}
+            {{ __('api-tokens.api_tokens_allow') }}
         </x-slot>
 
         <x-slot name="form">
-            <!-- Token Name -->
+            <!-- Имя токена -->
             <div class="col-span-6 sm:col-span-4">
-                <x-label for="name" value="{{ __('Token Name') }}" />
-                <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="createApiTokenForm.name" autofocus />
-                <x-input-error for="name" class="mt-2" />
+                <x-label for="name" value="{{ __('api-tokens.token_name') }}"/>
+                <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="createApiTokenForm.name"
+                         autofocus/>
+                <x-input-error for="name" class="mt-2"/>
             </div>
 
-            <!-- Token Permissions -->
+            <!-- Разрешения токена -->
             @if (Laravel\Jetstream\Jetstream::hasPermissions())
                 <div class="col-span-6">
-                    <x-label for="permissions" value="{{ __('Permissions') }}" />
+                    <x-label for="permissions" value="{{ __('api-tokens.permissions') }}"/>
 
                     <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach (Laravel\Jetstream\Jetstream::$permissions as $permission)
@@ -36,134 +37,138 @@
 
         <x-slot name="actions">
             <x-action-message class="mr-3" on="created">
-                {{ __('Created.') }}
+                {{ __('api-tokens.created') }}
             </x-action-message>
 
             <x-button>
-                {{ __('Create') }}
+                {{ __('api-tokens.create') }}
             </x-button>
         </x-slot>
     </x-form-section>
-
     @if ($this->user->tokens->isNotEmpty())
-        <x-section-border />
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2>{{ __('api-tokens.manage_api_tokens') }}</h2>
+                    <p>{{ __('api-tokens.api_tokens_allow') }}</p>
 
-        <!-- Manage API Tokens -->
-        <div class="mt-10 sm:mt-0">
-            <x-action-section>
-                <x-slot name="title">
-                    {{ __('Manage API Tokens') }}
-                </x-slot>
-
-                <x-slot name="description">
-                    {{ __('You may delete any of your existing tokens if they are no longer needed.') }}
-                </x-slot>
-
-                <!-- API Token List -->
-                <x-slot name="content">
-                    <div class="space-y-6">
+                    <!-- Список API-токенов -->
+                    <div class="mt-3">
                         @foreach ($this->user->tokens->sortBy('name') as $token)
-                            <div class="flex items-center justify-between">
-                                <div class="break-all">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="text-break">
                                     {{ $token->name }}
                                 </div>
 
-                                <div class="flex items-center ml-2">
+                                <div class="d-flex align-items-center">
                                     @if ($token->last_used_at)
-                                        <div class="text-sm text-gray-400">
-                                            {{ __('Last used') }} {{ $token->last_used_at->diffForHumans() }}
+                                        <div class="text-muted small">
+                                            {{ __('api-tokens.last_used') }} {{ $token->last_used_at->diffForHumans() }}
+                                        </div>
+                                    @else
+                                        <div class="text-muted small">
+                                            {{ __('api-tokens.never_used') }}
                                         </div>
                                     @endif
 
                                     @if (Laravel\Jetstream\Jetstream::hasPermissions())
-                                        <button class="cursor-pointer ml-6 text-sm text-gray-400 underline" wire:click="manageApiTokenPermissions({{ $token->id }})">
-                                            {{ __('Permissions') }}
+                                        <button class="btn btn-link text-decoration-underline p-0 ms-3 small"
+                                                wire:click="manageApiTokenPermissions({{ $token->id }})">
+                                            {{ __('api-tokens.permissions') }}
                                         </button>
                                     @endif
-
-                                    <button class="cursor-pointer ml-6 text-sm text-red-500" wire:click="confirmApiTokenDeletion({{ $token->id }})">
-                                        {{ __('Delete') }}
+                                    <button class="btn btn-link text-danger p-0 ms-3 small"
+                                            wire:click="confirmApiTokenDeletion({{ $token->id }})">
+                                        {{ __('api-tokens.delete') }}
                                     </button>
                                 </div>
                             </div>
                         @endforeach
                     </div>
-                </x-slot>
-            </x-action-section>
+                </div>
+            </div>
         </div>
     @endif
 
-    <!-- Token Value Modal -->
-    <x-dialog-modal wire:model="displayingToken">
-        <x-slot name="title">
-            {{ __('API Token') }}
-        </x-slot>
-
-        <x-slot name="content">
-            <div>
-                {{ __('Please copy your new API token. For your security, it won\'t be shown again.') }}
+    <!-- Модальное окно API-токена -->
+    <div class="modal{{ $displayingToken ? ' show d-block' : '' }}" tabindex="-1" wire:model="displayingToken">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('api-tokens.api_token') }}</h5>
+                    <button type="button" class="btn-close" wire:click="$set('displayingToken', false)"
+                            wire:loading.attr="disabled"></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ __('api-tokens.api_text') }}</p>
+                    <input x-ref="plaintextToken" type="text" readonly wire:model.defer="plainTextToken"
+                           class="mt-4 bg-light px-4 py-2 rounded font-mono text-sm text-muted w-100 text-break"
+                           autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                           @showing-token-modal.window="setTimeout(() => $refs.plaintextToken.select(), 250)">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" wire:click="$set('displayingToken', false)"
+                            wire:loading.attr="disabled">{{ __('api-tokens.close') }}</button>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <x-input x-ref="plaintextToken" type="text" readonly :value="$plainTextToken"
-                class="mt-4 bg-gray-100 px-4 py-2 rounded font-mono text-sm text-gray-500 w-full break-all"
-                autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                @showing-token-modal.window="setTimeout(() => $refs.plaintextToken.select(), 250)"
-            />
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-secondary-button wire:click="$set('displayingToken', false)" wire:loading.attr="disabled">
-                {{ __('Close') }}
-            </x-secondary-button>
-        </x-slot>
-    </x-dialog-modal>
-
-    <!-- API Token Permissions Modal -->
-    <x-dialog-modal wire:model="managingApiTokenPermissions">
-        <x-slot name="title">
-            {{ __('API Token Permissions') }}
-        </x-slot>
-
-        <x-slot name="content">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                @foreach (Laravel\Jetstream\Jetstream::$permissions as $permission)
-                    <label class="flex items-center">
-                        <x-checkbox wire:model.defer="updateApiTokenForm.permissions" :value="$permission"/>
-                        <span class="ml-2 text-sm text-gray-600">{{ $permission }}</span>
-                    </label>
-                @endforeach
+    <!-- Модальное окно разрешений API-токена -->
+    <div class="modal{{ $managingApiTokenPermissions ? ' show d-block' : '' }}" tabindex="-1"
+         wire:model="managingApiTokenPermissions">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('api-tokens.api_token_permissions') }}</h5>
+                    <button type="button" class="btn-close" wire:click="$set('managingApiTokenPermissions', false)"
+                            wire:loading.attr="disabled"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        @foreach (Laravel\Jetstream\Jetstream::$permissions as $permission)
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="{{ $permission }}"
+                                           wire:model="updateApiTokenForm.permissions" value="{{ $permission }}">
+                                    <label class="form-check-label" for="{{ $permission }}">{{ $permission }}</label>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            wire:click="$set('managingApiTokenPermissions', false)"
+                            wire:loading.attr="disabled">{{ __('api-tokens.cancel') }}</button>
+                    <button type="button" class="btn btn-primary" wire:click="updateApiToken"
+                            wire:loading.attr="disabled">{{ __('api-tokens.save') }}</button>
+                </div>
             </div>
-        </x-slot>
+        </div>
+    </div>
 
-        <x-slot name="footer">
-            <x-secondary-button wire:click="$set('managingApiTokenPermissions', false)" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
+    <!-- Модальное окно подтверждения удаления токена -->
+    <div class="modal{{ $confirmingApiTokenDeletion ? ' show d-block' : '' }}" tabindex="-1"
+         wire:model="confirmingApiTokenDeletion">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('api-tokens.delete_api_token') }}</h5>
+                    <button type="button" class="btn-close" wire:click="$toggle('confirmingApiTokenDeletion')"
+                            wire:loading.attr="disabled"></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ __('api-tokens.confirm_delete_token') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" wire:click="$toggle('confirmingApiTokenDeletion')"
+                            wire:loading.attr="disabled">{{ __('api-tokens.cancel') }}</button>
+                    <button type="button" class="btn btn-danger" wire:click="deleteApiToken"
+                            wire:loading.attr="disabled">{{ __('api-tokens.delete') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <x-button class="ml-3" wire:click="updateApiToken" wire:loading.attr="disabled">
-                {{ __('Save') }}
-            </x-button>
-        </x-slot>
-    </x-dialog-modal>
-
-    <!-- Delete Token Confirmation Modal -->
-    <x-confirmation-modal wire:model="confirmingApiTokenDeletion">
-        <x-slot name="title">
-            {{ __('Delete API Token') }}
-        </x-slot>
-
-        <x-slot name="content">
-            {{ __('Are you sure you would like to delete this API token?') }}
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-secondary-button wire:click="$toggle('confirmingApiTokenDeletion')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
-
-            <x-danger-button class="ml-3" wire:click="deleteApiToken" wire:loading.attr="disabled">
-                {{ __('Delete') }}
-            </x-danger-button>
-        </x-slot>
-    </x-confirmation-modal>
 </div>

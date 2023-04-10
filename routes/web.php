@@ -17,6 +17,7 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('h
 Route::get('/celebrations/{celebration}', [\App\Http\Controllers\CelebrationController::class, 'show'])->name('celebrations.show');
 Route::get('/terms', [\App\Http\Controllers\LegalController::class, 'showTerms'])->name('terms.show');
 Route::get('/privacy-policy', [\App\Http\Controllers\LegalController::class, 'showPrivacyPolicy'])->name('policy.show');
+Route::get('/become-elf', [\App\Http\Controllers\ElfController::class,'showBecomeElfForm'])->name('become-elf');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -26,6 +27,8 @@ Route::middleware([
     Route::get('/order/confirmation/{orderId}', [\App\Http\Controllers\OrderController::class, 'confirmation'])->name('order.confirmation');
     Route::post('/order/confirm/{orderId}', [\App\Http\Controllers\OrderController::class, 'confirm'])->name('order.confirm');
     Route::post('/order/create/{celebration}', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
+    Route::post('/become-elf',  [\App\Http\Controllers\ElfController::class,'becomeElf'])->name('become-elf.submit');
+    Route::get('/elf-dashboard', [App\Http\Controllers\HomeController::class, 'elfDashboard'])->name('elf-dashboard');
 });
 Route::get('/order/confirm/{orderId}', function () {
     return view('errors.403');

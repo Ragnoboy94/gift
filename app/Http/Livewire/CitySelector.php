@@ -6,17 +6,17 @@ use Livewire\Component;
 
 class CitySelector extends Component
 {
-    public $city;
+    public $city_id;
 
     public function mount()
     {
-        $this->city = session('city');
+        $this->city_id = session('city_id');
     }
 
-    public function setCity($city)
+    public function setCity($city_id)
     {
-        $this->city = $city;
-        session(['city' => $city]);
+        $this->city_id = $city_id;
+        session(['city_id' => $city_id]);
     }
 
     public function render()

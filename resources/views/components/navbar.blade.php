@@ -57,6 +57,15 @@
                         @endforeach
                     </ul>
                 </li>
+                @if (Auth::user() && Auth::user()->is_elf)
+                    <li class="nav-item">
+                        <a href="{{ route('elf-dashboard') }}" class="btn btn-outline-link mt-3">Дела для эльфа</a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a href="{{ route('become-elf') }}" class="btn btn-outline-link mt-3">Стать эльфом</a>
+                    </li>
+                @endif
             </ul>
 
 

@@ -23,6 +23,8 @@ class CreateOrdersTable extends Migration
             $table->string('address')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('celebration_id')->references('id')->on('celebrations')->onDelete('cascade');
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
         });
     }
 
