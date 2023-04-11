@@ -15,6 +15,9 @@ class Order extends Model
         'hobby',
         'user_id',
         'celebration_id',
+        'apartment',
+        'floor',
+        'intercom',
     ];
 
     public function user()

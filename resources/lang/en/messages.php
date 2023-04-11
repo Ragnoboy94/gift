@@ -52,5 +52,8 @@ return [
     'proceed_to_payment' => 'Proceed to Payment',
     'forbidden' => 'Access Denied',
     'forbidden_text' => 'To access this page, you must be logged in and have the necessary permissions.',
-
+    'apartment' => 'Apartment',
+    'floor' => 'Floor',
+    'intercom' => 'Do you have intercom?',
+    'phone' => ' Enter your phone number.',
 ];

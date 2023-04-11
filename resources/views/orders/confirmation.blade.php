@@ -11,21 +11,49 @@
                     <li>{{ __('messages.gender1') }}: {{ __('messages.' . $order->gender) }}</li>
                     <li>{{ __('messages.hobby1') }}: {{ $order->hobby }}</li>
                 </ul>
-                <form method="POST" action="{{ route('order.confirm', ['orderId' => $order->id]) }}">
+                <form method="POST" action="{{ route('order.confirm', ['orderId' => $order->id]) }}" onsubmit="return checkCity()">
                     @csrf
-                    <div class="form-group">
-                        <label for="address">{{ __('messages.address') }}</label>
-                        <input type="text" name="address" id="address" class="form-control" required>
+                    <div class="row">
+                        <div class="col-md-8 form-group">
+                            <label for="address">{{ __('messages.address') }}</label>
+                            <input type="text" name="address" id="address" class="form-control" required>
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <label for="apartment">{{ __('messages.apartment') }}</label>
+                            <input type="text" name="apartment" id="apartment" class="form-control">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="floor">{{ __('messages.floor') }}</label>
+                            <input type="number" name="floor" id="floor" class="form-control">
+                        </div>
                     </div>
+                    <div class="form-check form-group">
+                        <input class="form-check-input" type="checkbox" name="intercom" id="intercom">
+                        <label class="form-check-label" for="intercom">{{ __('messages.intercom') }}</label>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="form-group">
+                            <label for="phone">{{ __('messages.phone') }}</label>
+                            <input type="text" value="{{$user->phone}}" name="phone" id="phone" placeholder="В формате +7XXX., 8XXX., 7XXX." class="form-control" required pattern="[+]?[78]\d{10}">
+                        </div>
+                        @if ($errors->any())
+                            <div class="text-danger">
+                                    {{ $errors->first('phone') }}
+                            </div>
+                        @endif
+                    </div>
+                    <input type="hidden" name="city" id="city">
                     <div id="map" style="width: 100%; height: 400px;"></div>
                     @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! \Illuminate\Support\Facades\Auth::user()->hasVerifiedEmail())
                         <button type="button" class="btn btn-sm btn-outline-primary rounded-md" data-bs-toggle="modal" data-bs-target="#emailVerificationModal">
                             {{ __('auth.verify_email') }}
                         </button>
                     @else
-                    <button type="submit" class="btn btn-primary mt-1">{{ __('messages.proceed_to_payment') }}</button>
+                        <button type="submit" class="btn btn-primary mt-1">{{ __('messages.proceed_to_payment') }}</button>
                     @endif
                 </form>
+
+
             </div>
             <div class="col-md-6">
                 <picture>
@@ -67,7 +95,18 @@
         <script src="https://api-maps.yandex.ru/2.1/?apikey=470ab6bb-6d83-4388-8f3d-248d94a6a16f&lang=ru_RU" type="text/javascript"></script>
         <script type="text/javascript">
             ymaps.ready(init);
-
+            async function getCityFromGeocode(geocode) {
+                const locality = geocode.geoObjects.get(0).properties.get('metaDataProperty.GeocoderMetaData.Address.Components').find(component => component.kind === 'locality');
+                return locality ? locality.name : null;
+            }
+            function checkCity() {
+                const cityInput = document.getElementById('city');
+                if (!cityInput.value) {
+                    alert('Убедитесь, что адрес есть на карте!');
+                    return false;
+                }
+                return true;
+            }
             function init() {
                 const addressInput = document.getElementById('address');
                 const defaultCoords = [55.753215, 37.622504]; // Москва, Кремль
@@ -86,6 +125,8 @@
                 addressInput.addEventListener('change', async () => {
                     const geocode = await ymaps.geocode(addressInput.value);
                     const coords = geocode.geoObjects.get(0).geometry.getCoordinates();
+                    const city = await getCityFromGeocode(geocode);
+                    document.getElementById('city').value = city;
                     placemark.geometry.setCoordinates(coords);
                     map.setCenter(coords);
                 });
@@ -94,6 +135,8 @@
                     const coords = placemark.geometry.getCoordinates();
                     const geocode = await ymaps.geocode(coords);
                     const address = geocode.geoObjects.get(0).properties.get('text');
+                    const city = await getCityFromGeocode(geocode);
+                    document.getElementById('city').value = city;
                     addressInput.value = address;
                     map.setCenter(coords);
                 });
@@ -104,11 +147,14 @@
                     const nearest = geocode.geoObjects.get(0);
                     const nearestCoords = nearest.geometry.getCoordinates();
                     const address = nearest.properties.get('text');
+                    const city = await getCityFromGeocode(geocode);
+                    document.getElementById('city').value = city; // установка города в скрытое поле
                     placemark.geometry.setCoordinates(nearestCoords);
                     addressInput.value = address;
                     map.setCenter(nearestCoords);
                 });
             }
+
         </script>
     @endpush
 
