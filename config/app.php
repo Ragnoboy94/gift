@@ -188,7 +188,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        App\Providers\PHPMailerServiceProvider::class,
         /*
          * Application Service Providers...
          */

@@ -41,5 +41,5 @@ return [
 'enable' => 'Enable',
 'disable' => 'Disable',
     'confirm_password_text' => 'For your security, please confirm your password to continue.',
-
+    'check_email_for_verification_link' => 'Check that the email address is correct',
 ];

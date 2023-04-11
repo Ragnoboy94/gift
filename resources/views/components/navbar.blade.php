@@ -98,15 +98,15 @@
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item" href="{{ route('profile.show') }}">{{ __('Profile') }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.show') }}">{{ __('app.profile') }}</a></li>
                                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                    <li><a class="dropdown-item" href="{{ route('api-tokens.index') }}">{{ __('API Tokens') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('api-tokens.index') }}">{{ __('api-tokens.api_token') }}</a></li>
                                 @endif
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="dropdown-item">{{ __('Log Out') }}</button>
+                                        <button type="submit" class="dropdown-item">{{ __('messages.log_out') }}</button>
                                     </form>
                                 </li>
                             </ul>

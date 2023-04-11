@@ -18,7 +18,13 @@
                         <input type="text" name="address" id="address" class="form-control" required>
                     </div>
                     <div id="map" style="width: 100%; height: 400px;"></div>
+                    @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! \Illuminate\Support\Facades\Auth::user()->hasVerifiedEmail())
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-md" data-bs-toggle="modal" data-bs-target="#emailVerificationModal">
+                            {{ __('auth.verify_email') }}
+                        </button>
+                    @else
                     <button type="submit" class="btn btn-primary mt-1">{{ __('messages.proceed_to_payment') }}</button>
+                    @endif
                 </form>
             </div>
             <div class="col-md-6">
@@ -40,7 +46,23 @@
             </div>
         </div>
     </div>
-
+    <!-- Модальное окно подтверждения email -->
+    <div class="modal fade" id="emailVerificationModal" tabindex="-1" aria-labelledby="emailVerificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailVerificationModalLabel">{{ __('auth.verify_email') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('session.cancel') }}"></button>
+                </div>
+                <div class="modal-body">
+                    @livewire('profile.update-profile-information-form')
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('session.cancel') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
     @push('scripts')
         <script src="https://api-maps.yandex.ru/2.1/?apikey=470ab6bb-6d83-4388-8f3d-248d94a6a16f&lang=ru_RU" type="text/javascript"></script>
         <script type="text/javascript">

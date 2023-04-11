@@ -38,4 +38,5 @@ return [
     'enable' => 'Включить',
     'disable' => 'Выключить',
     'confirm_password_text' => 'Для обеспечения безопасности, пожалуйста, подтвердите свой пароль.',
+    'check_email_for_verification_link' => 'Проверьте, что email указан верно',
 ];

@@ -10,4 +10,5 @@ return [
     'remember_me' => 'Запомнить меня',
     'forgot_password' => 'Забыли пароль?',
     'already_registered' => 'Уже зарегистрированы?',
+    'verify_email' => 'Подтвердите Email',
 ];

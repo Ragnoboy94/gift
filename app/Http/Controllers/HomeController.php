@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Illuminate\Support\Facades\Auth;
 use Nette\Utils\DateTime;
 
 class HomeController extends Controller
 {
     public function index()
     {
-
         $celebrations = trans('celebrations');
 
         // Получение текущей даты
