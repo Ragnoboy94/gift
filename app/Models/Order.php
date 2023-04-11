@@ -27,6 +27,6 @@ class Order extends Model
 
     public function celebration()
     {
-        return Celebration::findOrFail($this->celebration_id);
+        return $this->belongsTo(Celebration::class);
     }
 }

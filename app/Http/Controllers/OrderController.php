@@ -83,4 +83,20 @@ class OrderController extends Controller
 
         return redirect()->route('payment', ['orderId' => $order->id]);
     }
+    public function getOrdersByCity($city_name)
+    {
+        $city = City::where('name_ru', $city_name)->first();
+        $user_id = auth()->id();
+
+
+        if ($city) {
+            $orders = \App\Models\Order::where('city_id', $city->id)
+                ->where('user_id', '!=', $user_id)
+                ->with(['user', 'celebration'])
+                ->get();
+            return response()->json($orders);
+        }
+
+        return response()->json([]);
+    }
 }

@@ -17,6 +17,6 @@ class ElfController extends Controller
         $user->is_elf = true;
         $user->save();
 
-        return redirect()->route('home')->with('status', 'Поздравляем, теперь вы эльф!');
+        return redirect()->route('elf-dashboard')->with('status', 'Поздравляем, теперь вы эльф!');
     }
 }

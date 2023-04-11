@@ -36,6 +36,8 @@ Route::middleware([
     'is_elf'
 ])->group(function () {
     Route::get('/elf-dashboard', [App\Http\Controllers\HomeController::class, 'elfDashboard'])->name('elf-dashboard');
+    Route::get('/get-orders-by-city/{city_name}', [\App\Http\Controllers\OrderController::class, 'getOrdersByCity']);
+
 });
 Route::get('/order/confirm/{orderId}', function () {
     return view('errors.403');
