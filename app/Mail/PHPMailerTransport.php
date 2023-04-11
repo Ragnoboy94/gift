@@ -33,7 +33,7 @@ class PHPMailerTransport extends AbstractTransport
             $this->mailer->Host       = env('MAIL_HOST', 'smtp.mail.ru');
             $this->mailer->Username   = env('MAIL_USERNAME', 'still-1994@mail.ru');
             $this->mailer->Password   = env('MAIL_PASSWORD', 'GmR39mEVyzqqyKg9Wswr');
-            $this->mailer->Port       = env('MAIL_PORT', 465);
+            $this->mailer->Port       = env('MAIL_PORT', 587);
             $this->mailer->SMTPAuth   = true;
             $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             // Recipients
