@@ -11,6 +11,11 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // Проверяем, существует ли сессионное значение 'city_id'
+        if (!session()->has('city_id')) {
+            // Если значение отсутствует, устанавливаем его
+            session(['city_id' => 1]);
+        }
         $celebrations = trans('celebrations');
 
         // Получение текущей даты
