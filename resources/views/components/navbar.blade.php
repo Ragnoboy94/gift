@@ -59,7 +59,7 @@
                 </li>
                 @if (Auth::user() && Auth::user()->is_elf)
                     <li class="nav-item">
-                        <a href="{{ route('elf-dashboard') }}" class="btn btn-outline-link mt-3">Дела для эльфа<svg style="margin-left: -23px;margin-top: -19px;"
+                        <a href="{{ route('elf-dashboard') }}" class="btn btn-outline-link mt-3">{{__('app.work_elf')}}<svg style="margin-left: -22px;margin-top: -22px;"
                                 version="1.1"
                                 id="svg2"
                                 width="40.980652"
@@ -235,7 +235,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href="{{ route('become-elf') }}" class="btn btn-outline-link mt-3">Стать эльфом<svg style="margin-left: -23px;margin-top: -19px;"
+                        <a href="{{ route('become-elf') }}" class="btn btn-outline-link mt-3">{{__('app.be_elf')}}<svg style="margin-left: -20px;margin-top: -22px;"
                                 version="1.1"
                                 id="svg2"
                                 width="40.980652"

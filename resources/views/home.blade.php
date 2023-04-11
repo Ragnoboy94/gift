@@ -55,7 +55,7 @@
                                             >
                                         </div>
                                         <div class="col-md-6">
-                                            <p>{{ $celebration['description'] }}</p>
+                                            <p class="lead">{{ $celebration['description'] }}</p>
                                             <p><b>{{ __('messages.plus') }}:</b></p>
                                             <ul>
                                                 @foreach ($celebration['benefits'] as $benefit)

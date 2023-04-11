@@ -32,8 +32,10 @@
                     var firstGeoObject = res.geoObjects.get(0);
                     var map = new ymaps.Map("map", {
                         center: firstGeoObject.geometry.getCoordinates(),
-                        zoom: 10
+                        zoom: 10,
+                        controls: ['zoomControl'],
                     });
+                    map.options.set('suppressMapOpenBlock', true);
                 });
 
             // Добавляем метки заказов на карту

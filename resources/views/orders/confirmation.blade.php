@@ -3,15 +3,36 @@
 @section('content')
     <div class="container">
         <h1>{{ __('messages.order_confirmation') }}</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <p>{{ __('messages.order_summary') }}:</p>
-                <ul>
-                    <li>{{ __('messages.budget1') }}: {{ $order->sum }}</li>
-                    <li>{{ __('messages.gender1') }}: {{ __('messages.' . $order->gender) }}</li>
-                    <li>{{ __('messages.hobby1') }}: {{ $order->hobby }}</li>
-                </ul>
-                <form method="POST" action="{{ route('order.confirm', ['orderId' => $order->id]) }}" onsubmit="return checkCity()">
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <picture>
+                        <source media="(min-width: 768px)"
+                                srcset="{{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_medium.jpg') }} 768w,
+            {{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_large.jpg') }} 1200w"
+                                sizes="(max-width: 1199px) 768px,
+            1200px"
+                        >
+                        <img
+                            src="{{ asset('images/' . $celebration->image) }}"
+                            alt="{{ $celebration->name }}"
+                            class="img-fluid d-none d-md-block"
+                        >
+                    </picture>
+                </div>
+                <div class="col-md-8">
+                    <p class="lead ms-3">{{ $celebration->description }}</p>
+                    <p class="lead ms-3">{{ __('messages.order_summary') }}:</p>
+                    <ul class="lead ms-3">
+                        <li>{{ __('messages.budget1') }}: {{ $order->sum }}</li>
+                        <li>{{ __('messages.gender1') }}: {{ __('messages.' . $order->gender) }}</li>
+                        <li>{{ __('messages.hobby1') }}: {{ $order->hobby }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('order.confirm', ['orderId' => $order->id]) }}"
+                      onsubmit="return checkCity()">
                     @csrf
                     <div class="row">
                         <div class="col-md-8 form-group">
@@ -34,71 +55,62 @@
                     <div class="row mb-2">
                         <div class="form-group">
                             <label for="phone">{{ __('messages.phone') }}</label>
-                            <input type="text" value="{{$user->phone}}" name="phone" id="phone" placeholder="В формате +7XXX., 8XXX., 7XXX." class="form-control" required pattern="[+]?[78]\d{10}">
+                            <input type="text" value="{{$user->phone}}" name="phone" id="phone"
+                                   placeholder="В формате +7XXX., 8XXX., 7XXX." class="form-control" required
+                                   pattern="[+]?[78]\d{10}">
                         </div>
                         @if ($errors->any())
                             <div class="text-danger">
-                                    {{ $errors->first('phone') }}
+                                {{ $errors->first('phone') }}
                             </div>
                         @endif
                     </div>
                     <input type="hidden" name="city" id="city">
                     <div id="map" style="width: 100%; height: 400px;"></div>
                     @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! \Illuminate\Support\Facades\Auth::user()->hasVerifiedEmail())
-                        <button type="button" class="btn btn-sm btn-outline-primary rounded-md" data-bs-toggle="modal" data-bs-target="#emailVerificationModal">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-md" data-bs-toggle="modal"
+                                data-bs-target="#emailVerificationModal">
                             {{ __('auth.verify_email') }}
                         </button>
                     @else
-                        <button type="submit" class="btn btn-primary mt-1">{{ __('messages.proceed_to_payment') }}</button>
+                        <button type="submit"
+                                class="btn btn-primary mt-1">{{ __('messages.proceed_to_payment') }}</button>
                     @endif
                 </form>
-
-
-            </div>
-            <div class="col-md-6">
-                <picture>
-                    <source media="(min-width: 768px)"
-                            srcset="{{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_medium.jpg') }} 768w,
-            {{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_large.jpg') }} 1200w"
-                            sizes="(max-width: 1199px) 768px,
-            1200px"
-                    >
-                    <img
-                        src="{{ asset('images/' . $celebration->image) }}"
-                        alt="{{ $celebration->name }}"
-                        class="img-fluid d-none d-md-block"
-                    >
-                </picture>
-                <p>{{ $celebration->description }}</p>
-
             </div>
         </div>
     </div>
     <!-- Модальное окно подтверждения email -->
-    <div class="modal fade" id="emailVerificationModal" tabindex="-1" aria-labelledby="emailVerificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="emailVerificationModal" tabindex="-1" aria-labelledby="emailVerificationModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="emailVerificationModalLabel">{{ __('auth.verify_email') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('session.cancel') }}"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="{{ __('session.cancel') }}"></button>
                 </div>
                 <div class="modal-body">
                     @livewire('profile.update-profile-information-form')
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('session.cancel') }}</button>
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">{{ __('session.cancel') }}</button>
                 </div>
             </div>
         </div>
     </div>
     @push('scripts')
-        <script src="https://api-maps.yandex.ru/2.1/?apikey=470ab6bb-6d83-4388-8f3d-248d94a6a16f&lang=ru_RU" type="text/javascript"></script>
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=470ab6bb-6d83-4388-8f3d-248d94a6a16f&lang=ru_RU"
+                type="text/javascript"></script>
         <script type="text/javascript">
             ymaps.ready(init);
+
             async function getCityFromGeocode(geocode) {
                 const locality = geocode.geoObjects.get(0).properties.get('metaDataProperty.GeocoderMetaData.Address.Components').find(component => component.kind === 'locality');
                 return locality ? locality.name : null;
             }
+
             function checkCity() {
                 const cityInput = document.getElementById('city');
                 if (!cityInput.value) {
@@ -107,6 +119,7 @@
                 }
                 return true;
             }
+
             function init() {
                 const addressInput = document.getElementById('address');
                 const defaultCoords = [55.753215, 37.622504]; // Москва, Кремль
