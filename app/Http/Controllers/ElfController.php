@@ -14,6 +14,9 @@ class ElfController extends Controller
     public function becomeElf()
     {
         $user = Auth::user();
+        $user->role_user()->create([
+            'role_id' => 2,
+        ]);
         $user->is_elf = true;
         $user->save();
 

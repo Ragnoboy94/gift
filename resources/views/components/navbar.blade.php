@@ -270,6 +270,12 @@
                                 </g>
                             </svg>
                         </a>
+                        <div class="progress position-relative" data-bs-toggle="modal" data-bs-target="#ratingModal">
+                            <div id="ratingProgressBar2" class="progress-bar" role="progressbar" style="width: 0%;"
+                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            <span id="ratingLevel2" class="rating-level position-absolute w-100 text-center"
+                                  style="top: 50%;transform: translateY(-50%);color: #000;">Уровень 0</span>
+                        </div>
                     </li>
                 @else
                     <li class="nav-item">
@@ -472,7 +478,7 @@
                         </li>
                     @endif
                 @else
-                    <div class="ms-3">
+                    <div class="">
                         <div class="dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
                                id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -503,9 +509,12 @@
                                     </form>
                                 </li>
                             </ul>
-                            <div class="progress position-relative" data-bs-toggle="modal" data-bs-target="#ratingModal">
-                                <div id="ratingProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                <span id="ratingLevel" class="rating-level position-absolute w-100 text-center" style="top: 50%;transform: translateY(-50%);color: #000;">Уровень 0</span>
+                            <div class="progress position-relative" data-bs-toggle="modal"
+                                 data-bs-target="#ratingModal">
+                                <div id="ratingProgressBar1" class="progress-bar" role="progressbar" style="width: 0%;"
+                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <span id="ratingLevel1" class="rating-level position-absolute w-100 text-center"
+                                      style="top: 50%;transform: translateY(-50%);color: #000;">Уровень 0</span>
                             </div>
                         </div>
                     </div>
@@ -518,7 +527,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>У каждого пользователя есть уровень от 1 до 5. В зависимости от уровня пользователя определяется максимальная сумма, на которую можно сформировать заказ:</p>
+                    <p>У каждого пользователя есть уровень от 1 до 5. В зависимости от уровня пользователя определяется
+                        максимальная сумма, на которую можно сформировать заказ:</p>
                     <ol class="list-group">
                         <li class="list-group-item rating-level-1">Уровень 1 - 1000 рублей</li>
                         <li class="list-group-item rating-level-2">Уровень 2 - 3000 рублей</li>
@@ -526,12 +536,12 @@
                         <li class="list-group-item rating-level-4">Уровень 4 - 9000 рублей</li>
                         <li class="list-group-item rating-level-5">Уровень 5 - Не ограничено</li>
                     </ol>
-                    <p>Эльф, собирающий ваш заказ, будет вашего уровня или выше. Это гарантирует безопасность и креативность исполнителя.</p>
+                    <p>Эльф, собирающий ваш заказ, будет вашего уровня или выше. Это гарантирует безопасность и
+                        креативность исполнителя.</p>
                 </div>
             </div>
         </div>
     </div>
-
 
 
 </nav>
@@ -541,20 +551,37 @@
         updateRatingProgressBar();
     });
 
-    function updateRatingProgressBar() {
-        @if(Auth::check())
-        const rating = {{Auth::user()->role_user->rating}};
+    function updateProgressBar(rating, progressBarId, ratingLevelId) {
         const ratingFraction = rating % 1;
         const progressBarWidth = ratingFraction * 100;
 
-        const progressBar = document.getElementById('ratingProgressBar');
+        const progressBar = document.getElementById(progressBarId);
         progressBar.style.width = progressBarWidth + '%';
         progressBar.setAttribute('aria-valuenow', progressBarWidth);
 
         // Обновляем текст уровня
         const ratingLevel = Math.floor(rating);
+        document.getElementById(ratingLevelId).innerText = `Уровень ${ratingLevel}`;
+        if (ratingLevel === 5) {
+            progressBar.classList.add('bg-success');
+            progressBar.style.width = '100%';
+        } else if (ratingLevel === 3) {
+            progressBar.classList.add('bg-info');
+        } else if (ratingLevel === 2) {
+            progressBar.classList.add('bg-warning');
+        } else if (ratingLevel === 1) {
+            progressBar.classList.add('bg-danger');
+        }
+        return ratingLevel;
+    }
+
+    function updateRatingProgressBar() {
+        @if(Auth::check())
+        // Обновляем прогресс-бар для роли с ID 1
+        const rating1 = {{Auth::user()->role_user->where('role_id', 1)->first()->rating}};
+        const ratingLevel = updateProgressBar(rating1, 'ratingProgressBar1', 'ratingLevel1');
+
         const ratingList = document.querySelectorAll('#ratingModal ol li');
-        document.getElementById('ratingLevel').innerText = `Уровень ${ratingLevel}`;
         ratingList.forEach(function (item) {
             if (item.textContent.includes(`Уровень ${ratingLevel}`)) {
                 item.style.fontWeight = 'bold';
@@ -562,6 +589,11 @@
                 item.style.fontWeight = 'normal';
             }
         });
+        // Если есть роль с ID 2, обновляем прогресс-бар для этой роли
+        @if(Auth::user()->role_user->where('role_id', 2)->count() > 0)
+        const rating2 = {{Auth::user()->role_user->where('role_id', 2)->first()->rating}};
+        updateProgressBar(rating2, 'ratingProgressBar2', 'ratingLevel2');
+        @endif
         @endif
     }
 </script>
