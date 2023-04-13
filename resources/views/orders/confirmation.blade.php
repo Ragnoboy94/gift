@@ -53,18 +53,32 @@
                         <label class="form-check-label" for="intercom">{{ __('messages.intercom') }}</label>
                     </div>
                     <div class="row mb-2">
-                        <div class="form-group">
-                            <label for="phone">{{ __('messages.phone') }}</label>
-                            <input type="text" value="{{$user->phone}}" name="phone" id="phone"
-                                   placeholder="В формате +7XXX., 8XXX., 7XXX." class="form-control" required
-                                   pattern="[+]?[78]\d{10}">
-                        </div>
-                        @if ($errors->any())
-                            <div class="text-danger">
-                                {{ $errors->first('phone') }}
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">{{ __('messages.phone') }}</label>
+                                <input type="text" value="{{$user->phone}}" name="phone" id="phone"
+                                       placeholder="В формате +7XXX., 8XXX., 7XXX." class="form-control" required
+                                       pattern="[+]?[78]\d{10}">
                             </div>
-                        @endif
+                            @if ($errors->any())
+                                <div class="text-danger">
+                                    {{ $errors->first('phone') }}
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="due_date">{{ __('messages.due_date') }}</label>
+                                <input type="date" name="due_date" id="due_date" class="form-control">
+                            </div>
+                        </div>
                     </div>
+                    <div class="row mb-2">
+                        <div class="col-md-12 text-end">
+                            <p class="text-muted">* {{ __('messages.no_due_date_info') }}</p>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="city" id="city">
                     <div id="map" style="width: 100%; height: 400px;"></div>
                     @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! \Illuminate\Support\Facades\Auth::user()->hasVerifiedEmail())

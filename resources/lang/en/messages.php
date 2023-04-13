@@ -14,7 +14,6 @@ return [
     'i_agree_to_terms_and_privacy_policy' => 'I agree to the :terms_of_service and :privacy_policy',
     'terms_of_service' => 'Terms of Service',
     'privacy_policy' => 'Privacy Policy',
-    "plus" => 'Advantages',
     'email' => 'Email',
     'forgot_password_text' => 'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
     'email_password_reset_link' => 'Email Password Reset Link',
@@ -56,4 +55,7 @@ return [
     'floor' => 'Floor',
     'intercom' => 'Do you have intercom?',
     'phone' => ' Enter your phone number.',
+    'due_date' => 'Deadline date',
+    'no_due_date_info' => 'Without specifying a due date, the execution period is one month.',
+    'order_created' => 'Order successfully created.',
 ];

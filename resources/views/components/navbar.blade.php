@@ -574,23 +574,25 @@
         const progressBarWidth = ratingFraction * 100;
 
         const progressBar = document.getElementById(progressBarId);
-        progressBar.style.width = progressBarWidth + '%';
-        progressBar.setAttribute('aria-valuenow', progressBarWidth);
+        if (progressBar) {
+            progressBar.style.width = progressBarWidth + '%';
+            progressBar.setAttribute('aria-valuenow', progressBarWidth);
 
-        // Обновляем текст уровня
-        const ratingLevel = Math.floor(rating);
-        document.getElementById(ratingLevelId).innerText = `{{ __('modal.level') }} ${ratingLevel}`;
-        if (ratingLevel === 5) {
-            progressBar.classList.add('bg-success');
-            progressBar.style.width = '100%';
-        } else if (ratingLevel === 3) {
-            progressBar.classList.add('bg-info');
-        } else if (ratingLevel === 2) {
-            progressBar.classList.add('bg-warning');
-        } else if (ratingLevel === 1) {
-            progressBar.classList.add('bg-danger');
+            // Обновляем текст уровня
+            const ratingLevel = Math.floor(rating);
+            document.getElementById(ratingLevelId).innerText = `{{ __('modal.level') }} ${ratingLevel}`;
+            if (ratingLevel === 5) {
+                progressBar.classList.add('bg-success');
+                progressBar.style.width = '100%';
+            } else if (ratingLevel === 3) {
+                progressBar.classList.add('bg-info');
+            } else if (ratingLevel === 2) {
+                progressBar.classList.add('bg-warning');
+            } else if (ratingLevel === 1) {
+                progressBar.classList.add('bg-danger');
+            }
+            return ratingLevel;
         }
-        return ratingLevel;
     }
 
     function updateRatingProgressBar() {

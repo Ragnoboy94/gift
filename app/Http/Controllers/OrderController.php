@@ -43,11 +43,27 @@ class OrderController extends Controller
         return view('orders.confirmation', compact('order','celebration','user'));
     }
 
+    // Декодирование невозможно
+    private function encodeOrderNumber($orderId, $userId, $timestamp)
+    {
+        $orderNumber = $orderId . '-' . $userId . '-' . $timestamp;
+
+        // Использование CRC32 для получения хеша, ограниченного 10 знаками
+        $crc32 = crc32($orderNumber);
+
+        // Преобразование результата в беззнаковое 32-битное целое число
+        $unsignedCrc32 = $crc32 >= 0 ? $crc32 : ($crc32 + 4294967296);
+
+        return $unsignedCrc32;
+    }
+
+
     public function confirm(Request $request, $orderId)
     {
         $request->validate([
             'address' => 'required',
             'phone' => 'required',
+            'due_date' => 'nullable|date',
         ]);
         $phoneUtil = PhoneNumberUtil::getInstance();
         try {
@@ -60,6 +76,8 @@ class OrderController extends Controller
         }
         // Найти заказ по orderId
         $order = Order::findOrFail($orderId);
+        $order->updated_at = now();
+        $order->save();
         $city_name = City::where('name_ru', $request->input('city'))->first();
         // Сохранить адрес в модели заказа
         $order->address = $request->input('address');
@@ -67,6 +85,9 @@ class OrderController extends Controller
         $order->floor = $request->input('floor');
         $order->intercom = $request->input('intercom') === 'on' ? 1 : 0;;
         $order->city_id = $city_name->id;
+        $encodedOrderNumber = $this->encodeOrderNumber($order->id, $order->user_id, $order->updated_at->timestamp);
+        $order->order_number = $encodedOrderNumber;
+        $order->deadline = $request->due_date ? $request->due_date : date('Y-m-d', strtotime('+1 month'));
         $order->save();
 
 

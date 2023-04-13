@@ -115,7 +115,7 @@
                                         const feeAmount = 200 + ((`${order.sum}` - 625) / 100 * 15);
                                         const giftsAmount = `${order.sum}` - feeAmount;
 
-                                        price.innerHTML = `Сумма заказа: ${Math.round(giftsAmount)} ${pluralizeRubles(Math.round(giftsAmount))}`;
+                                        price.innerHTML = `Сумма заказа: ${Math.round(giftsAmount)} ${pluralizeRubles(Math.round(giftsAmount))}<br><p>За работу: ${Math.round(feeAmount)} ${pluralizeRubles(Math.round(feeAmount))}</p>`;
                                         colImage.appendChild(price);
 
                                         const colInfo = document.createElement('div');
@@ -144,9 +144,69 @@
                                         smallText.classList.add('text-muted');
                                         smallText.textContent = order.address;
                                         cardAddress.appendChild(smallText);
-
+                                        const takeOrderBtn = document.createElement('button');
+                                        takeOrderBtn.classList.add('btn', 'btn-primary', 'mt-3');
+                                        takeOrderBtn.setAttribute('type', 'button');
+                                        takeOrderBtn.setAttribute('data-bs-toggle', 'modal');
+                                        takeOrderBtn.setAttribute('data-bs-target', `#order-${order.id}-modal`);
+                                        takeOrderBtn.textContent = 'Взять в работу';
+                                        colInfo.appendChild(takeOrderBtn);
                                         ordersContainer.appendChild(orderCard);
+                                        const orderModal = document.createElement('div');
+                                        orderModal.classList.add('modal', 'fade');
+                                        orderModal.id = `order-${order.id}-modal`;
+                                        orderModal.setAttribute('tabindex', '-1');
+                                        orderModal.setAttribute('aria-labelledby', `order-${order.id}-modalLabel`);
+                                        orderModal.setAttribute('aria-hidden', 'true');
+                                        ordersContainer.appendChild(orderModal);
 
+                                        const modalDialog = document.createElement('div');
+                                        modalDialog.classList.add('modal-dialog');
+                                        orderModal.appendChild(modalDialog);
+
+                                        const modalContent = document.createElement('div');
+                                        modalContent.classList.add('modal-content');
+                                        modalDialog.appendChild(modalContent);
+
+                                        const modalHeader = document.createElement('div');
+                                        modalHeader.classList.add('modal-header');
+                                        modalContent.appendChild(modalHeader);
+
+                                        const modalTitle = document.createElement('h5');
+                                        modalTitle.classList.add('modal-title');
+                                        modalTitle.id = `order-${order.id}-modalLabel`;
+                                        modalTitle.textContent = 'Подтверждение';
+                                        modalHeader.appendChild(modalTitle);
+
+                                        const modalCloseBtn = document.createElement('button');
+                                        modalCloseBtn.classList.add('btn-close');
+                                        modalCloseBtn.setAttribute('type', 'button');
+                                        modalCloseBtn.setAttribute('data-bs-dismiss', 'modal');
+                                        modalCloseBtn.setAttribute('aria-label', 'Close');
+                                        modalHeader.appendChild(modalCloseBtn);
+
+                                        const modalBody = document.createElement('div');
+                                        modalBody.classList.add('modal-body');
+                                        modalBody.innerHTML = `Взяв заказ, вы подтверждаете, что в случае отказа от него по своим причинам, ваш рейтинг будет снижен. Ожидается выполнение заказа вовремя, и сумма подарка должна быть равна или незначительно меньше объявленной. Также все покупки должны иметь подтверждение в виде чека. Оформление остается на ваше усмотрение и может быть включено в стоимость набора при предъявлении чека. Все, что сделано сверх данного, будет расцениваться как добрая воля, и требование за него плату с заказчика будет отражено на рейтинге.`;
+                                        modalContent.appendChild(modalBody);
+
+                                        const modalFooter = document.createElement('div');
+                                        modalFooter.classList.add('modal-footer');
+                                        modalContent.appendChild(modalFooter);
+
+                                        const confirmBtn = document.createElement('button');
+                                        confirmBtn.classList.add('btn', 'btn-primary');
+                                        confirmBtn.setAttribute('type', 'button');
+                                        confirmBtn.setAttribute('data-bs-dismiss', 'modal');
+                                        confirmBtn.textContent = 'Подтвердить';
+                                        modalFooter.appendChild(confirmBtn);
+
+                                        const cancelBtn = document.createElement('button');
+                                        cancelBtn.classList.add('btn', 'btn-secondary');
+                                        cancelBtn.setAttribute('type', 'button');
+                                        cancelBtn.setAttribute('data-bs-dismiss', 'modal');
+                                        cancelBtn.textContent = 'Отмена';
+                                        modalFooter.appendChild(cancelBtn);
                                         // Назначаем обработчик клика для каждого элемента списка
                                         orderCard.addEventListener('click', () => {
                                             showOrderInfo(order.id);
