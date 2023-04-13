@@ -66,7 +66,7 @@
                                                 <form method="POST" action="{{ route('order.create', ['celebration' => $key]) }}">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <label for="sum">{{ __('messages.budget') }}</label>
+                                                        <label for="sum-{{ $key }}">{{ __('messages.budget') }}</label>
                                                         <input type="number" name="sum" id="sum-{{ $key }}" class="form-control" required>
                                                         <div id="orderDetails-{{ $key }}"></div>
                                                     </div>

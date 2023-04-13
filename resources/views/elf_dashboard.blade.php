@@ -26,6 +26,20 @@
                 type="text/javascript"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+                function pluralizeRubles(number) {
+                    const remainder100 = number % 100;
+                    const remainder10 = number % 10;
+
+                    if (remainder100 >= 11 && remainder100 <= 19) {
+                        return 'рублей';
+                    } else if (remainder10 === 1) {
+                        return 'рубль';
+                    } else if (remainder10 >= 2 && remainder10 <= 4) {
+                        return 'рубля';
+                    } else {
+                        return 'рублей';
+                    }
+                }
                 let map;
 
                 ymaps.ready(init);
@@ -97,36 +111,39 @@
                                         image.classList.add('img-fluid', 'd-none', 'd-md-block');
                                         colImage.appendChild(image);
 
+                                        const price = document.createElement('p');
+                                        const feeAmount = 200 + ((`${order.sum}` - 625) / 100 * 15);
+                                        const giftsAmount = `${order.sum}` - feeAmount;
+
+                                        price.innerHTML = `Сумма заказа: ${Math.round(giftsAmount)} ${pluralizeRubles(Math.round(giftsAmount))}`;
+                                        colImage.appendChild(price);
+
                                         const colInfo = document.createElement('div');
                                         colInfo.classList.add('col-md-8');
                                         row.appendChild(colInfo);
 
-                                        const cardBody = document.createElement('div');
-                                        cardBody.classList.add('card-body');
-                                        colInfo.appendChild(cardBody);
+                                        const listGroup = document.createElement('ul');
+                                        listGroup.classList.add('list-group', 'lead', 'ms-3');
+                                        colInfo.appendChild(listGroup);
 
-                                        const cardTitle = document.createElement('h5');
-                                        cardTitle.classList.add('card-title');
-                                        cardTitle.textContent = order.celebration.name;
-                                        cardBody.appendChild(cardTitle);
+                                        const listItemGender = document.createElement('li');
+                                        listItemGender.classList.add('list-group-item');
+                                        listItemGender.textContent = `Для кого: ${order.gender}`;
+                                        listGroup.appendChild(listItemGender);
 
-                                        const cardText = document.createElement('p');
-                                        cardText.classList.add('card-text');
-                                        cardText.innerHTML = `
-  <ul class="list-group lead ms-3">
-    <li class="list-group-item">Сумма заказа: ${order.sum}</li>
-    <li class="list-group-item">Для кого: ${order.gender}</li>
-    <li class="list-group-item">Его интересы: ${order.hobby}</li>
-  </ul>`;
-                                        cardBody.appendChild(cardText);
+                                        const listItemHobby = document.createElement('li');
+                                        listItemHobby.classList.add('list-group-item');
+                                        listItemHobby.textContent = `Его интересы: ${order.hobby}`;
+                                        listGroup.appendChild(listItemHobby);
 
                                         const cardAddress = document.createElement('p');
                                         cardAddress.classList.add('card-text');
+                                        colInfo.appendChild(cardAddress);
+
                                         const smallText = document.createElement('small');
                                         smallText.classList.add('text-muted');
                                         smallText.textContent = order.address;
                                         cardAddress.appendChild(smallText);
-                                        cardBody.appendChild(cardAddress);
 
                                         ordersContainer.appendChild(orderCard);
 
