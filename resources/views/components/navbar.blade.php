@@ -270,11 +270,11 @@
                                 </g>
                             </svg>
                         </a>
-                        <div class="progress position-relative" data-bs-toggle="modal" data-bs-target="#ratingModal">
+                        <div class="progress position-relative" data-bs-toggle="modal" data-bs-target="#ratingModal2">
                             <div id="ratingProgressBar2" class="progress-bar" role="progressbar" style="width: 0%;"
                                  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             <span id="ratingLevel2" class="rating-level position-absolute w-100 text-center"
-                                  style="top: 50%;transform: translateY(-50%);color: #000;">Уровень 0</span>
+                                  style="top: 50%;transform: translateY(-50%);color: #000;">{{ __('modal.level') }} 0</span>
                         </div>
                     </li>
                 @else
@@ -514,7 +514,7 @@
                                 <div id="ratingProgressBar1" class="progress-bar" role="progressbar" style="width: 0%;"
                                      aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 <span id="ratingLevel1" class="rating-level position-absolute w-100 text-center"
-                                      style="top: 50%;transform: translateY(-50%);color: #000;">Уровень 0</span>
+                                      style="top: 50%;transform: translateY(-50%);color: #000;">{{ __('modal.level') }} 0</span>
                             </div>
                         </div>
                     </div>
@@ -527,21 +527,39 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>У каждого пользователя есть уровень от 1 до 5. В зависимости от уровня пользователя определяется
-                        максимальная сумма, на которую можно сформировать заказ:</p>
+                    <p>{{ __('modal.description_user') }}</p>
                     <ol class="list-group">
-                        <li class="list-group-item rating-level-1">Уровень 1 - 1000 рублей</li>
-                        <li class="list-group-item rating-level-2">Уровень 2 - 3000 рублей</li>
-                        <li class="list-group-item rating-level-3">Уровень 3 - 6000 рублей</li>
-                        <li class="list-group-item rating-level-4">Уровень 4 - 9000 рублей</li>
-                        <li class="list-group-item rating-level-5">Уровень 5 - Не ограничено</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 1 - 1000 {{ __('modal.rubles') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 2 - 3000 {{ __('modal.rubles') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 3 - 6000 {{ __('modal.rubles') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 4 - 9000 {{ __('modal.rubles') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 5 - {{ __('modal.unlimited') }}</li>
                     </ol>
-                    <p>Эльф, собирающий ваш заказ, будет вашего уровня или выше. Это гарантирует безопасность и
-                        креативность исполнителя.</p>
+                    <p>{{ __('modal.elf_note') }}</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Модальное окно -->
+    <div class="modal fade" id="ratingModal2" tabindex="4" aria-labelledby="ratingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>{{ __('modal.description_elf') }}</p>
+                    <ol class="list-group">
+                        <li class="list-group-item">{{ __('modal.level') }} 1 - {{ __('modal.order') }} 2 {{ __('modal.order_after') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 2 - {{ __('modal.order') }} 3 {{ __('modal.order_after') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 3 - {{ __('modal.order') }} 4 {{ __('modal.order_after') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 4 - {{ __('modal.all') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 5 - {{ __('modal.all_5') }}</li>
+                    </ol>
+                    <p>{{ __('modal.note') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 </nav>
@@ -561,7 +579,7 @@
 
         // Обновляем текст уровня
         const ratingLevel = Math.floor(rating);
-        document.getElementById(ratingLevelId).innerText = `Уровень ${ratingLevel}`;
+        document.getElementById(ratingLevelId).innerText = `{{ __('modal.level') }} ${ratingLevel}`;
         if (ratingLevel === 5) {
             progressBar.classList.add('bg-success');
             progressBar.style.width = '100%';
@@ -583,7 +601,7 @@
 
         const ratingList = document.querySelectorAll('#ratingModal ol li');
         ratingList.forEach(function (item) {
-            if (item.textContent.includes(`Уровень ${ratingLevel}`)) {
+            if (item.textContent.includes(`{{ __('modal.level') }} ${ratingLevel}`)) {
                 item.style.fontWeight = 'bold';
             } else {
                 item.style.fontWeight = 'normal';
@@ -592,7 +610,16 @@
         // Если есть роль с ID 2, обновляем прогресс-бар для этой роли
         @if(Auth::user()->role_user->where('role_id', 2)->count() > 0)
         const rating2 = {{Auth::user()->role_user->where('role_id', 2)->first()->rating}};
-        updateProgressBar(rating2, 'ratingProgressBar2', 'ratingLevel2');
+
+        const ratingLevel2 = updateProgressBar(rating2, 'ratingProgressBar2', 'ratingLevel2');
+        const ratingList2 = document.querySelectorAll('#ratingModal2 ol li');
+        ratingList2.forEach(function (item) {
+            if (item.textContent.includes(`{{ __('modal.level') }} ${ratingLevel2}`)) {
+                item.style.fontWeight = 'bold';
+            } else {
+                item.style.fontWeight = 'normal';
+            }
+        });
         @endif
         @endif
     }

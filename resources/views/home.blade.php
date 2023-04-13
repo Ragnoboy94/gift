@@ -53,9 +53,9 @@
                                                 alt="{{ $celebration['name'] }}"
                                                 class="img-fluid"
                                             >
+                                            <p class="lead">{{ $celebration['description'] }}</p>
                                         </div>
                                         <div class="col-md-6">
-                                            <p class="lead">{{ $celebration['description'] }}</p>
                                             <p><b>{{ __('messages.plus') }}:</b></p>
                                             <ul>
                                                 @foreach ($celebration['benefits'] as $benefit)
@@ -67,7 +67,8 @@
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="sum">{{ __('messages.budget') }}</label>
-                                                        <input type="number" name="sum" id="sum" class="form-control" required>
+                                                        <input type="number" name="sum" id="sum-{{ $key }}" class="form-control" required>
+                                                        <div id="orderDetails-{{ $key }}"></div>
                                                     </div>
 
                                                     @if ($celebration['name'] !== '8 марта')
@@ -100,4 +101,27 @@
             </div>
         </div>
     </main>
+    <script>
+        document.querySelectorAll("[id^='sum-']").forEach((sumInput) => {
+            sumInput.addEventListener("input", (event) => {
+                const totalAmount = parseFloat(event.target.value);
+                const key = event.target.id.split("-")[1];
+                const orderDetails = document.getElementById("orderDetails-" + key);
+
+                if (totalAmount < 700) {
+                    orderDetails.innerHTML = "<span class='text-danger'>Сумма должна быть не менее 700 рублей</span";
+                    return;
+                }else if ((totalAmount >= 700)){
+                    const feeAmount = 200 + ((totalAmount - 625)/100*15);
+                    const giftsAmount = totalAmount - feeAmount;
+
+                    orderDetails.innerHTML = `Сумма на подарки: <span class="lead">${Math.round(giftsAmount)}</span> рублей<br>
+Вознаграждение исполнителя: <span class="lead">${Math.round(feeAmount)}</span> рублей`;
+                }else{
+                    orderDetails.innerHTML = "";
+                    return;
+                }
+            });
+        });
+    </script>
 @endsection
