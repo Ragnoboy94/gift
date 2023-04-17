@@ -125,8 +125,10 @@
                     return Infinity;
             }
         }
-        const rating = {{ Auth::user()->role_user->where('role_id', 1)->first()->rating }};
-        const ratingLevel = Math.floor(rating);
+        @if(Auth::check()){
+            const rating = {{ Auth::user()->role_user->where('role_id', 1)->first()->rating }};
+            const ratingLevel = Math.floor(rating);
+        }
         document.querySelectorAll("[id^='sum-']").forEach((sumInput) => {
             sumInput.addEventListener("input", (event) => {
                 const totalAmount = parseFloat(event.target.value);
