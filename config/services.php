@@ -30,5 +30,15 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'vkontakte' => [
+        'client_id' => env('VKONTAKTE_KEY'),
+        'client_secret' => env('VKONTAKTE_SECRET'),
+        'redirect' => env('VKONTAKTE_REDIRECT_URI'),
+    ],
+    'yandex' => [
+        'client_id' => env('YA_KEY'),
+        'client_secret' => env('YA_SECRET'),
+        'redirect' => env('YA_REDIRECT_URI'),
+    ],
 
 ];

@@ -11,4 +11,5 @@ return [
     'forgot_password' => 'Forgot your password?',
     'already_registered' => 'Already registered?',
     'verify_email' => 'Verify Email',
+    'register_with_vk' => 'Register with VKontakte',
 ];

@@ -11,4 +11,5 @@ return [
     'forgot_password' => 'Забыли пароль?',
     'already_registered' => 'Уже зарегистрированы?',
     'verify_email' => 'Подтвердите Email',
+    'register_with_vk' => 'Регистрация через ВКонтакте',
 ];

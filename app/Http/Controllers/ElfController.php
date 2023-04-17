@@ -8,7 +8,11 @@ class ElfController extends Controller
 {
     public function showBecomeElfForm()
     {
-        return view('become_elf');
+        if ($user = Auth::user()) {
+            return view('become_elf');
+        }else{
+            return redirect()->route('login');
+        }
     }
 
     public function becomeElf()
@@ -16,6 +20,7 @@ class ElfController extends Controller
         $user = Auth::user();
         $user->role_user()->create([
             'role_id' => 2,
+            'rating' => 1.0,
         ]);
         $user->is_elf = true;
         $user->save();

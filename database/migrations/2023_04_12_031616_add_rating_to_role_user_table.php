@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('role_user', function (Blueprint $table) {
-            $table->float('rating')->default(3.0);
+            $table->float('rating')->default(1.0);
         });
     }
 

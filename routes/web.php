@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/auth/vk', [\App\Http\Controllers\Auth\AuthController::class, 'vk'])->name('auth.vk');
+Route::get('/auth/yandex', [\App\Http\Controllers\Auth\AuthController::class, 'yandex'])->name('auth.yandex');
+Route::get('/auth/google', [\App\Http\Controllers\Auth\AuthController::class, 'google'])->name('auth.google');
+Route::get('login/{provider}/callback', [\App\Http\Controllers\Auth\AuthController::class, 'handleCallback']);
 Route::get('language/{language}', [\App\Http\Controllers\LanguageController::class, 'switch'])->name('language.switch');
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/celebrations/{celebration}', [\App\Http\Controllers\CelebrationController::class, 'show'])->name('celebrations.show');

@@ -472,11 +472,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('messages.Login') }}</a>
                     </li>
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('messages.Register') }}</a>
-                        </li>
-                    @endif
                 @else
                     <div class="">
                         <div class="dropdown">

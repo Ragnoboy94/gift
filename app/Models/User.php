@@ -28,6 +28,8 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'profile_photo_path',
+        'email_verified_at',
     ];
 
     /**
@@ -70,6 +72,6 @@ class User extends Authenticatable
     }
     public function role_user()
     {
-        return $this->hasOne(Role_user::class);
+        return $this->hasMany(Role_user::class);
     }
 }

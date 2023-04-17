@@ -185,6 +185,9 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Livewire\LivewireServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+        SocialiteProviders\Manager\ServiceProvider::class,
+        App\Providers\SocialiteVkontakteServiceProvider::class,
+        App\Providers\YandexSocialiteServiceProvider::class,
         /*
          * Package Service Providers...
          */
