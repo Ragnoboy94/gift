@@ -94,8 +94,9 @@
                     </ul>
                 </li>
                 @if (Auth::user() && Auth::user()->is_elf)
+
                     <li class="nav-item">
-                        <a href="{{ route('elf-dashboard') }}" class="btn btn-outline-link mt-3">{{__('app.work_elf')}}
+                        <a href="{{ route('elf-dashboard') }}" class="btn btn-outline-light text-black mt-1">{{__('app.work_elf')}}
                             <svg style="margin-left: -22px;margin-top: -22px;"
                                  version="1.1"
                                  id="svg2"
@@ -279,7 +280,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href="{{ route('become-elf') }}" class="btn btn-outline-link mt-3">{{__('app.be_elf')}}
+                        <a href="{{ route('become-elf') }}" class="btn btn-outline-light text-black mt-3">{{__('app.be_elf')}}
                             <svg style="margin-left: -20px;margin-top: -22px;"
                                  version="1.1"
                                  id="svg2"
@@ -456,23 +457,26 @@
                         </a>
                     </li>
                 @endif
+
+
+
             </ul>
-
-
-            <!-- Centered City Selector -->
             <livewire:city-selector/>
-
-            <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
-                <!-- Language Selector -->
-                <livewire:language-switcher/>
 
-                <!-- Authentication Links -->
+
+
+
+
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('messages.Login') }}</a>
                     </li>
                 @else
+                    <button class="btn btn-outline-light text-black mt-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#ordersOffcanvas"
+                            aria-controls="ordersOffcanvas">
+                        Мои заказы
+                    </button>
                     <div class="">
                         <div class="dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
@@ -543,9 +547,12 @@
                 <div class="modal-body">
                     <p>{{ __('modal.description_elf') }}</p>
                     <ol class="list-group">
-                        <li class="list-group-item">{{ __('modal.level') }} 1 - {{ __('modal.order') }} 2 {{ __('modal.order_after') }}</li>
-                        <li class="list-group-item">{{ __('modal.level') }} 2 - {{ __('modal.order') }} 3 {{ __('modal.order_after') }}</li>
-                        <li class="list-group-item">{{ __('modal.level') }} 3 - {{ __('modal.order') }} 4 {{ __('modal.order_after') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 1 - {{ __('modal.order') }}
+                            2 {{ __('modal.order_after') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 2 - {{ __('modal.order') }}
+                            3 {{ __('modal.order_after') }}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 3 - {{ __('modal.order') }}
+                            4 {{ __('modal.order_after') }}</li>
                         <li class="list-group-item">{{ __('modal.level') }} 4 - {{ __('modal.all') }}</li>
                         <li class="list-group-item">{{ __('modal.level') }} 5 - {{ __('modal.all_5') }}</li>
                     </ol>
@@ -554,7 +561,6 @@
             </div>
         </div>
     </div>
-
 
 
 </nav>

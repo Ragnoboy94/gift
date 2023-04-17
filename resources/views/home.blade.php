@@ -9,7 +9,7 @@
                     <p>{{ __('messages.welcome_text') }}</p>
                 </div>
             </div>
-            @if ($errors->any())
+        @if ($errors->any())
                 <div class="alert text-danger text-center">
                     <ul class="list-unstyled">
                         @foreach ($errors->all() as $error)

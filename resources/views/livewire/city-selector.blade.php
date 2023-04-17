@@ -10,4 +10,6 @@
         @endforeach
     </select>
 </div>
+<ul class="navbar-nav"><livewire:language-switcher/></ul>
+
 
