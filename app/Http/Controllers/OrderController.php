@@ -17,14 +17,35 @@ class OrderController extends Controller
         $user = Auth::user();
         $celebrationName = __('celebrations.' . $celebration)['name'];
         $celebrationModel = Celebration::where('name', $celebrationName)->first();
+        $ratingLevel = intval($user->role_user->where('role_id', 1)->first()->rating);
 
+        $maxOrderAmount = match ($ratingLevel) {
+            1 => 1000,
+            2 => 3000,
+            3 => 6000,
+            4 => 9000,
+            default => PHP_INT_MAX,
+        };
+        $request->validate([
+            'sum' => [
+                'required',
+                'numeric',
+                'min:700',
+                "max:$maxOrderAmount",
+            ],
+        ], [
+            'sum.max' => 'Ваш уровень не позволяет заказывать на суммы выше ' . $maxOrderAmount . ' рублей',
+            'sum.min' => 'Минимальная сумма заказа 700 рублей.',
+        ]);
         $order = new Order([
             'sum' => $request->input('sum'),
             'hobby' => $request->input('hobby'),
-            'user_id' => $user->id, // Связываем модели с помощью их ID напрямую
-            'celebration_id' => $celebrationModel->id, // Связываем модели с помощью их ID напрямую
+            'user_id' => $user->id,
+            'celebration_id' => $celebrationModel->id,
         ]);
-        if ($celebrationName !== '8 марта') {
+        if ($celebrationName == '8 марта') {
+            $order->gender = 'female';
+        }else{
             $order->gender = $request->input('gender');
         }
 

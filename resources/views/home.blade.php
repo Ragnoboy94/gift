@@ -9,7 +9,15 @@
                     <p>{{ __('messages.welcome_text') }}</p>
                 </div>
             </div>
-
+            @if ($errors->any())
+                <div class="alert text-danger text-center">
+                    <ul class="list-unstyled">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="row">
                 @foreach ($celebrations_3 as $key => $celebration)
                     <div class="col-md-4">
@@ -102,22 +110,44 @@
         </div>
     </main>
     <script>
+        function getMaxOrderAmount(ratingLevel) {
+            switch (ratingLevel) {
+                case 1:
+                    return 1000;
+                case 2:
+                    return 3000;
+                case 3:
+                    return 6000;
+                case 4:
+                    return 9000;
+                case 5:
+                default:
+                    return Infinity;
+            }
+        }
+        const rating = {{ Auth::user()->role_user->where('role_id', 1)->first()->rating }};
+        const ratingLevel = Math.floor(rating);
         document.querySelectorAll("[id^='sum-']").forEach((sumInput) => {
             sumInput.addEventListener("input", (event) => {
                 const totalAmount = parseFloat(event.target.value);
                 const key = event.target.id.split("-")[1];
                 const orderDetails = document.getElementById("orderDetails-" + key);
 
+                const maxOrderAmount = getMaxOrderAmount(ratingLevel);
+
                 if (totalAmount < 700) {
                     orderDetails.innerHTML = "<span class='text-danger'>Сумма должна быть не менее 700 рублей</span";
                     return;
-                }else if ((totalAmount >= 700)){
-                    const feeAmount = 200 + ((totalAmount - 625)/100*15);
+                } else if (totalAmount > maxOrderAmount) {
+                    orderDetails.innerHTML = `<span class='text-danger'>Ваш уровень не позволяет заказывать на суммы выше ${maxOrderAmount} рублей</span>`;
+                    return;
+                } else if (totalAmount >= 700) {
+                    const feeAmount = 200 + ((totalAmount - 625) / 100 * 15);
                     const giftsAmount = totalAmount - feeAmount;
 
                     orderDetails.innerHTML = `Сумма на подарки: <span class="lead">${Math.round(giftsAmount)}</span> рублей<br>
 Вознаграждение исполнителя: <span class="lead">${Math.round(feeAmount)}</span> рублей`;
-                }else{
+                } else {
                     orderDetails.innerHTML = "";
                     return;
                 }

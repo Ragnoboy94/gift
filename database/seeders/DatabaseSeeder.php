@@ -19,26 +19,5 @@ class DatabaseSeeder extends Seeder
         $this->call(CelebrationsTableSeeder::class);
         $this->call(CitiesSeeder::class);
 
-        $userRole = Role::where('name', 'user')->first();
-        $elfRole = Role::where('name', 'elf')->first();
-        $adminRole = Role::where('name', 'admin')->first();
-
-        User::create([
-            'name' => 'User One',
-            'email' => 'user1@example.com',
-            'password' => bcrypt('password'),
-        ])->roles()->attach($userRole);
-
-        User::create([
-            'name' => 'Elf One',
-            'email' => 'elf1@example.com',
-            'password' => bcrypt('password'),
-        ])->roles()->attach($elfRole);
-
-        User::create([
-            'name' => 'Admin One',
-            'email' => 'admin1@example.com',
-            'password' => bcrypt('password'),
-        ])->roles()->attach($adminRole);
     }
 }
