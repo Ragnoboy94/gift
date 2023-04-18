@@ -464,19 +464,18 @@
             <livewire:city-selector/>
             <ul class="navbar-nav ms-auto">
 
-
-
-
-
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('messages.Login') }}</a>
                     </li>
                 @else
-                    <button class="btn btn-outline-light text-black mt-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#ordersOffcanvas"
-                            aria-controls="ordersOffcanvas">
+                    <button class="btn btn-outline-light text-black mt-1" type="button" data-url="{{ route('orders.active_count') }}" onclick="location.href='{{ route('orders.my_orders') }}'">
+
                         Мои заказы
+                        <span class="badge rounded-pill bg-danger" id="activeOrdersBadge" style="top: -12px;left: -8px;right: 0px;"></span>
+                        <span class="visually-hidden">Созданные заказы</span>
                     </button>
+
                     <div class="">
                         <div class="dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
@@ -565,7 +564,20 @@
 
 </nav>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const activeOrdersBadge = document.getElementById('activeOrdersBadge');
+        const ordersButton = document.querySelector('button[data-url]');
+        const url = ordersButton.dataset.url;
 
+        fetch(url)
+            .then(response => response.json())
+            .then(activeOrdersCount => {
+                if (activeOrdersCount > 0) {
+                    activeOrdersBadge.textContent = activeOrdersCount;
+                }
+            })
+            .catch(error => console.error('Error fetching active orders count:', error));
+    });
     document.addEventListener('DOMContentLoaded', function () {
         updateRatingProgressBar();
     });

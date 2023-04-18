@@ -18,6 +18,7 @@ class Order extends Model
         'apartment',
         'floor',
         'intercom',
+        'status_id',
     ];
 
     public function user()
@@ -28,5 +29,10 @@ class Order extends Model
     public function celebration()
     {
         return $this->belongsTo(Celebration::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(OrderStatus::class, 'status_id');
     }
 }

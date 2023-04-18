@@ -71,7 +71,7 @@
                                                 @endforeach
                                             </ul>
                                             @if (Auth::check())
-                                                <form method="POST" action="{{ route('order.create', ['celebration' => $key]) }}">
+                                                <form method="POST" action="{{ route('order.create', ['celebration' => $celebration['id']]) }}">
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="sum-{{ $key }}">{{ __('messages.budget') }}</label>
@@ -79,7 +79,7 @@
                                                         <div id="orderDetails-{{ $key }}"></div>
                                                     </div>
 
-                                                    @if ($celebration['name'] !== '8 марта')
+                                                    @if ($celebration['id'] !== 6)
                                                         <div class="form-group">
                                                             <label for="gender">{{ __('messages.select_gender') }}</label>
                                                             <select name="gender" id="gender" class="form-control" required>

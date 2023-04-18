@@ -36,8 +36,7 @@
                                        class="form-control" required>
                                 <div id="orderDetails-{{ $celebration['id'] }}"></div>
                             </div>
-
-                            @if ($celebration['name'] !== '8 марта')
+                            @if ($celebration['id'] !== 6)
                                 <div class="form-group">
                                     <label for="gender">{{ __('messages.select_gender') }}</label>
                                     <select name="gender" id="gender" class="form-control" required>

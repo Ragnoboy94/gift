@@ -32,6 +32,8 @@ Route::middleware([
     Route::post('/order/confirm/{orderId}', [\App\Http\Controllers\OrderController::class, 'confirm'])->name('order.confirm');
     Route::post('/order/create/{celebration}', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
     Route::post('/become-elf',  [\App\Http\Controllers\ElfController::class,'becomeElf'])->name('become-elf.submit');
+    Route::get('/active-orders-count', [\App\Http\Controllers\OrderController::class, 'getActiveOrdersCount'])->name('orders.active_count');
+    Route::get('/my-orders', [\App\Http\Controllers\OrderController::class, 'myOrders'])->name('orders.my_orders');
 });
 Route::middleware([
     'auth:sanctum',

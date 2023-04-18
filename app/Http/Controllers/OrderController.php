@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Celebration;
 use App\Models\City;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use libphonenumber\NumberParseException;
@@ -15,8 +16,7 @@ class OrderController extends Controller
     public function create(Request $request, $celebration)
     {
         $user = Auth::user();
-        $celebrationName = __('celebrations.' . $celebration)['name'];
-        $celebrationModel = Celebration::where('name', $celebrationName)->first();
+        $celebrationName = Celebration::where('id', $celebration)->first();
         $ratingLevel = intval($user->role_user->where('role_id', 1)->first()->rating);
 
         $maxOrderAmount = match ($ratingLevel) {
@@ -41,11 +41,12 @@ class OrderController extends Controller
             'sum' => $request->input('sum'),
             'hobby' => $request->input('hobby'),
             'user_id' => $user->id,
-            'celebration_id' => $celebrationModel->id,
+            'celebration_id' => $celebration,
+            'status_id' => OrderStatus::where('name', 'created')->first()->id,
         ]);
-        if ($celebrationName == '8 марта') {
+        if ($celebrationName['name'] == '8 марта') {
             $order->gender = 'female';
-        }else{
+        } else {
             $order->gender = $request->input('gender');
         }
 
@@ -55,13 +56,14 @@ class OrderController extends Controller
         }
 
         return redirect()->route('order.confirmation', ['orderId' => $order->id]);
-}
+    }
+
     public function confirmation($orderId)
     {
         $order = Order::findOrFail($orderId);
         $celebration = Celebration::findOrFail($order->celebration_id);
         $user = Auth::user();
-        return view('orders.confirmation', compact('order','celebration','user'));
+        return view('orders.confirmation', compact('order', 'celebration', 'user'));
     }
 
     // Декодирование невозможно
@@ -98,6 +100,7 @@ class OrderController extends Controller
         // Найти заказ по orderId
         $order = Order::findOrFail($orderId);
         $order->updated_at = now();
+        $order->status_id = OrderStatus::where('name', 'active')->first()->id;
         $order->save();
         $city_name = City::where('name_ru', $request->input('city'))->first();
         // Сохранить адрес в модели заказа
@@ -125,6 +128,7 @@ class OrderController extends Controller
 
         return redirect()->route('payment', ['orderId' => $order->id]);
     }
+
     public function getOrdersByCity($city_name)
     {
         $city = City::where('name_ru', $city_name)->first();
@@ -140,5 +144,20 @@ class OrderController extends Controller
         }
 
         return response()->json([]);
+    }
+
+    public function getActiveOrdersCount()
+    {
+        $user_id = Auth::id();
+        $activeOrdersCount = Order::where('user_id', $user_id)->count();
+        return $activeOrdersCount;
+    }
+
+    public function myOrders()
+    {
+        $user = Auth::user();
+        $orders = $user->orders()->with('status')->get();
+
+        return view('orders.my_orders', compact('orders'));
     }
 }
