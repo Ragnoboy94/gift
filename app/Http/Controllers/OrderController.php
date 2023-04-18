@@ -149,15 +149,77 @@ class OrderController extends Controller
     public function getActiveOrdersCount()
     {
         $user_id = Auth::id();
-        $activeOrdersCount = Order::where('user_id', $user_id)->count();
+        $activeOrdersCount = Order::where('user_id', $user_id)
+            ->whereDoesntHave('status', function ($query) {
+                $query->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
+            })
+            ->orWhere(function ($query) {
+                $query->whereHas('status', function ($subQuery) {
+                    $subQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
+                })->where('updated_at', '>', now()->subDays(3));
+            })
+            ->count();
+
         return $activeOrdersCount;
     }
 
     public function myOrders()
     {
         $user = Auth::user();
-        $orders = $user->orders()->with('status')->get();
+        $orders = $user->orders()
+            ->whereDoesntHave('status', function ($query) {
+                $query->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
+            })
+            ->orWhere(function ($query) {
+                $query->whereHas('status', function ($subQuery) {
+                    $subQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
+                })->where('updated_at', '>', now()->subDays(3));
+            })
+            ->with('status')
+            ->get();
 
         return view('orders.my_orders', compact('orders'));
     }
+
+
+    public function cancel($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        $user = Auth::user();
+
+        if ($order->user_id != $user->id) {
+            return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
+        }
+
+        if ($order->status->name == 'created' || $order->status->name == 'active') {
+            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
+            $order->save();
+        } elseif ($order->status->name == 'in_progress') {
+            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
+            $order->save();
+
+            $cancellations_this_month = Order::where('user_id', $user->id)
+                ->where('status_id', OrderStatus::where('name', 'cancelled_by_customer')->first()->id)
+                ->whereMonth('updated_at', now()->month)
+                ->count();
+
+            $user->rating -= 0.2 * $cancellations_this_month;
+            $user->save();
+
+        } elseif ($order->status->name == 'ready_for_delivery') {
+            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
+            $order->save();
+
+            $cancellations_this_month = Order::where('user_id', $user->id)
+                ->where('status_id', OrderStatus::where('name', 'cancelled_by_customer')->first()->id)
+                ->whereMonth('updated_at', now()->month)
+                ->count();
+
+            $user->rating -= 0.4 * $cancellations_this_month;
+            $user->save();
+        }
+
+        return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно отменен');
+    }
+
 }

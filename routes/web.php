@@ -34,6 +34,7 @@ Route::middleware([
     Route::post('/become-elf',  [\App\Http\Controllers\ElfController::class,'becomeElf'])->name('become-elf.submit');
     Route::get('/active-orders-count', [\App\Http\Controllers\OrderController::class, 'getActiveOrdersCount'])->name('orders.active_count');
     Route::get('/my-orders', [\App\Http\Controllers\OrderController::class, 'myOrders'])->name('orders.my_orders');
+    Route::get('/order/cancel/{orderId}', [\App\Http\Controllers\OrderController::class, 'cancel'])->name('order.cancel');
 });
 Route::middleware([
     'auth:sanctum',
