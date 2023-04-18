@@ -19,7 +19,7 @@ Route::get('login/{provider}/callback', [\App\Http\Controllers\Auth\AuthControll
 Route::get('language/{language}', [\App\Http\Controllers\LanguageController::class, 'switch'])->name('language.switch');
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/celebrations/{celebration}', [\App\Http\Controllers\CelebrationController::class, 'show'])->name('celebrations.show');
-Route::get('/terms', [\App\Http\Controllers\LegalController::class, 'showTerms'])->name('terms.show');
+Route::get('/terms', [\App\Http\Controllers\LegalController::class, 'showTerms'])->name('terms1.show');
 Route::get('/privacy-policy', [\App\Http\Controllers\LegalController::class, 'showPrivacyPolicy'])->name('policy.show');
 Route::get('/become-elf', [\App\Http\Controllers\ElfController::class,'showBecomeElfForm'])->name('become-elf');
 Route::middleware([

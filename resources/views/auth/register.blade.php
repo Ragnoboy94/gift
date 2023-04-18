@@ -115,7 +115,7 @@
                                     <input type="checkbox" name="terms" id="terms" class="form-check-input" required>
                                     <label class="form-check-label ms-2" for="terms">
                                         {!! __('messages.i_agree_to_terms_and_privacy_policy', [
-                                                'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="text-decoration-none text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('messages.terms_of_service').'</a>',
+                                                'terms_of_service' => '<a target="_blank" href="'.route('terms1.show').'" class="text-decoration-none text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('messages.terms_of_service').'</a>',
                                                 'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="text-decoration-none text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('messages.privacy_policy').'</a>',
                                         ]) !!}
                                     </label>
