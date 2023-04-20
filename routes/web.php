@@ -44,7 +44,8 @@ Route::middleware([
 ])->group(function () {
     Route::get('/elf-dashboard', [App\Http\Controllers\HomeController::class, 'elfDashboard'])->name('elf-dashboard');
     Route::get('/get-orders-by-city/{city_name}', [\App\Http\Controllers\OrderController::class, 'getOrdersByCity']);
-
+    Route::get('/active-orders', [\App\Http\Controllers\OrderController::class, 'getActiveOrders'])->name('orders.active_orders');
+    Route::get('/elf/take-order/{order_id}', [\App\Http\Controllers\ElfController::class, 'takeOrder'])->name('elf.take-order');
 });
 Route::get('/order/confirm/{orderId}', function () {
     return view('errors.403');

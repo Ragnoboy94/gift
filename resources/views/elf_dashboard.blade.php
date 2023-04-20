@@ -5,13 +5,42 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <h1>Дела для эльфа</h1>
+                @if(session()->has('message'))
+                    <div class="text-success mt-3">
+                        {{ session()->get('message') }}
+                    </div>
+                @endif
+                @if (count($activeOrders) > 0)
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>Активные заказы</h1>
+
+                            <div id="currentTasksContainer">
+                                @foreach($activeOrders as $order)
+                                    <div class="order">
+                                        <p>Заказ ID: {{ $order->id }}</p>
+                                        <p>Сумма: {{ $order->sum }} рублей</p>
+                                        <p>Праздник: {{ $order->celebration->name }}</p>
+                                        <p>Клиент: {{ $order->user->name }}</p>
+                                        <button class="btn btn-primary update-order" data-order-id="{{ $order->id }}">
+                                            Обновить заказ
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                        </div>
+                    </div>
+                @endif
                 <div class="row">
+                    <h2>Доступные задачи</h2>
                     <div class="col-md-7">
                         <div id="map" style="width: 100%; height: 70vh;"></div>
                     </div>
                     <div class="col-md-5">
                         <div id="orderInfo">
                             <div id="ordersContainer">
+                                <!-- Здесь будет отображаться список доступных заказов -->
                             </div>
                         </div>
                     </div>
@@ -19,6 +48,8 @@
             </div>
         </div>
     </div>
+
+
 
     @push('scripts')
         <!-- Подключаем API карт, например, Яндекс.Карты -->
@@ -40,6 +71,7 @@
                         return 'рублей';
                     }
                 }
+
                 let map;
 
                 ymaps.ready(init);
@@ -194,10 +226,9 @@
                                         modalFooter.classList.add('modal-footer');
                                         modalContent.appendChild(modalFooter);
 
-                                        const confirmBtn = document.createElement('button');
+                                        const confirmBtn = document.createElement('a');
                                         confirmBtn.classList.add('btn', 'btn-primary');
-                                        confirmBtn.setAttribute('type', 'button');
-                                        confirmBtn.setAttribute('data-bs-dismiss', 'modal');
+                                        confirmBtn.setAttribute('href', `/elf/take-order/${order.id}`);
                                         confirmBtn.textContent = 'Подтвердить';
                                         modalFooter.appendChild(confirmBtn);
 
@@ -272,6 +303,8 @@
                         if (callNow) func.apply(context, args);
                     };
                 }
+
+
             });
         </script>
 

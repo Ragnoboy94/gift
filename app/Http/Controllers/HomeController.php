@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Order;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Auth;
 use Nette\Utils\DateTime;
@@ -77,7 +78,11 @@ class HomeController extends Controller
 
         // Группируем заказы по городам
         $ordersByCity = $orders->groupBy('city_id');
+        $activeOrders = Order::whereHas('status', function ($query) {
+            $query->where('name', 'in_progress');
+        })->where('elf_id', $user_id)
+            ->with(['user', 'celebration'])->get();
 
-        return view('elf_dashboard', compact('city_name', 'ordersByCity'));
+        return view('elf_dashboard', compact('city_name', 'ordersByCity', 'activeOrders'));
     }
 }

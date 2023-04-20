@@ -60,10 +60,21 @@ class OrderController extends Controller
 
     public function confirmation($orderId)
     {
+        $city_id = session('city_id');
+        $city_name = City::find($city_id);
         $order = Order::findOrFail($orderId);
         $celebration = Celebration::findOrFail($order->celebration_id);
         $user = Auth::user();
-        return view('orders.confirmation', compact('order', 'celebration', 'user'));
+        return view('orders.confirmation', compact('order', 'celebration', 'user','city_name'));
+    }
+    public function accept($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        $order->status_id = 2; // in_progress
+        $order->elf_id = Auth::user()->id;
+        $order->save();
+
+        return response()->json(['success' => true]);
     }
 
     // Декодирование невозможно
@@ -120,13 +131,8 @@ class OrderController extends Controller
         $user = Auth::user();
         $user->phone = $request->input('phone');
         $user->save();
-        // Предполагая, что у вас есть URL-адрес платежной страницы
-        $paymentUrl = "https://example.com/payment/{$order->id}";
 
-        // Перенаправить пользователя на платежную страницу
-        return redirect($paymentUrl);
-
-        return redirect()->route('payment', ['orderId' => $order->id]);
+        return redirect()->route('orders.my_orders');
     }
 
     public function getOrdersByCity($city_name)
@@ -150,13 +156,14 @@ class OrderController extends Controller
     {
         $user_id = Auth::id();
         $activeOrdersCount = Order::where('user_id', $user_id)
-            ->whereDoesntHave('status', function ($query) {
-                $query->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
-            })
-            ->orWhere(function ($query) {
-                $query->whereHas('status', function ($subQuery) {
+            ->where(function ($query) {
+                $query->whereDoesntHave('status', function ($subQuery) {
                     $subQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
-                })->where('updated_at', '>', now()->subDays(3));
+                })->orWhere(function ($subQuery) {
+                    $subQuery->whereHas('status', function ($subSubQuery) {
+                        $subSubQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
+                    })->where('updated_at', '>', now()->subDays(3));
+                });
             })
             ->count();
 
@@ -167,13 +174,14 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $orders = $user->orders()
-            ->whereDoesntHave('status', function ($query) {
-                $query->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
-            })
-            ->orWhere(function ($query) {
-                $query->whereHas('status', function ($subQuery) {
+            ->where(function ($query) {
+                $query->whereDoesntHave('status', function ($subQuery) {
                     $subQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
-                })->where('updated_at', '>', now()->subDays(3));
+                })->orWhere(function ($subQuery) {
+                    $subQuery->whereHas('status', function ($subSubQuery) {
+                        $subSubQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
+                    })->where('updated_at', '>', now()->subDays(3));
+                });
             })
             ->with('status')
             ->get();
@@ -221,5 +229,18 @@ class OrderController extends Controller
 
         return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно отменен');
     }
+
+    public function updateOrder($orderId)
+    {
+        // Здесь добавьте код для обновления заказа по ID
+        // ...
+
+        // После обновления заказа, получите обновленный заказ
+        $updatedOrder = Order::where('id', $orderId)->with(['user', 'celebration'])->first();
+
+        return response()->json($updatedOrder);
+    }
+
+
 
 }
