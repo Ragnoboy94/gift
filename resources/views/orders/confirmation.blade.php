@@ -139,7 +139,7 @@
                 const cityName = '{{$city_name->name_ru}}'; // Введите название города здесь
                 const defaultCoords = [55.753215, 37.622504]; // Москва, Кремль
 
-                ymaps.geocode(cityName, { results: 1 }).then(function (res) {
+                ymaps.geocode(cityName, {results: 1}).then(function (res) {
                     const firstGeoObject = res.geoObjects.get(0);
                     const cityCoords = firstGeoObject.geometry.getCoordinates();
 
@@ -154,38 +154,39 @@
                     });
 
                     map.geoObjects.add(placemark);
-                });
 
-                addressInput.addEventListener('change', async () => {
-                    const geocode = await ymaps.geocode(addressInput.value);
-                    const coords = geocode.geoObjects.get(0).geometry.getCoordinates();
-                    const city = await getCityFromGeocode(geocode);
-                    document.getElementById('city').value = city;
-                    placemark.geometry.setCoordinates(coords);
-                    map.setCenter(coords);
-                });
 
-                placemark.events.add('dragend', async () => {
-                    const coords = placemark.geometry.getCoordinates();
-                    const geocode = await ymaps.geocode(coords);
-                    const address = geocode.geoObjects.get(0).properties.get('text');
-                    const city = await getCityFromGeocode(geocode);
-                    document.getElementById('city').value = city;
-                    addressInput.value = address;
-                    map.setCenter(coords);
-                });
+                    addressInput.addEventListener('change', async () => {
+                        const geocode = await ymaps.geocode(addressInput.value);
+                        const coords = geocode.geoObjects.get(0).geometry.getCoordinates();
+                        const city = await getCityFromGeocode(geocode);
+                        document.getElementById('city').value = city;
+                        placemark.geometry.setCoordinates(coords);
+                        map.setCenter(coords);
+                    });
 
-                map.events.add('click', async (e) => {
-                    const coords = e.get('coords');
-                    const geocode = await ymaps.geocode(coords);
-                    const nearest = geocode.geoObjects.get(0);
-                    const nearestCoords = nearest.geometry.getCoordinates();
-                    const address = nearest.properties.get('text');
-                    const city = await getCityFromGeocode(geocode);
-                    document.getElementById('city').value = city; // установка города в скрытое поле
-                    placemark.geometry.setCoordinates(nearestCoords);
-                    addressInput.value = address;
-                    map.setCenter(nearestCoords);
+                    placemark.events.add('dragend', async () => {
+                        const coords = placemark.geometry.getCoordinates();
+                        const geocode = await ymaps.geocode(coords);
+                        const address = geocode.geoObjects.get(0).properties.get('text');
+                        const city = await getCityFromGeocode(geocode);
+                        document.getElementById('city').value = city;
+                        addressInput.value = address;
+                        map.setCenter(coords);
+                    });
+
+                    map.events.add('click', async (e) => {
+                        const coords = e.get('coords');
+                        const geocode = await ymaps.geocode(coords);
+                        const nearest = geocode.geoObjects.get(0);
+                        const nearestCoords = nearest.geometry.getCoordinates();
+                        const address = nearest.properties.get('text');
+                        const city = await getCityFromGeocode(geocode);
+                        document.getElementById('city').value = city; // установка города в скрытое поле
+                        placemark.geometry.setCoordinates(nearestCoords);
+                        addressInput.value = address;
+                        map.setCenter(nearestCoords);
+                    });
                 });
             }
 
