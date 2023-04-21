@@ -160,10 +160,6 @@ class OrderController extends Controller
             ->where(function ($query) {
                 $query->whereDoesntHave('status', function ($subQuery) {
                     $subQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
-                })->orWhere(function ($subQuery) {
-                    $subQuery->whereHas('status', function ($subSubQuery) {
-                        $subSubQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
-                    })->where('updated_at', '>', now()->subDays(3));
                 });
             })
             ->count();
