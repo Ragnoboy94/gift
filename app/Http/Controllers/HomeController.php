@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Order;
 use Artesaos\SEOTools\Facades\SEOMeta;
-use Illuminate\Support\Facades\Auth;
 use Nette\Utils\DateTime;
 
 class HomeController extends Controller

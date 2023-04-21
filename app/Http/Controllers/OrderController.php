@@ -6,6 +6,7 @@ use App\Models\Celebration;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use libphonenumber\NumberParseException;
@@ -191,7 +192,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($orderId);
         $user = Auth::user();
-
+        $role_user = $user->role_user->first();
         if ($order->user_id != $user->id) {
             return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
         }
@@ -200,43 +201,40 @@ class OrderController extends Controller
             $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
             $order->save();
         } elseif ($order->status->name == 'in_progress') {
-            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
-            $order->save();
+
 
             $cancellations_this_month = Order::where('user_id', $user->id)
                 ->where('status_id', OrderStatus::where('name', 'cancelled_by_customer')->first()->id)
                 ->whereMonth('updated_at', now()->month)
+                ->whereNotNull('elf_id')
                 ->count();
-
-            $user->rating -= 0.2 * $cancellations_this_month;
-            $user->save();
-
+            if ($cancellations_this_month == 0){
+                $cancellations_this_month = 1;
+            }
+            $role_user->rating -= 0.2 * $cancellations_this_month;
+            $role_user->save();
+            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
+            $order->save();
         } elseif ($order->status->name == 'ready_for_delivery') {
-            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
-            $order->save();
+
 
             $cancellations_this_month = Order::where('user_id', $user->id)
                 ->where('status_id', OrderStatus::where('name', 'cancelled_by_customer')->first()->id)
                 ->whereMonth('updated_at', now()->month)
                 ->count();
-
-            $user->rating -= 0.4 * $cancellations_this_month;
-            $user->save();
+            if ($cancellations_this_month == 0){
+                $cancellations_this_month = 1;
+            }
+            $role_user->rating -= 0.4 * $cancellations_this_month;
+            $role_user->save();
+            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
+            $order->save();
         }
 
         return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно отменен');
     }
 
-    public function updateOrder($orderId)
-    {
-        // Здесь добавьте код для обновления заказа по ID
-        // ...
 
-        // После обновления заказа, получите обновленный заказ
-        $updatedOrder = Order::where('id', $orderId)->with(['user', 'celebration'])->first();
-
-        return response()->json($updatedOrder);
-    }
 
 
 

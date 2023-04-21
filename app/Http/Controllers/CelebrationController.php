@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Artesaos\SEOTools\Facades\SEOMeta;
-use Illuminate\Http\Request;
 
 class CelebrationController extends Controller
 {
