@@ -565,6 +565,7 @@
 </nav>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        @if(Auth::check())
         const activeOrdersBadge = document.getElementById('activeOrdersBadge');
         const ordersButton = document.querySelector('button[data-url]');
         const url = ordersButton.dataset.url;
@@ -577,6 +578,7 @@
                 }
             })
             .catch(error => console.error('Error fetching active orders count:', error));
+        @endif
     });
     document.addEventListener('DOMContentLoaded', function () {
         updateRatingProgressBar();
