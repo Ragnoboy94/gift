@@ -14,21 +14,28 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <h1>Активные заказы</h1>
-
-                            <div id="currentTasksContainer">
+                            <div class="row">
                                 @foreach($activeOrders as $order)
-                                    <div class="order">
-                                        <p>Заказ ID: {{ $order->id }}</p>
-                                        <p>Сумма: {{ $order->sum }} рублей</p>
-                                        <p>Праздник: {{ $order->celebration->name }}</p>
-                                        <p>Клиент: {{ $order->user->name }}</p>
-                                        <button class="btn btn-primary update-order" data-order-id="{{ $order->id }}">
-                                            Обновить заказ
-                                        </button>
+                                    <div class="col-md-6 col-lg-4 my-3">
+                                        <div class="card" style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center;">
+                                            <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
+                                                <h5 class="card-title text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Заказ ID: {{ $order->order_number }}</b></h5>
+                                                <p class="card-text text-white lead" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Сумма на подарок: {{ $order->sum_work }} рублей</b></p>
+                                                <p class="card-text text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>За работу: {{ $order->sum_elf }} рублей</b></p>
+                                                <p class="card-text text-white lead" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Праздник: {{ $order->celebration->name }}</b></p>
+                                                <p class="card-text text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Данные: Заказ для @if($order->gender == 'male')мужчины@elseженщины@endif. {{ $order->hobby }}</b></p>
+                                                <button class="btn btn-primary update-order mb-2" data-order-id="{{ $order->id }}">
+                                                    Обновить заказ
+                                                </button>
+                                                <br>
+                                                <button class="btn btn-danger cancel-order" data-order-id="{{ $order->id }}">
+                                                    Отменить заказ
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
-
                         </div>
                     </div>
                 @endif

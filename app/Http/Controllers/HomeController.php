@@ -83,6 +83,15 @@ class HomeController extends Controller
         })->where('elf_id', $user_id)
             ->with(['user', 'celebration'])->get();
 
-        return view('elf_dashboard', compact('city_name', 'ordersByCity', 'activeOrders'));
+        foreach ($activeOrders as $order) {
+            $sum_order = $order->sum;
+            $sum_elf = 200 + (($sum_order - 625) / 100 * 15);
+            $sum_work = $sum_order - $sum_elf;
+
+            $order->sum_elf = $sum_elf;
+            $order->sum_work = $sum_work;
+        }
+
+        return view('elf_dashboard', compact('city_name', 'ordersByCity', 'activeOrders', 'sum_elf', 'sum_work'));
     }
 }
