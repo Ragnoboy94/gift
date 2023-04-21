@@ -73,11 +73,6 @@ class HomeController extends Controller
         $city_name = City::find($city_id);
         $user_id = auth()->id();
 
-        // Получаем заказы, исключая заказы пользователя
-        $orders = \App\Models\Order::where('user_id', '!=', $user_id)->get();
-
-        // Группируем заказы по городам
-        $ordersByCity = $orders->groupBy('city_id');
         $activeOrders = Order::whereHas('status', function ($query) {
             $query->where('name', 'in_progress');
         })->where('elf_id', $user_id)
@@ -92,6 +87,6 @@ class HomeController extends Controller
             $order->sum_work = $sum_work;
         }
 
-        return view('elf_dashboard', compact('city_name', 'ordersByCity', 'activeOrders', 'sum_elf', 'sum_work'));
+        return view('elf_dashboard', compact('city_name', 'activeOrders', 'sum_elf', 'sum_work'));
     }
 }

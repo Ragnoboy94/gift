@@ -144,6 +144,7 @@ class OrderController extends Controller
         if ($city) {
             $orders = \App\Models\Order::where('city_id', $city->id)
                 ->where('user_id', '!=', $user_id)
+                ->where('status_id','=',1)
                 ->with(['user', 'celebration'])
                 ->get();
             return response()->json($orders);

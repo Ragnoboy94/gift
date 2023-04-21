@@ -20,8 +20,8 @@
                                         <div class="card" style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center;">
                                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
                                                 <h5 class="card-title text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Заказ ID: {{ $order->order_number }}</b></h5>
-                                                <div class="card-text text-white lead" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Сумма на подарок: {{ $order->sum_work }} рублей</b></div>
-                                                <div class="card-text text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>За работу: {{ $order->sum_elf }} рублей</b></div>
+                                                <div class="card-text text-white lead" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Сумма на подарок: {{ round($order->sum_work) }} <span class="rublesText" data-sum="{{ $order->sum_work }}"></span></b></div>
+                                                <div class="card-text text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>За работу: {{ round($order->sum_elf) }} <span class="rublesText" data-sum="{{ $order->sum_elf }}"></span></b></div>
                                                 <div class="card-text text-white lead" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Праздник: {{ $order->celebration->name }}</b></div>
                                                 <div class="card-text text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Данные: Заказ для @if($order->gender == 'male')мужчины@elseженщины@endif. {{ $order->hobby }}</b></div>
                                                 <button class="btn btn-primary update-order mb-2" data-order-id="{{ $order->id }}">
@@ -78,6 +78,12 @@
                         return 'рублей';
                     }
                 }
+                const rublesTextElements = document.querySelectorAll('.rublesText');
+
+                rublesTextElements.forEach((element) => {
+                    const sum = parseInt(element.getAttribute('data-sum'));
+                    element.innerText = pluralizeRubles(sum);
+                });
 
                 let map;
 
