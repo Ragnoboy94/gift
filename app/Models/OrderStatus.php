@@ -10,6 +10,7 @@ class OrderStatus extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'name','display_name'
     ];
+
 }

@@ -11,20 +11,26 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">№ заказа</th>
                 <th scope="col">Сумма</th>
                 <th scope="col">Статус</th>
                 <th scope="col">Дата создания</th>
+                <th scope="col">Срок выполнения</th>
                 <th scope="col">Действия</th>
             </tr>
             </thead>
             <tbody>
             @foreach ($orders as $order)
                 <tr>
-                    <th scope="row">{{ $order->id }}</th>
-                    <td>{{ $order->sum }}</td>
-                    <td>{{ $order->status->name }}</td>
-                    <td>{{ $order->created_at }}</td>
+                    <th scope="row">{{ $order->order_number }}</th>
+                    <td>
+                        {{ $order->sum }} {{ $order->sum_rubles }}:<br>
+                        <b>Подарок:</b> {{ round($order->sum_work) }} {{ $order->sum_work_rubles }}<br>
+                        <b>Эльфу:</b> {{ round($order->sum_elf) }} {{ $order->sum_elf_rubles }}
+                    </td>
+                    <td>{{ $order->status->display_name }}</td>
+                    <td><input type="datetime-local" class="form-control" value="{{ $order->created_at }}" readonly></td>
+                    <td><input type="date" class="form-control" value="{{ $order->deadline }}" readonly></td>
                     <td>
                         @if ($order->status->name == 'active' || $order->status->name == 'created' || $order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery')
                             @if ($order->status->name == 'created')

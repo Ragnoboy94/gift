@@ -173,6 +173,20 @@ class OrderController extends Controller
         return $activeOrdersCount;
     }
 
+    function pluralizeRubles($number) {
+        $remainder100 = $number % 100;
+        $remainder10 = $number % 10;
+
+        if ($remainder100 >= 11 && $remainder100 <= 19) {
+            return 'рублей';
+        } elseif ($remainder10 == 1) {
+            return 'рубль';
+        } elseif ($remainder10 >= 2 && $remainder10 <= 4) {
+            return 'рубля';
+        } else {
+            return 'рублей';
+        }
+    }
     public function myOrders()
     {
         $user = Auth::user();
@@ -186,8 +200,23 @@ class OrderController extends Controller
                     })->where('updated_at', '>', now()->subDays(3));
                 });
             })
-            ->with('status')
+            ->with(['status' => function ($query) {
+                $query->addSelect(['id', 'name', 'display_name']);
+            }])
+            ->select(['id', 'order_number', 'sum', 'status_id', 'deadline','created_at'])
             ->get();
+
+        foreach ($orders as $order) {
+            $sum_order = $order->sum;
+            $sum_elf = 200 + (($sum_order - 625) / 100 * 15);
+            $sum_work = $sum_order - $sum_elf;
+
+            $order->sum_elf = $sum_elf;
+            $order->sum_work = $sum_work;
+            $order->sum_rubles = $this->pluralizeRubles($sum_order);
+            $order->sum_elf_rubles = $this->pluralizeRubles($sum_elf);
+            $order->sum_work_rubles = $this->pluralizeRubles($sum_work);
+        }
 
         return view('orders.my_orders', compact('orders'));
     }

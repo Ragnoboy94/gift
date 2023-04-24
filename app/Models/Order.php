@@ -19,7 +19,8 @@ class Order extends Model
         'floor',
         'intercom',
         'status_id',
-        'elf_id'
+        'elf_id',
+        'created_at'
     ];
 
     public function user()
