@@ -11,37 +11,39 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Проверяем, существует ли сессионное значение 'city_id'
         if (!session()->has('city_id')) {
-            // Если значение отсутствует, устанавливаем его
             session(['city_id' => 1]);
         }
         $celebrations = trans('celebrations');
 
-        // Получение текущей даты
         $currentDate = new DateTime();
         $oneWeekBefore = clone $currentDate;
-        // Вычисление даты, которая находится на одной неделе до текущей
         $oneWeekBefore->modify('-1 week');
         $threeWeeksAfter = clone $currentDate;
-        // Вычисление даты, которая находится на трех неделях после текущей
-        $threeWeeksAfter->modify('+3 weeks');
+        $threeWeeksAfter->modify('+4 weeks');
 
-        // Фильтрация списка праздников, чтобы показывать только те, что удовлетворяют заданным условиям
+        usort($celebrations, function ($a, $b) {
+            if ($a['date'] === null && $b['date'] === null) {
+                return 0;
+            }
+            if ($a['date'] === null) {
+                return 1;
+            }
+            if ($b['date'] === null) {
+                return -1;
+            }
+            return strcmp($a['date'], $b['date']);
+        });
+
         $filteredHolidays = array_filter($celebrations, function ($holiday) use ($oneWeekBefore, $threeWeeksAfter) {
-            // Если дата праздника равна null, включаем его в список
             if ($holiday['date'] === null) {
                 return true;
             }
 
             $holidayDate = DateTime::createFromFormat('m-d', $holiday['date']);
-            // Проверяем, находится ли дата праздника в заданном диапазоне
             return $holidayDate >= $oneWeekBefore && $holidayDate <= $threeWeeksAfter;
         });
-        // Выводим первые три праздника из отфильтрованного списка
         $displayedHolidays = array_slice($filteredHolidays, 0, 3);
-
-        // Получение названий и ключевых слов текущих праздников
         $holidayNames = [];
         $holidayKeywords = [];
 
@@ -51,10 +53,8 @@ class HomeController extends Controller
                 $holidayKeywords = array_merge($holidayKeywords, $holiday['keywords']);
             }
         }
-
         $holidayNames = implode(', ', $holidayNames);
         $holidayKeywords = implode(', ', array_unique($holidayKeywords));
-
         $currentLanguage = app()->getLocale();
 
         if ($currentLanguage === 'en') {
@@ -66,6 +66,7 @@ class HomeController extends Controller
         }
         return view('home', ['celebrations_3' => $displayedHolidays]);
     }
+
     public function elfDashboard()
     {
         $city_id = session('city_id');

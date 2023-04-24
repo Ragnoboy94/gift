@@ -25,6 +25,7 @@ return new class extends Migration
             ['name' => 'cancelled_by_customer'],
             ['name' => 'cancelled_by_elf'],
             ['name' => 'created'],
+            ['name' => 'finished'],
         ]);
     }
 

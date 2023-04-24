@@ -9,6 +9,9 @@
                     <p>{{ __('messages.welcome_text') }}</p>
                 </div>
             </div>
+            @php
+                $ordersCount = app('App\Http\Controllers\OrderController')->getActiveOrdersCount();
+            @endphp
         @if ($errors->any())
                 <div class="alert text-danger text-center">
                     <ul class="list-unstyled">
@@ -92,7 +95,11 @@
                                                         <label for="hobby">{{ __('messages.hobby') }}</label>
                                                         <textarea name="hobby" id="hobby" class="form-control"></textarea>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary mt-1">{{ __('messages.order_button') }}</button>
+                                                    @if ($ordersCount < 3)
+                                                        <button type="submit" class="btn btn-primary mt-1">{{ __('messages.order_button') }}</button>
+                                                    @else
+                                                        <p class="text-danger">{{ __('messages.order_limit_reached') }}</p>
+                                                    @endif
                                                 </form>
 
                                             @else

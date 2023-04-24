@@ -17,6 +17,11 @@ class OrderController extends Controller
     public function create(Request $request, $celebration)
     {
         $user = Auth::user();
+        $activeOrdersCount = $this->getActiveOrdersCount();
+
+        if ($activeOrdersCount >= 3) {
+            return redirect()->back()->withErrors(['error' => __('messages.order_limit_reached')]);
+        }
         $celebrationName = Celebration::where('id', $celebration)->first();
         $ratingLevel = intval($user->role_user->where('role_id', 1)->first()->rating);
 
@@ -160,7 +165,7 @@ class OrderController extends Controller
         $activeOrdersCount = Order::where('user_id', $user_id)
             ->where(function ($query) {
                 $query->whereDoesntHave('status', function ($subQuery) {
-                    $subQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer']);
+                    $subQuery->whereIn('name', ['cancelled_by_elf', 'cancelled_by_customer', 'finished']);
                 });
             })
             ->count();

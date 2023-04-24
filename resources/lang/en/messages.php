@@ -58,4 +58,6 @@ return [
     'due_date' => 'Deadline date',
     'no_due_date_info' => 'Without specifying a due date, the execution period is one month.',
     'order_created' => 'Order successfully created.',
+    'order_limit_reached' => 'You have already placed the maximum number of orders (3).',
+
 ];
