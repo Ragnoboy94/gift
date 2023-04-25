@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Celebration extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        'image',
+    ];
     public function orders()
     {
         return $this->hasMany(Order::class);

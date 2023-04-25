@@ -78,7 +78,7 @@
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="sum-{{ $key }}">{{ __('messages.budget') }}</label>
-                                                        <input type="number" name="sum" id="sum-{{ $key }}" class="form-control" required>
+                                                        <input type="number" name="sum" id="sum-{{ $key }}" class="form-control" placeholder="1000" required>
                                                         <div id="orderDetails-{{ $key }}"></div>
                                                     </div>
 
@@ -93,7 +93,7 @@
                                                     @endif
                                                     <div class="form-group">
                                                         <label for="hobby">{{ __('messages.hobby') }}</label>
-                                                        <textarea name="hobby" id="hobby" class="form-control"></textarea>
+                                                        <textarea name="hobby" id="hobby" class="form-control" placeholder="Занимается спортом, любит читать классику"></textarea>
                                                     </div>
                                                     @if ($ordersCount < 3)
                                                         <button type="submit" class="btn btn-primary mt-1">{{ __('messages.order_button') }}</button>

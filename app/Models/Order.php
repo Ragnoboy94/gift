@@ -30,7 +30,7 @@ class Order extends Model
 
     public function celebration()
     {
-        return $this->belongsTo(Celebration::class);
+        return $this->belongsTo(Celebration::class, 'celebration_id');
     }
 
     public function status()

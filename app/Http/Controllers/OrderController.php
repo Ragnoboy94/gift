@@ -203,9 +203,11 @@ class OrderController extends Controller
             ->with(['status' => function ($query) {
                 $query->addSelect(['id', 'name', 'display_name']);
             }])
-            ->select(['id', 'order_number', 'sum', 'status_id', 'deadline','created_at'])
+            ->with(['celebration' => function ($query) {
+                $query->select(['id', 'image']);
+            }])
+            ->select(['id', 'order_number', 'sum', 'status_id', 'deadline', 'created_at', 'celebration_id'])
             ->get();
-
         foreach ($orders as $order) {
             $sum_order = $order->sum;
             $sum_elf = 200 + (($sum_order - 625) / 100 * 15);

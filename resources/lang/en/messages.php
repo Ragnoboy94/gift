@@ -48,7 +48,7 @@ return [
     'gender1' => 'Gender',
     'hobby1' => 'Hobby',
     'address' => 'Address',
-    'proceed_to_payment' => 'Proceed to Payment',
+    'proceed_to_payment' => 'Place an order',
     'forbidden' => 'Access Denied',
     'forbidden_text' => 'To access this page, you must be logged in and have the necessary permissions.',
     'apartment' => 'Apartment',
