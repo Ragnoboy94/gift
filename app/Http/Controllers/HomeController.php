@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Nette\Utils\DateTime;
 
@@ -73,12 +74,19 @@ class HomeController extends Controller
         $city_name = City::find($city_id);
         $user_id = auth()->id();
 
-        $activeOrders = Order::whereHas('status', function ($query) {
-            $query->where('name', 'in_progress');
-        })->where('elf_id', $user_id)
+        $activeOrders = Order::whereIn('status_id', [
+            OrderStatus::where('name', 'in_progress')->first()->id,
+            OrderStatus::where('name', 'ready_for_delivery')->first()->id,
+        ])->where('elf_id', $user_id)
             ->with(['user', 'celebration'])->get();
-
-        foreach ($activeOrders as $order) {
+        $recentOrders = Order::whereIn('status_id', [
+            OrderStatus::where('name', 'cancelled_by_customer')->first()->id,
+            OrderStatus::where('name', 'finished')->first()->id,
+        ])->where('elf_id', $user_id)
+            ->where('updated_at', '>', now()->subDays(3))
+            ->with(['user', 'celebration'])->get();
+        $orders = $activeOrders->merge($recentOrders);
+        foreach ($orders as $order) {
             $sum_order = $order->sum;
             $sum_elf = 200 + (($sum_order - 625) / 100 * 15);
             $sum_work = $sum_order - $sum_elf;
@@ -87,6 +95,6 @@ class HomeController extends Controller
             $order->sum_work = $sum_work;
         }
 
-        return view('elf_dashboard', compact('city_name', 'activeOrders', 'sum_elf', 'sum_work'));
+        return view('elf_dashboard', compact('city_name', 'orders'));
     }
 }

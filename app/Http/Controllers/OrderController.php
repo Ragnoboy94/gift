@@ -229,41 +229,35 @@ class OrderController extends Controller
         $order = Order::findOrFail($orderId);
         $user = Auth::user();
         $role_user = $user->role_user->first();
-        if ($order->user_id != $user->id) {
+        $role = $role_user->role;
+
+        $isElf = $role->name === 'elf';
+
+        // Проверка на соответствие пользователя или эльфа
+        if (($isElf && $order->elf_id != $user->id) || (!$isElf && $order->user_id != $user->id)) {
             return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
         }
 
-        if ($order->status->name == 'created' || $order->status->name == 'active') {
+        // Отмена заказа для заказчика
+        if (!$isElf && ($order->status->name == 'created' || $order->status->name == 'active')) {
             $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
             $order->save();
-        } elseif ($order->status->name == 'in_progress') {
-
-
-            $cancellations_this_month = Order::where('user_id', $user->id)
-                ->where('status_id', OrderStatus::where('name', 'cancelled_by_customer')->first()->id)
-                ->whereMonth('updated_at', now()->month)
-                ->whereNotNull('elf_id')
-                ->count();
-            if ($cancellations_this_month == 0){
-                $cancellations_this_month = 1;
-            }
-            $role_user->rating -= 0.2 * $cancellations_this_month;
-            $role_user->save();
-            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
-            $order->save();
-        } elseif ($order->status->name == 'ready_for_delivery') {
-
+        }
+        // Отмена заказа для эльфа и заказчика в статусе 'in_progress' или 'ready_for_delivery'
+        elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
+            $statusName = $isElf ? 'cancelled_by_elf' : 'cancelled_by_customer';
+            $ratingDecrease = $order->status->name == 'in_progress' ? 0.2 : 0.4;
 
             $cancellations_this_month = Order::where('user_id', $user->id)
-                ->where('status_id', OrderStatus::where('name', 'cancelled_by_customer')->first()->id)
+                ->where('status_id', OrderStatus::where('name', $statusName)->first()->id)
                 ->whereMonth('updated_at', now()->month)
                 ->count();
             if ($cancellations_this_month == 0){
                 $cancellations_this_month = 1;
             }
-            $role_user->rating -= 0.4 * $cancellations_this_month;
+            $role_user->rating -= $ratingDecrease * $cancellations_this_month;
             $role_user->save();
-            $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
+            $order->status_id = OrderStatus::where('name', $statusName)->first()->id;
             $order->save();
         }
 

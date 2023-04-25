@@ -10,27 +10,62 @@
                         {{ session()->get('message') }}
                     </div>
                 @endif
-                @if (count($activeOrders) > 0)
+                @if (count($orders) > 0)
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <h1>Активные заказы</h1>
                             <div class="row">
-                                @foreach($activeOrders as $order)
+                                @foreach($orders as $order)
                                     <div class="col-md-6 col-lg-4 my-3">
-                                        <div class="card" style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center;">
+                                        <div class="card"
+                                             style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center;">
                                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
-                                                <h5 class="card-title text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Заказ ID: {{ $order->order_number }}</b></h5>
-                                                <div class="card-text text-white lead" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Сумма на подарок: {{ round($order->sum_work) }} <span class="rublesText" data-sum="{{ $order->sum_work }}"></span></b></div>
-                                                <div class="card-text text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>За работу: {{ round($order->sum_elf) }} <span class="rublesText" data-sum="{{ $order->sum_elf }}"></span></b></div>
-                                                <div class="card-text text-white lead" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Праздник: {{ $order->celebration->name }}</b></div>
-                                                <div class="card-text text-white" style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Данные: Заказ для @if($order->gender == 'male')мужчины@elseженщины@endif. {{ $order->hobby }}</b></div>
-                                                <button class="btn btn-primary update-order mb-2" data-order-id="{{ $order->id }}">
-                                                    Обновить заказ
-                                                </button>
-                                                <br>
-                                                <button class="btn btn-danger cancel-order" data-order-id="{{ $order->id }}">
-                                                    Отменить заказ
-                                                </button>
+                                                <h5 class="card-title text-white"
+                                                    style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Заказ
+                                                        ID: {{ $order->order_number }}</b></h5>
+                                                <div class="card-text text-white lead"
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Сумма на
+                                                        подарок: {{ round($order->sum_work) }} <span class="rublesText"
+                                                                                                     data-sum="{{ $order->sum_work }}"></span></b>
+                                                </div>
+                                                <div class="card-text text-white"
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>За
+                                                        работу: {{ round($order->sum_elf) }} <span class="rublesText"
+                                                                                                   data-sum="{{ $order->sum_elf }}"></span></b>
+                                                </div>
+                                                <div class="card-text text-white lead"
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);">
+                                                    <b>Праздник: {{ $order->celebration->name }}</b></div>
+                                                <div class="card-text text-white"
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Данные:
+                                                        Заказ для @if($order->gender == 'male')
+                                                            мужчины
+                                                        @else
+                                                            женщины
+                                                        @endif. {{ $order->hobby }}</b></div>
+                                                @if($order->status->name == 'cancelled_by_customer')
+                                                    <div class="tooltip-container bg-primary text-white">
+                                                        Статус заказа: {{ $order->status->display_name }}
+                                                        <div class="tooltip-text" data-tooltip>Мы сожалеем, что клиент отменил заказ. Его рейтинг понижен. Свяжитесь с нами и предоставьте фотофиксацию чеков и подарка в разложенном виде. Постараемся компенсировать ваши траты.</div>
+                                                    </div>
+                                                @elseif($order->status->name == 'finished')
+                                                    <div class="tooltip-container bg-primary text-white">
+                                                        Статус заказа: {{ $order->status->display_name }}
+                                                        <div class="tooltip-text" data-tooltip>Спасибо, что завершили заказ. Ваш рейтинг увеличился!</div>
+                                                    </div>
+                                                @else
+                                                    <button class="btn btn-primary update-order mb-2"
+                                                            data-order-id="{{ $order->id }}"
+                                                            onclick="return confirm('Вы уверены, что заказ собран и готов к отправке? Отлично! Пожалуйста, учтите, что если заказ будет отменен после подтверждения, ваш рейтинг может снизиться на 0.4. Продолжаем радовать людей!')">
+                                                        Заказ собран
+                                                    </button>
+                                                    <br>
+                                                    <button class="btn btn-danger cancel-order"
+                                                            data-order-id="{{ $order->id }}"
+                                                            onclick="return confirm('Отмена заказа приведет к снижению вашего рейтинга на 0.2 в этом месяце. Помните, что ваша работа эльфа заключается в радости, которую вы приносите людям. Вы уверены, что хотите отменить заказ?')">
+                                                        Отменить заказ
+                                                    </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -78,6 +113,7 @@
                         return 'рублей';
                     }
                 }
+
                 const rublesTextElements = document.querySelectorAll('.rublesText');
 
                 rublesTextElements.forEach((element) => {
