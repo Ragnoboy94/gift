@@ -47,6 +47,18 @@ Route::middleware([
     Route::get('/active-orders', [\App\Http\Controllers\OrderController::class, 'getActiveOrders'])->name('orders.active_orders');
     Route::get('/elf/take-order/{order_id}', [\App\Http\Controllers\ElfController::class, 'takeOrder'])->name('elf.take-order');
 });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'is_admin'
+])->group(function () {
+    Route::get('/admin-dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/translate/{sourceLanguage}', [\App\Http\Controllers\AdminController::class, 'generateLanguagePacks'])->name('translate.generate');
+
+});
+
 Route::get('/order/confirm/{orderId}', function () {
     return view('errors.403');
 })->name('error.403');

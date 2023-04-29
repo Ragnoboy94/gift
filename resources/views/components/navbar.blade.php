@@ -469,6 +469,9 @@
                         <a class="nav-link" href="{{ route('login') }}">{{ __('messages.Login') }}</a>
                     </li>
                 @else
+                    @if (Auth::user() && Auth::user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                    @endif
                     <button class="btn btn-outline-light text-black mt-1" type="button" data-url="{{ route('orders.active_count') }}" onclick="location.href='{{ route('orders.my_orders') }}'">
 
                         Мои заказы
