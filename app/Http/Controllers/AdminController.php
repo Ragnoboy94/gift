@@ -14,7 +14,8 @@ class AdminController extends Controller
 
     public function generateLanguagePacks(Request $request, $sourceLanguage)
     {
-        $targetLanguages = ['ar', 'zh', 'nl', 'fr', 'de', 'hi', 'id', 'it', 'ja', 'ko', 'pl', 'pt', 'ru', 'es', 'th', 'tr', 'vi'];
+        $targetLanguages = ['en','ar', 'zh', 'nl', 'fr', 'de', 'hi', 'id', 'it', 'ja', 'ko', 'pl', 'pt', 'es', 'th', 'tr', 'vi', 'uk', 'be', 'kk', 'uz', 'az', 'tg', 'ky', 'hy', 'ka', 'lt', 'lv', 'et', 'ro'];
+
         $completedLanguages = [];
 
         foreach ($targetLanguages as $targetLanguage) {
@@ -29,7 +30,6 @@ class AdminController extends Controller
 
     private function generateLanguagePack($sourceLanguage, $targetLanguage)
     {
-        $apiKey = config('openai.api_key');
         $client = new Client([
             'base_uri' => 'https://api.openai.com/v1/',
             'headers' => [
@@ -51,35 +51,72 @@ class AdminController extends Controller
         }
 
         $sourceFiles = scandir($sourcePath);
+        $createdFilesInfo = [];
 
         foreach ($sourceFiles as $file) {
             if ($file !== '.' && $file !== '..') {
-                $filePath = $sourcePath . '/' . $file;
-                $translations = include $filePath;
-
-                $translatedTexts = [];
-                foreach ($translations as $key => $text) {
-                    $prompt = "Translate the following text from " . strtoupper($sourceLanguage) . " to " . strtoupper($targetLanguage) . ": " . $text;
-                    $response = $client->post('completions', [
-                        'json' => [
-                            'model' => 'text-davinci-003',
-                            'prompt' => $prompt,
-                            'max_tokens' => 50,
-                            'temperature' => 0.5,
-                        ],
-                    ]);
-
-                    $responseBody = json_decode((string) $response->getBody(), true);
-                    $translatedText = $responseBody['choices'][0]['text'];
-                    $translatedTexts[$key] = $translatedText;
-                }
-
                 $outputFile = $targetPath . '/' . $file;
-                $content = "<?php\n\nreturn " . var_export($translatedTexts, true) . ";\n";
-                file_put_contents($outputFile, $content);
+
+                if (!file_exists($outputFile)) {
+                    $filePath = $sourcePath . '/' . $file;
+                    $translations = include $filePath;
+
+                    if ($file === 'celebrations.php') {
+                        $translatedTexts = [];
+                        /*foreach ($translations as $index => $celebration) {
+                            $translatedTexts[$index] = $celebration;
+                            foreach ($celebration as $key => $text) {
+                                if (is_string($text)) {
+                                    $prompt = "Translate the following text from " . strtoupper($sourceLanguage) . " to " . strtoupper($targetLanguage) . ": " . $text;
+                                    $response = $client->post('completions', [
+                                        'json' => [
+                                            'model' => 'text-davinci-003',
+                                            'prompt' => $prompt,
+                                            'max_tokens' => 1024,
+                                            'temperature' => 0.5,
+                                        ],
+                                    ]);
+
+                                    $responseBody = json_decode((string)$response->getBody(), true);
+                                    $translatedText = $responseBody['choices'][0]['text'];
+                                    $translatedTexts[$index][$key] = $translatedText;
+                                }
+                            }
+                        }*/
+                    } else {
+                        $translatedTexts = [];
+                        foreach ($translations as $key => $text) {
+                            $prompt = "Translate the following text from " . strtoupper($sourceLanguage) . " to " . strtoupper($targetLanguage) . ": " . $text;
+                            $response = $client->post('completions', [
+                                'json' => [
+                                    'model' => 'text-davinci-003',
+                                    'prompt' => $prompt,
+                                    'max_tokens' => 1024,
+                                    'temperature' => 0.5,
+                                ],
+                            ]);
+
+                            $responseBody = json_decode((string) $response->getBody(), true);
+                            $translatedText = $responseBody['choices'][0]['text'];
+                            $translatedTexts[$key] = $translatedText;
+                        }
+                    }
+
+                    $content = "<?php\n\nreturn " . var_export($translatedTexts, true) . ";\n";
+                    file_put_contents($outputFile, $content);
+                    $createdFilesInfo[] = "Created file: $file for language pack: " . strtoupper($targetLanguage);
+
+                }
             }
         }
+
+        if (!empty($createdFilesInfo)) {
+            return response("Переводы успешно созданы:\n" . implode("\n", $createdFilesInfo), 200);
+        } else {
+            return response("Все файлы для языкового пакета " . strtoupper($targetLanguage) . " уже существуют.", 200);
+        }
     }
+
 
 
 }

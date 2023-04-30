@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
                 <div class="col-md-6">
-                    <a href="{{ route('translate.generate', ['sourceLanguage' => 'ru']) }}" class="btn btn-primary">Сгенерировать языковые пакет</a>
+                    <a href="{{ route('translate.generate', ['sourceLanguage' => 'ru']) }}" class="btn btn-primary">Сгенерировать языковые пакеты</a>
                 </div>
         </div>
     </div>
