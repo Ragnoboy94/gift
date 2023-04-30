@@ -229,23 +229,21 @@ class OrderController extends Controller
         $order = Order::findOrFail($orderId);
         $user = Auth::user();
         $role_user = $user->role_user->first();
-        $role = $role_user->role;
 
-        $isElf = $role->name === 'elf';
 
         // Проверка на соответствие пользователя или эльфа
-        if (($isElf && $order->elf_id != $user->id) || (!$isElf && $order->user_id != $user->id)) {
+        if (($order->elf_id != $user->id) || ($order->user_id != $user->id)) {
             return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
         }
 
         // Отмена заказа для заказчика
-        if (!$isElf && ($order->status->name == 'created' || $order->status->name == 'active')) {
+        if (($order->status->name == 'created' || $order->status->name == 'active')) {
             $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
             $order->save();
         }
-        // Отмена заказа для эльфа и заказчика в статусе 'in_progress' или 'ready_for_delivery'
+
         elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
-            $statusName = $isElf ? 'cancelled_by_elf' : 'cancelled_by_customer';
+            $statusName = 'cancelled_by_customer';
             $ratingDecrease = $order->status->name == 'in_progress' ? 0.2 : 0.4;
 
             $cancellations_this_month = Order::where('user_id', $user->id)
