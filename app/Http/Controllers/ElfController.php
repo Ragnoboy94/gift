@@ -58,21 +58,20 @@ class ElfController extends Controller
         $isElf = $role_users->some(function ($role_user) {
             return $role_user->role->name === 'elf';
         });
+
         if ($isElf){
             $role_user = $role_users->first(function ($role_user) {
                 return $role_user->role->name === 'elf';
             });
 
         }else{
-            return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
+            return redirect()->back()->with('message','Вы не являетесь эльфом почему-то:(');
         }
-
 
         // Проверка на соответствие пользователя или эльфа
-        if ($order->elf_id != $user->id || $order->user_id != $user->id) {
-            return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
+        if ($order->elf_id != $user->id || $order->user_id == $user->id) {
+            return redirect()->back()->with('message','Вы не можете отменить этот заказ');
         }
-
         // Отмена заказа для эльфа и заказчика в статусе 'in_progress' или 'ready_for_delivery'
         elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
             $statusName = 'cancelled_by_elf';

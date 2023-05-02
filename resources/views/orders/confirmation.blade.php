@@ -37,15 +37,15 @@
                     <div class="row">
                         <div class="col-md-8 form-group">
                             <label for="address">{{ __('messages.address') }}</label>
-                            <input type="text" name="address" id="address" class="form-control" required>
+                            <input type="text" name="address" id="address" class="form-control" value="{{ $order->address }}" required>
                         </div>
                         <div class="col-md-2 form-group">
                             <label for="apartment">{{ __('messages.apartment') }}</label>
-                            <input type="text" name="apartment" id="apartment" class="form-control">
+                            <input type="text" name="apartment" id="apartment" class="form-control" value="{{ $order->apartment }}">
                         </div>
                         <div class="form-group col-md-2">
                             <label for="floor">{{ __('messages.floor') }}</label>
-                            <input type="number" name="floor" id="floor" class="form-control">
+                            <input type="number" name="floor" id="floor" class="form-control" value="{{ $order->floor }}>
                         </div>
                     </div>
                     <div class="form-check form-group">
@@ -69,7 +69,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="due_date">{{ __('messages.due_date') }}</label>
-                                <input type="date" name="due_date" id="due_date" class="form-control">
+                                <input type="date" name="due_date" id="due_date" class="form-control" value="{{$order->deadline }}">
                             </div>
                         </div>
                     </div>
