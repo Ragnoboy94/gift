@@ -136,10 +136,11 @@
 
             function init() {
                 const addressInput = document.getElementById('address');
+                const cityInput = document.getElementById('city');
                 const cityName = '{{$city_name->name_ru}}'; // Введите название города здесь
                 const defaultCoords = [55.753215, 37.622504]; // Москва, Кремль
 
-                ymaps.geocode(cityName, {results: 1}).then(function (res) {
+                ymaps.geocode(cityName, {results: 1}).then(async function (res) {
                     const firstGeoObject = res.geoObjects.get(0);
                     const cityCoords = firstGeoObject.geometry.getCoordinates();
 
@@ -149,7 +150,18 @@
                         controls: ['zoomControl'],
                     });
                     map.options.set('suppressMapOpenBlock', true);
-                    const placemark = new ymaps.Placemark(cityCoords, {}, {
+
+
+                    let placemarkCoords = cityCoords;
+                    if (addressInput.value) {
+                        const geocode = await ymaps.geocode(addressInput.value);
+                        placemarkCoords = geocode.geoObjects.get(0).geometry.getCoordinates();
+                        const city = await getCityFromGeocode(geocode);
+                        cityInput.value = city; // установка города в скрытое поле
+                        map.setCenter(placemarkCoords);
+                    }
+
+                    const placemark = new ymaps.Placemark(placemarkCoords, {}, {
                         draggable: true
                     });
 

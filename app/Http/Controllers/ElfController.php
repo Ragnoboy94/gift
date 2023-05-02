@@ -90,6 +90,7 @@ class ElfController extends Controller
             $role_user->rating -= $ratingDecrease * $cancellations_this_month;
             $role_user->save();
             $order->status_id = OrderStatus::where('name', $statusName)->first()->id;
+            $order->elf_id = null;
             $order->save();
         }
 
