@@ -35,6 +35,7 @@ Route::middleware([
     Route::get('/active-orders-count', [\App\Http\Controllers\OrderController::class, 'getActiveOrdersCount'])->name('orders.active_count');
     Route::get('/my-orders', [\App\Http\Controllers\OrderController::class, 'myOrders'])->name('orders.my_orders');
     Route::get('/order/cancel/{orderId}', [\App\Http\Controllers\OrderController::class, 'cancel'])->name('order.cancel');
+    Route::get('/order/data/{orderId}', [\App\Http\Controllers\OrderController::class,'showDataPage'])->name('order.show_data');
 });
 Route::middleware([
     'auth:sanctum',
@@ -47,6 +48,7 @@ Route::middleware([
     Route::get('/active-orders', [\App\Http\Controllers\OrderController::class, 'getActiveOrders'])->name('orders.active_orders');
     Route::get('/elf/take-order/{order_id}', [\App\Http\Controllers\ElfController::class, 'takeOrder'])->name('elf.take-order');
     Route::get('/elf/cancel/{orderId}', [\App\Http\Controllers\ElfController::class, 'cancel'])->name('elf.cancel');
+    Route::get('/send-order-ready/{orderId}', [\App\Http\Controllers\OrderController::class, 'sendOrderReady'])->name('send-order-ready');
 });
 
 Route::middleware([

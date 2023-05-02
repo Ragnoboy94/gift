@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderReadyMail;
 use App\Models\Celebration;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
+
 
 class OrderController extends Controller
 {
@@ -71,8 +74,9 @@ class OrderController extends Controller
         $order = Order::findOrFail($orderId);
         $celebration = Celebration::findOrFail($order->celebration_id);
         $user = Auth::user();
-        return view('orders.confirmation', compact('order', 'celebration', 'user','city_name'));
+        return view('orders.confirmation', compact('order', 'celebration', 'user', 'city_name'));
     }
+
     public function accept($orderId)
     {
         $order = Order::findOrFail($orderId);
@@ -150,7 +154,7 @@ class OrderController extends Controller
         if ($city) {
             $orders = \App\Models\Order::where('city_id', $city->id)
                 ->where('user_id', '!=', $user_id)
-                ->where('status_id','=',1)
+                ->where('status_id', '=', 1)
                 ->with(['user', 'celebration'])
                 ->get();
             return response()->json($orders);
@@ -173,7 +177,8 @@ class OrderController extends Controller
         return $activeOrdersCount;
     }
 
-    function pluralizeRubles($number) {
+    function pluralizeRubles($number)
+    {
         $remainder100 = $number % 100;
         $remainder10 = $number % 10;
 
@@ -187,6 +192,7 @@ class OrderController extends Controller
             return 'рублей';
         }
     }
+
     public function myOrders()
     {
         $user = Auth::user();
@@ -240,9 +246,7 @@ class OrderController extends Controller
         if (($order->status->name == 'created' || $order->status->name == 'active')) {
             $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
             $order->save();
-        }
-
-        elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
+        } elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
             $statusName = 'cancelled_by_customer';
             $ratingDecrease = $order->status->name == 'in_progress' ? 0.2 : 0.4;
 
@@ -250,7 +254,7 @@ class OrderController extends Controller
                 ->where('status_id', OrderStatus::where('name', $statusName)->first()->id)
                 ->whereMonth('updated_at', now()->month)
                 ->count();
-            if ($cancellations_this_month == 0){
+            if ($cancellations_this_month == 0) {
                 $cancellations_this_month = 1;
             }
             $role_user->rating -= $ratingDecrease * $cancellations_this_month;
@@ -262,8 +266,42 @@ class OrderController extends Controller
         return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно отменен');
     }
 
+    public function showDataPage($orderId)
+    {
+        return view('order_data_page');
+    }
+
+    public function sendEmailWithOrderData($order)
+    {
+        try {
+            Mail::to($order->user->email)->send(new OrderReadyMail($order));
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error sending email for order ID: ' . $order->id . ' - ' . $e->getMessage());
+        }
+    }
+
+    public function sendOrderReady($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        $inProgressStatus = OrderStatus::where('name', 'in_progress')->first()->id;
+        if ($order->status_id !== $inProgressStatus) {
+            return redirect()->back()->with('message', 'Заказ не находится в статусе "в процессе"');
+        }
 
 
+        // Отправьте электронное письмо
+        if ($this->sendEmailWithOrderData($order)) {
+            $readyForDeliveryStatus = OrderStatus::where('name', 'ready_for_delivery')->first()->id;
+            $order->status_id = $readyForDeliveryStatus;
+            $order->save();
+            return redirect()->back()->with('message', 'Статус заказа успешно изменен на "готов к отправке" и письмо отправлено');
+        }else{
+            return redirect()->back()->with('message', 'Ошибка с отправкой сообщения пользователю. Пока чиним, простите.');
+        }
 
+
+    }
 
 }
