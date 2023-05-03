@@ -9,17 +9,14 @@
                         Чат
                     </div>
                     <div class="card-body">
-                        @foreach($messages as $message)
-                            <div>{{ $message->content }}</div>
-                        @endforeach
                         <div class="chat-messages" id="chat-messages" style="height: 400px; overflow-y: scroll;">
-
                         </div>
                     </div>
                     <div class="card-footer">
-                        <form id="chat-form">
+                        <form id="chat-form" autocomplete="off">
                             <div class="input-group">
-                                <input type="text" id="chat-input" class="form-control" placeholder="Введите ваше сообщение...">
+                                <input type="text" id="chat-input" class="form-control"
+                                       placeholder="Введите ваше сообщение..." required>
                                 <button type="submit" class="btn btn-primary">Отправить</button>
                             </div>
                         </form>
@@ -34,11 +31,9 @@
             const chatMessages = document.getElementById('chat-messages');
             const chatForm = document.getElementById('chat-form');
             const chatInput = document.getElementById('chat-input');
+            let lastMessageId = 0;
 
-            // Получение и отображение сообщений при загрузке страницы
             getMessages();
-
-            // Отправка сообщений
             chatForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const message = chatInput.value;
@@ -49,18 +44,20 @@
                 }
             });
 
-            // Получение и отображение сообщений с сервера
+            // Запуск цикла проверки каждые 3 секунды
+            setInterval(checkForNewMessages, 3000);
+
             function getMessages() {
                 fetch(`{{ url('/chat/' . $order->id . '/messages') }}`)
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(message => {
                             addMessageToChat(message);
+                            lastMessageId = message.id;
                         });
                     });
             }
 
-            // Отправка сообщения на сервер
             function sendMessage(content) {
                 fetch(`{{ url('/chat/' . $order->id . '/send') }}`, {
                     method: 'POST',
@@ -73,18 +70,37 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            addMessageToChat({content});
+                            addMessageToChat({message: content, user_id: {{ auth()->id() }}});
                         }
                     });
             }
 
-            // Добавление сообщения на страницу чата
             function addMessageToChat(message) {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
-                messageElement.textContent = message.content;
+
+                if (message.user_id === {{ auth()->id() }}) {
+                    messageElement.classList.add('sender');
+                } else {
+                    messageElement.classList.add('receiver');
+                }
+
+                messageElement.textContent = message.message;
                 chatMessages.appendChild(messageElement);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function checkForNewMessages() {
+                fetch(`{{ url('/chat/' . $order->id . '/messages?lastMessageId=' . urlencode('')) }}${lastMessageId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            data.forEach(message => {
+                                addMessageToChat(message);
+                                lastMessageId = message.id;
+                            });
+                        }
+                    });
             }
         });
     </script>

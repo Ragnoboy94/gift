@@ -37,4 +37,25 @@ body {
     }
 }
 
+.chat-message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 55%;
+    word-wrap: break-word;
+}
+
+.chat-message.sender {
+    background-color: #cce5ff;
+    float: right;
+    clear: both;
+    text-align: right;
+}
+
+.chat-message.receiver {
+    background-color: #f8f9fa;
+    float: left;
+    clear: both;
+}
+
 

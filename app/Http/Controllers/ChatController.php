@@ -15,12 +15,18 @@ class ChatController extends Controller
         return view('chat.show', ['order' => $order, 'messages' => $messages]);
     }
 
-    public function getMessages($orderId)
+    public function getMessages($orderId, Request $request)
     {
-        $messages = Message::where('order_id', $orderId)->orderBy('created_at', 'asc')->get();
+        $lastMessageId = $request->query('lastMessageId', 0);
+
+        $messages = Message::where('order_id', $orderId)
+            ->where('id', '>', $lastMessageId)
+            ->orderBy('created_at', 'asc')
+            ->get();
 
         return response()->json($messages);
     }
+
 
     public function sendMessage(Request $request, $orderId)
     {
