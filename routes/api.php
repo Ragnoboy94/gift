@@ -18,7 +18,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/chat/{orderId}/messages', [\App\Http\Controllers\ChatController::class, 'getMessages']);
-    Route::post('/chat/{orderId}/send', [\App\Http\Controllers\ChatController::class, 'sendMessage']);
-});

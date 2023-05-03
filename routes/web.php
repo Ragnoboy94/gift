@@ -37,6 +37,8 @@ Route::middleware([
     Route::get('/order/cancel/{orderId}', [\App\Http\Controllers\OrderController::class, 'cancel'])->name('order.cancel');
     Route::get('/order/data/{orderId}', [\App\Http\Controllers\OrderController::class,'showDataPage'])->name('order.show_data');
     Route::get('chat/{orderId}', [\App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
+    Route::get('/chat/{orderId}/messages', [\App\Http\Controllers\ChatController::class, 'getMessages']);
+    Route::post('/chat/{orderId}/send', [\App\Http\Controllers\ChatController::class, 'sendMessage']);
 });
 Route::middleware([
     'auth:sanctum',

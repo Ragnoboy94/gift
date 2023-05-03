@@ -27,38 +27,62 @@
     </div>
 
     <script>
-        const socket = io('{{ config("app.socket_server_address") }}:3000');
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatMessages = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
 
+            // Получение и отображение сообщений при загрузке страницы
+            getMessages();
 
-        // Уведомления о новых сообщениях
-        socket.on('chat message', (msg) => {
-            // Добавьте код для добавления нового сообщения на страницу чата
-        });
+            // Отправка сообщений
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const message = chatInput.value;
 
-        // Индикаторы "печатающего" пользователя
-        const typingIndicator = document.getElementById('typing-indicator');
+                if (message) {
+                    sendMessage(message);
+                    chatInput.value = '';
+                }
+            });
 
-        socket.on('typing', (msg) => {
-            typingIndicator.innerHTML = msg;
-        });
-
-        // Отправка сообщений
-        const sendMessageButton = document.getElementById('send-message-button');
-        const messageInput = document.getElementById('message-input');
-
-        sendMessageButton.addEventListener('click', () => {
-            const message = messageInput.value;
-
-            if (message) {
-                socket.emit('chat message', message);
-                messageInput.value = '';
+            // Получение и отображение сообщений с сервера
+            function getMessages() {
+                fetch(`{{ url('/chat/' . $order->id . '/messages') }}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(message => {
+                            addMessageToChat(message);
+                        });
+                    });
             }
-        });
 
-        // Обработка события "печатающий"
-        messageInput.addEventListener('input', () => {
-            socket.emit('typing', 'Пользователь печатает...');
+// Отправка сообщения на сервер
+            function sendMessage(content) {
+                fetch(`{{ url('/chat/' . $order->id . '/send') }}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({content}),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            addMessageToChat({content});
+                        }
+                    });
+            }
+
+            // Добавление сообщения на страницу чата
+            function addMessageToChat(message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message');
+                messageElement.textContent = message.content;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
         });
     </script>
 @endsection
-

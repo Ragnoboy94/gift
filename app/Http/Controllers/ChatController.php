@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\Order;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Events\MessageSent;
 
 class ChatController extends Controller
 {
@@ -15,6 +14,7 @@ class ChatController extends Controller
 
         return view('chat.show', ['order' => $order]);
     }
+
     public function getMessages($orderId)
     {
         $order = Order::findOrFail($orderId);
@@ -28,14 +28,11 @@ class ChatController extends Controller
         $request->validate(['content' => 'required']);
 
         $message = new Message();
-        $message->fill([
-            'order_id' => $orderId,
-            'user_id' => auth()->id(),
-            'content' => $request->content,
-        ]);
+        $message->order_id = $orderId;
+        $message->user_id = auth()->id();
+        $message->message = $request->input('content');
         $message->save();
 
         return response()->json(['status' => 'success']);
     }
-
 }
