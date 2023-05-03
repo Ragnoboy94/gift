@@ -9,6 +9,9 @@
                         Чат
                     </div>
                     <div class="card-body">
+                        @foreach($messages as $message)
+                            <div>{{ $message->content }}</div>
+                        @endforeach
                         <div class="chat-messages" id="chat-messages" style="height: 400px; overflow-y: scroll;">
 
                         </div>
@@ -57,7 +60,7 @@
                     });
             }
 
-// Отправка сообщения на сервер
+            // Отправка сообщения на сервер
             function sendMessage(content) {
                 fetch(`{{ url('/chat/' . $order->id . '/send') }}`, {
                     method: 'POST',
@@ -85,4 +88,5 @@
             }
         });
     </script>
+
 @endsection

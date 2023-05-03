@@ -11,14 +11,13 @@ class ChatController extends Controller
     public function show($orderId)
     {
         $order = Order::findOrFail($orderId);
-
-        return view('chat.show', ['order' => $order]);
+        $messages = Message::where('order_id', $orderId)->orderBy('created_at', 'ASC')->get();
+        return view('chat.show', ['order' => $order, 'messages' => $messages]);
     }
 
     public function getMessages($orderId)
     {
-        $order = Order::findOrFail($orderId);
-        $messages = Message::where('order_id', $orderId)->orderBy('created_at', 'ASC')->get();
+        $messages = Message::where('order_id', $orderId)->orderBy('created_at', 'asc')->get();
 
         return response()->json($messages);
     }
