@@ -55,7 +55,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
-
+    'socket_server_address' => env('SOCKET_SERVER_ADDRESS', 'http://localhost'),
     'asset_url' => env('ASSET_URL'),
 
     /*

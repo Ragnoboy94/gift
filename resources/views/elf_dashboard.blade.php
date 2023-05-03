@@ -53,6 +53,11 @@
                                                         Статус заказа: {{ $order->status->display_name }}
                                                         <div class="tooltip-text" data-tooltip>Спасибо, что завершили заказ. Ваш рейтинг увеличился!</div>
                                                     </div>
+                                                @elseif($order->status->name == 'ready_for_delivery')
+                                                    <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
+                                                       class="btn btn-primary mb-2">
+                                                        Связь с заказчиком
+                                                    </a>
                                                 @else
                                                     <a href="{{ route('send-order-ready', ['orderId' => $order->id]) }}"
                                                        class="btn btn-primary update-order mb-2"

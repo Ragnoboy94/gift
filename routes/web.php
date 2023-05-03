@@ -36,6 +36,7 @@ Route::middleware([
     Route::get('/my-orders', [\App\Http\Controllers\OrderController::class, 'myOrders'])->name('orders.my_orders');
     Route::get('/order/cancel/{orderId}', [\App\Http\Controllers\OrderController::class, 'cancel'])->name('order.cancel');
     Route::get('/order/data/{orderId}', [\App\Http\Controllers\OrderController::class,'showDataPage'])->name('order.show_data');
+    Route::get('chat/{orderId}', [\App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
 });
 Route::middleware([
     'auth:sanctum',

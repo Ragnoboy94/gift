@@ -296,7 +296,7 @@ class OrderController extends Controller
             $readyForDeliveryStatus = OrderStatus::where('name', 'ready_for_delivery')->first()->id;
             $order->status_id = $readyForDeliveryStatus;
             $order->save();
-            return redirect()->back()->with('message', 'Статус заказа успешно изменен на "готов к отправке" и письмо отправлено');
+            return redirect()->route('chat.show', ['orderId' => $orderId]);
         }else{
             return redirect()->back()->with('message', 'Ошибка с отправкой сообщения пользователю. Пока чиним, простите.');
         }
