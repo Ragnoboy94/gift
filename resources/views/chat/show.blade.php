@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 offset-md-2">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
                         Чат
@@ -19,6 +19,33 @@
                                        placeholder="Введите ваше сообщение..." required>
                                 <button type="submit" class="btn btn-primary">Отправить</button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Информация о заказе
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Адрес:</strong> {{ $order->address }}</p>
+                        <form id="photo-upload-form" enctype="multipart/form-data">
+                            <div class="upload-container" id="upload-container">
+                                <div class="upload-box" id="upload-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                                         class="bi bi-plus" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                    </svg>
+                                    <input type="file" id="photos" name="photos[]" multiple accept="image/*">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Описание:</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
                         </form>
                     </div>
                 </div>
@@ -102,6 +129,68 @@
                         }
                     });
             }
+
+            const uploadContainer = document.getElementById('upload-container');
+            const uploadBox = document.getElementById('upload-box');
+            const photosInput = document.getElementById('photos');
+
+            uploadBox.addEventListener('click', (e) => {
+                if (e.target === uploadBox || e.target.tagName === 'svg' || e.target.tagName === 'path') {
+                    photosInput.click();
+                }
+            });
+
+            photosInput.addEventListener('change', (e) => {
+                const files = e.target.files;
+                handleFiles(files);
+                photosInput.value = '';
+            });
+
+
+            function handleFiles(files) {
+                for (const file of files) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.onload = () => URL.revokeObjectURL(img.src);
+
+                    const newUploadBox = uploadBox.cloneNode(true);
+                    newUploadBox.appendChild(img);
+
+                    const removeIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    removeIcon.setAttribute('width', '26');
+                    removeIcon.setAttribute('height', '26');
+                    removeIcon.setAttribute('fill', 'currentColor');
+                    removeIcon.classList.add('bi', 'bi-x-lg', 'remove-icon');
+
+                    const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path1.setAttribute('fill-rule', 'evenodd');
+                    path1.setAttribute('d', 'M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z');
+
+                    const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path2.setAttribute('fill-rule', 'evenodd');
+                    path2.setAttribute('d', 'M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z');
+
+                    removeIcon.appendChild(path1);
+                    removeIcon.appendChild(path2);
+
+                    removeIcon.addEventListener('click', () => {
+                        newUploadBox.remove();
+                    });
+
+                    newUploadBox.appendChild(removeIcon);
+                    uploadContainer.insertBefore(newUploadBox, uploadBox);
+                }
+            }
+
+            uploadBox.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
         });
     </script>
 
