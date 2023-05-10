@@ -54,6 +54,9 @@ Route::middleware([
     Route::get('/elf/take-order/{order_id}', [\App\Http\Controllers\ElfController::class, 'takeOrder'])->name('elf.take-order');
     Route::get('/elf/cancel/{orderId}', [\App\Http\Controllers\ElfController::class, 'cancel'])->name('elf.cancel');
     Route::get('/send-order-ready/{orderId}', [\App\Http\Controllers\OrderController::class, 'sendOrderReady'])->name('send-order-ready');
+    Route::post('/chat/{orderId}/upload', [\App\Http\Controllers\ChatController::class, 'uploadFiles'])->middleware('auth')->name('upload_files');
+    Route::get('/orders/{order}/images', [\App\Http\Controllers\ChatController::class, 'getSavedImages'])->name('get_saved_images');
+
 });
 
 Route::middleware([

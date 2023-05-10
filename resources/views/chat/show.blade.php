@@ -30,7 +30,9 @@
                     </div>
                     <div class="card-body">
                         @if (Auth::user()->id == $order->user_id)
-                            <p><img width="48" class="h-8 w-8 rounded-full object-cover" src="{{ $elf->profile_photo_url }}" alt="{{ $elf->name }}" /><strong>Исполнитель:</strong> {{ $elf->name }}</p>
+                            <p><img width="48" class="h-8 w-8 rounded-full object-cover"
+                                    src="{{ $elf->profile_photo_url }}"
+                                    alt="{{ $elf->name }}"/><strong>Исполнитель:</strong> {{ $elf->name }}</p>
                             @if(!$order->phone_visible)
                                 <form method="POST" action="{{ route('orders.update_phone_visibility', $order->id) }}">
                                     @csrf
@@ -85,7 +87,7 @@
             const chatForm = document.getElementById('chat-form');
             const chatInput = document.getElementById('chat-input');
             let lastMessageId = 0;
-
+            displaySavedImages();
             getMessages();
             chatForm.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -212,6 +214,29 @@
                     uploadContainer.insertBefore(newUploadBox, uploadBox);
                 }
             }
+            function displaySavedImages() {
+                fetch('{{ route('get_saved_images', $order->id) }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(image => {
+                            const img = document.createElement('img');
+                            img.src = image.file_name; // Используйте image.file_name вместо image.url
+                            img.classList.add('saved-image');
+
+                            const newUploadBox = uploadBox.cloneNode(true);
+                            newUploadBox.appendChild(img);
+
+                            // Удалить иконку удаления для сохраненных изображений
+                            const removeIcon = newUploadBox.querySelector('.remove-icon');
+                            if (removeIcon) {
+                                removeIcon.remove();
+                            }
+
+                            uploadContainer.insertBefore(newUploadBox, uploadBox);
+                        });
+                    });
+            }
+
 
             uploadBox.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -222,6 +247,31 @@
                 const files = e.dataTransfer.files;
                 handleFiles(files);
             });
+            const photoUploadForm = document.getElementById('photo-upload-form');
+
+            photoUploadForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(photoUploadForm);
+                fetch('{{ route('upload_files', $order->id) }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: formData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Файлы успешно загружены!');
+                            document.querySelectorAll('.upload-container .upload-box:not(#upload-box) .remove-icon').forEach(removeIcon => {
+                                removeIcon.remove();
+                            });
+                        }
+                    });
+            });
+
+
             @endif
         });
     </script>

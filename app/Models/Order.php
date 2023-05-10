@@ -38,4 +38,8 @@ class Order extends Model
     {
         return $this->belongsTo(OrderStatus::class, 'status_id');
     }
+    public function files()
+    {
+        return $this->hasMany(OrderFile::class);
+    }
 }
