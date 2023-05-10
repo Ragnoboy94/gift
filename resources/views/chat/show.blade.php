@@ -29,24 +29,50 @@
                         Информация о заказе
                     </div>
                     <div class="card-body">
-                        <p><strong>Адрес:</strong> {{ $order->address }}</p>
-                        <form id="photo-upload-form" enctype="multipart/form-data">
-                            <div class="upload-container" id="upload-container">
-                                <div class="upload-box" id="upload-box">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                                         class="bi bi-plus" viewBox="0 0 16 16">
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                    </svg>
-                                    <input type="file" id="photos" name="photos[]" multiple accept="image/*">
+                        @if (Auth::user()->id == $order->user_id)
+                            <p><img width="48" class="h-8 w-8 rounded-full object-cover" src="{{ $elf->profile_photo_url }}" alt="{{ $elf->name }}" /><strong>Исполнитель:</strong> {{ $elf->name }}</p>
+                            @if(!$order->phone_visible)
+                                <form method="POST" action="{{ route('orders.update_phone_visibility', $order->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="alert alert-warning" role="alert">
+                                        Ваш номер телефона скрыт от эльфа. Если вы хотите показать свой номер телефона
+                                        эльфу, нажмите кнопку ниже. Обратите внимание, что ваш номер телефона будет
+                                        виден в открытом виде.
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Показать номер телефона эльфу</button>
+                                </form>
+                            @else
+
+                                <div class="alert alert-info" role="alert">
+                                    Ваш номер телефона виден эльфу.
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Описание:</label>
-                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Отправить</button>
-                        </form>
+                            @endif
+                        @else
+                            <p><strong>Адрес:</strong> {{ $order->address }}</p>
+                            @if($order->phone_visible)
+                                <p><strong>Телефон для связи:</strong> {{ $user->phone }}</p>
+                            @endif
+                            <form id="photo-upload-form" enctype="multipart/form-data">
+                                <div class="upload-container" id="upload-container">
+                                    <div class="upload-box" id="upload-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                             fill="currentColor"
+                                             class="bi bi-plus" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                        </svg>
+                                        <input type="file" id="photos" name="photos[]" multiple accept="image/*">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Описание:</label>
+                                    <textarea class="form-control" id="description" name="description"
+                                              rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Отправить</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -97,12 +123,17 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            addMessageToChat({message: content, user_id: {{ auth()->id() }}});
+                            addMessageToChat({message: content, user_id: {{ auth()->id() }}, sent_by_me: true});
                         }
                     });
             }
 
             function addMessageToChat(message) {
+                // Если сообщение отправлено мной и уже отображается в чате, пропустите его
+                if (message.sent_by_me && message.user_id === {{ auth()->id() }}) {
+                    return;
+                }
+
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
 
@@ -129,7 +160,7 @@
                         }
                     });
             }
-
+            @if (Auth::user()->id != $order->user_id)
             const uploadContainer = document.getElementById('upload-container');
             const uploadBox = document.getElementById('upload-box');
             const photosInput = document.getElementById('photos');
@@ -191,6 +222,7 @@
                 const files = e.dataTransfer.files;
                 handleFiles(files);
             });
+            @endif
         });
     </script>
 

@@ -303,5 +303,11 @@ class OrderController extends Controller
 
 
     }
+    public function updatePhoneVisibility(Request $request, Order $order)
+    {
+        $order->update(['phone_visible' => true]);
+
+        return redirect()->back()->with('message', 'Номер телефона теперь виден эльфу');
+    }
 
 }

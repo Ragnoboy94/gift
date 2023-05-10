@@ -39,6 +39,8 @@ Route::middleware([
     Route::get('chat/{orderId}', [\App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
     Route::get('/chat/{orderId}/messages', [\App\Http\Controllers\ChatController::class, 'getMessages']);
     Route::post('/chat/{orderId}/send', [\App\Http\Controllers\ChatController::class, 'sendMessage']);
+    Route::put('/orders/{order}/update_phone_visibility', [\App\Http\Controllers\OrderController::class, 'updatePhoneVisibility'])->name('orders.update_phone_visibility');
+
 });
 Route::middleware([
     'auth:sanctum',

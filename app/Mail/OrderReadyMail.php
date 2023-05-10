@@ -20,7 +20,7 @@ class OrderReadyMail extends Mailable
 
     public function build()
     {
-        $orderDataUrl = route('order.show_data', ['orderId' => $this->order->id]);
+        $orderDataUrl = route('chat.show', ['orderId' => $this->order->id]);
 
         return $this->subject('Заказ №'.$this->order->order_number.' собран')
             ->view('emails.order_ready', ['orderDataUrl' => $orderDataUrl,'homeUrl'=>route('home')]);

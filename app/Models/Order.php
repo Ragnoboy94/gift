@@ -20,7 +20,8 @@ class Order extends Model
         'intercom',
         'status_id',
         'elf_id',
-        'created_at'
+        'created_at',
+        'phone_visible'
     ];
 
     public function user()
