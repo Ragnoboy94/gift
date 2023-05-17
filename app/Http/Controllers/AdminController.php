@@ -33,7 +33,7 @@ class AdminController extends Controller
         $client = new Client([
             'base_uri' => 'https://api.openai.com/v1/',
             'headers' => [
-                'Authorization' => "Bearer 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",
+                'Authorization' => "Bearer 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",
                 'Content-Type' => 'application/json',
             ],
         ]);
