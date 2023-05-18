@@ -54,7 +54,36 @@
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderConfirmationModal">
                                 Заказ получен
                             </button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#orderProblemModal">
+                                Проблема с заказом
+                            </button>
 
+                            <!-- Модальное окно -->
+                            <div class="modal fade" id="orderProblemModal" tabindex="-1" aria-labelledby="orderProblemModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="orderProblemModalLabel">Сообщить о проблеме с заказом</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger" role="alert">
+                                                Заказ будет заблокирован до завершения проверки.
+                                            </div>
+                                            <form>
+                                                <div class="form-group">
+                                                    <label for="problemDescription">Описание проблемы</label>
+                                                    <textarea class="form-control" id="problemDescription" rows="3"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary">Отправить</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Модальное окно -->
                             <div class="modal fade" id="orderConfirmationModal" tabindex="-1" aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">

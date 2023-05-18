@@ -11,7 +11,7 @@
         <!-- Карточки для мобильных устройств -->
         <div class="d-md-none">
             @foreach ($orders as $order)
-                <div class="card mb-3">
+                <div class="card mb-3 text-white" style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
                     <div class="card-body">
                         <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
                         <p class="card-text">
