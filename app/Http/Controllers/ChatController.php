@@ -50,28 +50,43 @@ class ChatController extends Controller
     public function uploadFiles(Request $request, $orderId)
     {
         $request->validate([
-            'photos.*' => 'file|mimes:jpg,jpeg,png|max:2048', // Можете добавить валидацию файлов, если нужно
+            'photos.*' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'description' => 'nullable|string',
         ]);
 
         $order = Order::findOrFail($orderId);
+        if ($request->input('description')) {
+            $order->description = $request->input('description');
+            $order->save();
+        }
 
         $uploadedPhotos = [];
-        foreach ($request->file('photos') as $photo) {
-            $path = $photo->store('public/photos');
-            $url = Storage::url($path);
+        if ($request->file('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('public/photos');
+                $url = Storage::url($path);
 
-            $orderFile = new OrderFile([
-                'order_id' => $orderId,
-                'user_id' => Auth::id(),
-                'file_name' => $url,
-            ]);
+                $orderFile = new OrderFile([
+                    'order_id' => $orderId,
+                    'user_id' => Auth::id(),
+                    'file_name' => $url,
+                ]);
 
-            $order->files()->save($orderFile);
-            $uploadedPhotos[] = $url;
+                $order->files()->save($orderFile);
+                $uploadedPhotos[] = $url;
+            }
+
+            $message = 'Фото получено!';
+        } else {
+            $uploadedPhotos[] = '';
+            $message = 'Описание получено!';
+        }
+        if ($request->input('description') && $request->file('photos')) {
+            $message = "Фото и описание получены!";
         }
 
         // Верните ответ, например, со списком загруженных файлов или просто статусом успеха
-        return response()->json(['status' => 'success', 'uploaded_photos' => $uploadedPhotos]);
+        return response()->json(['status' => 'success', 'message' => $message, 'uploaded_photos' => $uploadedPhotos]);
     }
 
     public function getSavedImages(Order $order)
@@ -81,7 +96,6 @@ class ChatController extends Controller
 
         return response()->json($images);
     }
-
 
 
 }

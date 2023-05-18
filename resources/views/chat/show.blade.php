@@ -29,7 +29,8 @@
                         Информация о заказе
                     </div>
                     <div class="card-body">
-                        @if (Auth::user()->id == $order->user_id)
+                        <div id="message" class="alert" role="alert" style="display: none;"></div>
+                    @if (Auth::user()->id == $order->user_id)
                             <p><img width="48" class="h-8 w-8 rounded-full object-cover"
                                     src="{{ $elf->profile_photo_url }}"
                                     alt="{{ $elf->name }}"/><strong>Исполнитель:</strong> {{ $elf->name }}</p>
@@ -51,7 +52,14 @@
                                 </div>
                             @endif
                         @else
-                            <p><strong>Адрес:</strong> {{ $order->address }}</p>
+                            <p><strong>Адрес:</strong> {{ $order->address }}
+                                @if ($order->apartment), квартира: {{$order->apartment}}
+                                @endif
+                                @if ($order->floor)
+                                    , этаж: {{$order->floor}}
+                                    @endif
+                                @if ($order->intercom), домофон работает
+                                @endif</p>
                             @if($order->phone_visible)
                                 <p><strong>Телефон для связи:</strong> {{ $user->phone }}</p>
                             @endif
@@ -214,6 +222,7 @@
                     uploadContainer.insertBefore(newUploadBox, uploadBox);
                 }
             }
+
             function displaySavedImages() {
                 fetch('{{ route('get_saved_images', $order->id) }}')
                     .then(response => response.json())
@@ -263,7 +272,11 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            alert('Файлы успешно загружены!');
+                            const messageElement = document.getElementById('message');
+                            messageElement.style.display = 'block';
+                            messageElement.classList.add('alert-success');
+                            messageElement.textContent = data.message;
+
                             document.querySelectorAll('.upload-container .upload-box:not(#upload-box) .remove-icon').forEach(removeIcon => {
                                 removeIcon.remove();
                             });
