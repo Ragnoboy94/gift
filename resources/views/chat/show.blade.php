@@ -26,7 +26,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        Информация о заказе
+                        Информация о заказе:
                     </div>
                     <div class="card-body">
                         <div id="message" class="alert" role="alert" style="display: none;"></div>
@@ -51,6 +51,28 @@
                                     Ваш номер телефона виден эльфу.
                                 </div>
                             @endif
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderConfirmationModal">
+                                Заказ получен
+                            </button>
+
+                            <!-- Модальное окно -->
+                            <div class="modal fade" id="orderConfirmationModal" tabindex="-1" aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="orderConfirmationModalLabel">Подтверждение получения заказа</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Пожалуйста, подтвердите, что заказ соответствует обговоренной цене, были получены чеки, и вы передали деньги с учетом работы. Это важный шаг для подтверждения выполнения заказа.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary">Подтвердить</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @else
                             <p><strong>Адрес:</strong> {{ $order->address }}
                                 @if ($order->apartment), квартира: {{$order->apartment}}
@@ -77,8 +99,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Описание:</label>
-                                    <textarea class="form-control" id="description" name="description"
-                                              rows="3"></textarea>
+                                    <textarea placeholder="Пришла идея собрать набор футбольного фаната..." class="form-control" id="description" name="description"
+                                              rows="3">{{$order->description}}</textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Отправить</button>
                             </form>
@@ -95,7 +117,9 @@
             const chatForm = document.getElementById('chat-form');
             const chatInput = document.getElementById('chat-input');
             let lastMessageId = 0;
+            @if (Auth::user()->id != $order->user_id)
             displaySavedImages();
+            @endif
             getMessages();
             chatForm.addEventListener('submit', (e) => {
                 e.preventDefault();
