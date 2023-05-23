@@ -310,4 +310,20 @@ class OrderController extends Controller
         return redirect()->back()->with('message', 'Номер телефона теперь виден эльфу');
     }
 
+    public function finishOrder($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        // Убедитесь, что заказ в правильном статусе перед окончанием
+        $validStatuses = ['ready_for_delivery'];
+        if (!in_array($order->status->name, $validStatuses)) {
+            return redirect()->back()->with('error_message', 'Заказ не может быть завершен в текущем статусе');
+        }
+
+        $finishedStatus = OrderStatus::where('name', 'finished')->first();
+        $order->status_id = $finishedStatus->id;
+        $order->save();
+
+        return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно завершен');
+    }
 }

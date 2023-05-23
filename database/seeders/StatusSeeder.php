@@ -17,8 +17,8 @@ class StatusSeeder extends Seeder
             ['name' => 'active', 'display_name' => 'Активный'],
             ['name' => 'in_progress', 'display_name' => 'В процессе'],
             ['name' => 'ready_for_delivery', 'display_name' => 'Готов к доставке'],
-            ['name' => 'cancelled_by_customer', 'display_name' => 'Отменено клиентом'],
-            ['name' => 'cancelled_by_elf', 'display_name' => 'Отменено исполнителем'],
+            ['name' => 'cancelled_by_customer', 'display_name' => 'Отменен клиентом'],
+            ['name' => 'cancelled_by_elf', 'display_name' => 'Отменен исполнителем'],
             ['name' => 'created', 'display_name' => 'Создан'],
             ['name' => 'finished', 'display_name' => 'Завершен'],
         ];
