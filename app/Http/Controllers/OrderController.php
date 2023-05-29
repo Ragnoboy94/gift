@@ -326,4 +326,14 @@ class OrderController extends Controller
 
         return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно завершен');
     }
+
+    public function markAsPaid($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        $order->paid = true;
+        $order->save();
+
+        return redirect()->route('elf-dashboard')->with('message', 'Заказ отмечен как оплаченный');
+    }
 }

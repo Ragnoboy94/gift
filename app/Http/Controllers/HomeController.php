@@ -77,11 +77,12 @@ class HomeController extends Controller
         $activeOrders = Order::whereIn('status_id', [
             OrderStatus::where('name', 'in_progress')->first()->id,
             OrderStatus::where('name', 'ready_for_delivery')->first()->id,
+            OrderStatus::where('name', 'finished')->first()->id,
         ])->where('elf_id', $user_id)
+            ->where('paid', false)
             ->with(['user', 'celebration'])->get();
         $recentOrders = Order::whereIn('status_id', [
             OrderStatus::where('name', 'cancelled_by_customer')->first()->id,
-            OrderStatus::where('name', 'finished')->first()->id,
         ])->where('elf_id', $user_id)
             ->where('updated_at', '>', now()->subDays(3))
             ->with(['user', 'celebration'])->get();

@@ -57,6 +57,7 @@ Route::middleware([
     Route::get('/send-order-ready/{orderId}', [\App\Http\Controllers\OrderController::class, 'sendOrderReady'])->name('send-order-ready');
     Route::post('/chat/{orderId}/upload', [\App\Http\Controllers\ChatController::class, 'uploadFiles'])->middleware('auth')->name('upload_files');
     Route::get('/orders/{order}/images', [\App\Http\Controllers\ChatController::class, 'getSavedImages'])->name('get_saved_images');
+    Route::post('/orders/{order}/mark-as-paid', [\App\Http\Controllers\OrderController::class, 'markAsPaid'])->name('orders.mark_as_paid');
 
 });
 

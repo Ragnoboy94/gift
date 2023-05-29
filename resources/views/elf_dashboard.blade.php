@@ -46,28 +46,87 @@
                                                 @if($order->status->name == 'cancelled_by_customer')
                                                     <div class="tooltip-container bg-primary text-white">
                                                         Статус заказа: {{ $order->status->display_name }}
-                                                        <div class="tooltip-text" data-tooltip>Мы сожалеем, что клиент отменил заказ. Его рейтинг понижен. Свяжитесь с нами и предоставьте фотофиксацию чеков и подарка в разложенном виде. Постараемся компенсировать ваши траты.</div>
+                                                        <div class="tooltip-text" data-tooltip>Мы сожалеем, что клиент
+                                                            отменил заказ. Его рейтинг понижен. Свяжитесь с нами и
+                                                            предоставьте фотофиксацию чеков и подарка в разложенном
+                                                            виде. Постараемся компенсировать ваши траты.
+                                                        </div>
                                                     </div>
                                                 @elseif($order->status->name == 'finished')
                                                     <div class="tooltip-container bg-primary text-white">
                                                         Статус заказа: {{ $order->status->display_name }}
-                                                        <div class="tooltip-text" data-tooltip>Спасибо, что завершили заказ. Ваш рейтинг увеличился!</div>
+                                                        <div class="tooltip-text" data-tooltip>Спасибо, что завершили
+                                                            заказ. Ваш рейтинг увеличился!
+                                                        </div>
                                                     </div>
-                                                @elseif($order->status->name == 'ready_for_delivery')
-                                                    <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
-                                                       class="btn btn-primary mb-2">
-                                                        Связь с заказчиком
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('send-order-ready', ['orderId' => $order->id]) }}"
-                                                       class="btn btn-primary update-order mb-2"
-                                                       onclick="return confirm('Вы уверены, что заказ собран и готов к отправке? Отлично! Пожалуйста, учтите, что если заказ будет отменен после подтверждения, ваш рейтинг может снизиться на 0.4. Продолжаем радовать людей!')">
-                                                        Заказ собран
-                                                    </a>
-                                                    <br>
-                                                    <a href="{{ route('elf.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger"
-                                                       onclick="return confirm('Отмена заказа приведет к снижению вашего рейтинга на 0.2 в этом месяце. Помните, что ваша работа эльфа заключается в радости, которую вы приносите людям. Вы уверены, что хотите отменить заказ?')">Отменить заказ</a>
-                                                @endif
+                                                    @if($order->status->name == 'finished' && !$order->paid &&
+                                                    Auth::user()->id == $order->elf_id)
+                                                        <div class="row">
+                                                            <button type="button" class="btn btn-success my-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#orderConfirmationModal">
+                                                                Деньги получены.
+                                                            </button>
+                                                            @endif
+                                                        </div>
+                                                        <div class="modal fade" id="orderConfirmationModal"
+                                                             tabindex="-1"
+                                                             aria-labelledby="orderConfirmationModalLabel"
+                                                             aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="orderConfirmationModalLabel">
+                                                                            Подтверждение
+                                                                            получения оплаты</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                    </div>
+                                                                    <form method="POST"
+                                                                          action="{{ route('orders.mark_as_paid', $order->id) }}">
+                                                                        @csrf
+                                                                        <div class="modal-body">
+                                                                            Пожалуйста, подтвердите, что вы, как эльф,
+                                                                            выполнивший этот заказ, получили оплату
+                                                                            согласно
+                                                                            обговоренной цене и условиям. Это важный шаг
+                                                                            для
+                                                                            подтверждения выполнения заказа и получения
+                                                                            оплаты.
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary">
+                                                                                Подтвердить получение оплаты
+                                                                            </button>
+                                                                            <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Закрыть
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @elseif($order->status->name == 'ready_for_delivery')
+                                                        <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
+                                                           class="btn btn-primary mb-2">
+                                                            Связь с заказчиком
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('send-order-ready', ['orderId' => $order->id]) }}"
+                                                           class="btn btn-primary update-order mb-2"
+                                                           onclick="return confirm('Вы уверены, что заказ собран и готов к отправке? Отлично! Пожалуйста, учтите, что если заказ будет отменен после подтверждения, ваш рейтинг может снизиться на 0.4. Продолжаем радовать людей!')">
+                                                            Заказ собран
+                                                        </a>
+                                                        <br>
+                                                        <a href="{{ route('elf.cancel', ['orderId' => $order->id]) }}"
+                                                           class="btn btn-danger"
+                                                           onclick="return confirm('Отмена заказа приведет к снижению вашего рейтинга на 0.2 в этом месяце. Помните, что ваша работа эльфа заключается в радости, которую вы приносите людям. Вы уверены, что хотите отменить заказ?')">Отменить
+                                                            заказ</a>
+                                                    @endif
                                             </div>
                                         </div>
                                     </div>
