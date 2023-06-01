@@ -15,16 +15,17 @@
             @endif
             @if ($order->status_id != 3)
                 <h2 class="text-center"> Заказ {{$order->status->display_name}}</h2>
-                    <div class="card col-6 mx-auto mb-3 text-white" style="background-image: url('../images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
-                        <div class="card-body">
-                            <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
-                            <p class="card-text">
-                                <b>Сумма:</b> {{ $order->sum }} {{ $order->sum_rubles }}<br>
-                                <b>Статус:</b> {{ $order->status->display_name }}<br>
-                                <b>Дата создания:</b> {{ $order->created_at }}<br>
-                            </p>
-                        </div>
+                <div class="card col-6 mx-auto mb-3 text-white"
+                     style="background-image: url('../images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
+                    <div class="card-body">
+                        <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
+                        <p class="card-text">
+                            <b>Сумма:</b> {{ $order->sum }} {{ $order->sum_rubles }}<br>
+                            <b>Статус:</b> {{ $order->status->display_name }}<br>
+                            <b>Дата создания:</b> {{ $order->created_at }}<br>
+                        </p>
                     </div>
+                </div>
 
             @else
                 <div class="col-md-6">
@@ -69,7 +70,7 @@
                                             эльфу, нажмите кнопку ниже. Обратите внимание, что ваш номер телефона будет
                                             виден в открытом виде.
                                         </div>
-                                        <button type="submit" class="btn btn-success my-2">Показать номер телефона эльфу
+                                        <button type="submit" class="btn btn-success form-control my-2">Показать номер телефона эльфу
                                         </button>
                                     </form>
                                 @else
@@ -78,15 +79,20 @@
                                         Ваш номер телефона виден эльфу.
                                     </div>
                                 @endif
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#orderConfirmationModal">
-                                    Заказ получен
-                                </button>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#orderProblemModal">
-                                    Проблема с заказом
-                                </button>
-
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <button type="button" class="btn btn-primary form-control mb-1" data-bs-toggle="modal"
+                                                data-bs-target="#orderConfirmationModal">
+                                            Заказ получен
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <button type="button" class="btn btn-danger form-control mb-1" data-bs-toggle="modal"
+                                                data-bs-target="#orderProblemModal">
+                                            Проблема с заказом
+                                        </button>
+                                    </div>
+                                </div>
                                 <!-- Модальное окно -->
                                 <div class="modal fade" id="orderProblemModal" tabindex="-1"
                                      aria-labelledby="orderProblemModalLabel" aria-hidden="true">
