@@ -41,16 +41,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $socialiteUser->getEmail())->first();
         $socialAccountExists = SocialAccount::where('provider_id', $socialiteUser->getId())->where('provider', $provider)->exists();
-        if ($user && !$user->email_verified_at) {
-            DB::table('role_user')->where('user_id', $user->id)->delete();
-
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
-            }
-
-            $user->delete();
-
-        }elseif ($user && !$socialAccountExists) {
+        if ($user && !$socialAccountExists) {
             return redirect()->route('login')->withErrors(['email' => 'Этот адрес электронной почты уже зарегистрирован через другой аккаунт. Пожалуйста, войдите с использованием соответствующего аккаунта.']);
         }
         $user = User::where('email', $socialiteUser->getEmail())->first();

@@ -42,7 +42,9 @@ Route::middleware([
     Route::put('/orders/{order}/update_phone_visibility', [\App\Http\Controllers\OrderController::class, 'updatePhoneVisibility'])->name('orders.update_phone_visibility');
     Route::post('/orders/{order}/finish', [\App\Http\Controllers\OrderController::class, 'finishOrder'])->name('orders.finish');
     Route::post('/order-problem/{orderId}', [\App\Http\Controllers\OrderProblemController::class, 'store'])->name('order-problem.store');
-
+    Route::middleware('auth')->post('/account/delete', [\App\Http\Controllers\AccountController::class, 'sendDeletionConfirmationEmail'])->name('account.delete');
+    Route::get('/account/delete/confirm/{token}', [\App\Http\Controllers\AccountController::class, 'confirmDeletion'])
+        ->name('confirm-delete');
 });
 Route::middleware([
     'auth:sanctum',

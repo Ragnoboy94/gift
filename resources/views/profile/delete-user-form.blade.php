@@ -13,44 +13,54 @@
         </div>
 
         <div class="mt-5">
-            <button class="btn btn-danger" wire:click="$toggle('confirmingUserDeletion')">
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                 {{ __('session.delete_account_button') }}
             </button>
         </div>
 
-        @if($confirmingUserDeletion)
-            <!-- Delete User Confirmation Modal -->
-            <div class="modal d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">{{ __('session.delete_account') }}</h5>
-                            <button type="button" class="btn-close" wire:click="$toggle('confirmingUserDeletion')"></button>
-                        </div>
-                        <div class="modal-body">
-                            {{ __('session.delete_account_confirmation') }}
-
-                            <div class="mt-4" x-data="{}" x-on:confirming-delete-user.window="setTimeout(() => $refs.password.focus(), 250)">
-                                <input type="password" class="form-control mt-1 w-75"
-                                       autocomplete="current-password"
-                                       placeholder="{{ __('session.password') }}"
-                                       x-ref="password"
-                                       wire:model.defer="password"
-                                       wire:keydown.enter="deleteUser" />
-
-                                <x-input-error for="password" class="mt-2" />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" wire:click="$toggle('confirmingUserDeletion')">{{ __('session.cancel') }}</button>
-                            <button type="button" class="btn btn-danger ml-3" wire:click="deleteUser" wire:loading.attr="disabled">
-                                {{ __('session.delete_account_button') }}
-                            </button>
-                        </div>
+        <!-- Confirm Deletion Modal -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">{{ __('session.confirm_deletion_title') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ __('session.confirm_deletion_body') }}
+                    </div>
+                    <div class="modal-footer">
+                        <div class="lead text-center text-black" id="del-text"></div>
+                        <button type="button" class="btn btn-secondary" id="close-button" data-bs-dismiss="modal">{{ __('session.cancel') }}</button>
+                        <button type="button" id="confirm-delete-button" class="btn btn-danger">{{ __('session.confirm_deletion_button') }}</button>
                     </div>
                 </div>
             </div>
-        @endif
-
+        </div>
     </x-slot>
 </x-action-section>
+<script>
+    let deleteButton = document.getElementById('confirm-delete-button');
+    deleteButton.addEventListener('click', function() {
+        deleteButton.remove();
+        document.getElementById('close-button').remove();
+        document.getElementById('del-text').innerText = "На вашу почту отправляется письмо...";
+        fetch('/account/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+
+
+                document.getElementById('del-text').innerText = data.message;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
