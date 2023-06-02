@@ -99,33 +99,32 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="orderProblemModalLabel">Сообщить о проблеме
-                                                    с
-                                                    заказом</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                <h5 class="modal-title" id="orderProblemModalLabel">Сообщить о проблеме с заказом</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="alert alert-danger" role="alert">
                                                     Заказ будет заблокирован до завершения проверки.
                                                 </div>
-                                                <form>
+                                                <form method="POST" action="{{ route('order-problem.store', $order->id) }}">
+                                                    @csrf
                                                     <div class="form-group">
                                                         <label for="problemDescription">Описание проблемы</label>
-                                                        <textarea class="form-control" id="problemDescription"
-                                                                  rows="3"></textarea>
+                                                        <textarea class="form-control" id="problemDescription" name="description" rows="3"></textarea>
+                                                    </div>
+                                                    <input type="hidden" name="order_id" id="orderId" value="">
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Отправить</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                            Закрыть
+                                                        </button>
                                                     </div>
                                                 </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary">Отправить</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Закрыть
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- Модальное окно -->
                                 <div class="modal fade" id="orderConfirmationModal" tabindex="-1"
                                      aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
