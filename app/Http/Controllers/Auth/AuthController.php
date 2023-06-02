@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\SocialAccount;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -101,7 +102,11 @@ class AuthController extends Controller
         if ($cityId) {
             session(['city_id' => $cityId]);
         }
-
+        if ($user && $user->created_at->diffInDays(Carbon::now()) > 2 && !$user->checked) {
+            $user->email_verified_at = null;
+            $user->checked = true;
+            $user->save();
+        }
         $socialAccount = SocialAccount::firstOrNew(
             [
                 'provider' => $provider,
