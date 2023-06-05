@@ -19,7 +19,20 @@ class AccountController extends Controller
         // Генерация случайного токена
         $token = Str::random(64);
 
-        if ($last_token->created_at->diffInMinutes(Carbon::now()) > 25) {
+        if (!$last_token){
+            $deletionToken = new AccountDeletionToken([
+                'token' => hash('sha256', $token),
+                'expires_at' => now()->addMinutes(25)  // Токен истекает через 25 минут
+            ]);
+
+            // Связываем токен с текущим пользователем
+            $deletionToken->user()->associate($user);
+            $deletionToken->save();
+
+            // Отправляем письмо с ссылкой на подтверждение
+            $confirmationLink = route('confirm-delete', ['token' => $token]);
+            Mail::to($user->email)->send(new AccountDeletionConfirmation($confirmationLink));
+        }elseif ($last_token->created_at->diffInMinutes(Carbon::now()) > 25) {
             // Создание нового токена в базе данных
             $deletionToken = new AccountDeletionToken([
                 'token' => hash('sha256', $token),
