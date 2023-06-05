@@ -22,6 +22,8 @@ Route::get('/celebrations/{celebration}', [\App\Http\Controllers\CelebrationCont
 Route::get('/terms', [\App\Http\Controllers\LegalController::class, 'showTerms'])->name('terms1.show');
 Route::get('/privacy-policy', [\App\Http\Controllers\LegalController::class, 'showPrivacyPolicy'])->name('policy.show');
 Route::get('/become-elf', [\App\Http\Controllers\ElfController::class,'showBecomeElfForm'])->name('become-elf');
+Route::get('/account/delete/confirm/{token}', [\App\Http\Controllers\AccountController::class, 'confirmDeletion'])
+    ->name('confirm-delete');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -43,8 +45,6 @@ Route::middleware([
     Route::post('/orders/{order}/finish', [\App\Http\Controllers\OrderController::class, 'finishOrder'])->name('orders.finish');
     Route::post('/order-problem/{orderId}', [\App\Http\Controllers\OrderProblemController::class, 'store'])->name('order-problem.store');
     Route::middleware('auth')->post('/account/delete', [\App\Http\Controllers\AccountController::class, 'sendDeletionConfirmationEmail'])->name('account.delete');
-    Route::get('/account/delete/confirm/{token}', [\App\Http\Controllers\AccountController::class, 'confirmDeletion'])
-        ->name('confirm-delete');
 });
 Route::middleware([
     'auth:sanctum',

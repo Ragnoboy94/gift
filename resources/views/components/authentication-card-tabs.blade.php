@@ -26,7 +26,6 @@
     </div>
 @endif
 
-
 @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
     <div class="row mx-0">
         <label class="blockquote-footer text-muted">

@@ -12,13 +12,18 @@
             @php
                 $ordersCount = app('App\Http\Controllers\OrderController')->getActiveOrdersCount();
             @endphp
-        @if ($errors->any())
+            @if ($errors->any())
                 <div class="alert text-danger text-center">
                     <ul class="list-unstyled">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
+                </div>
+            @endif
+            @if (session('message'))
+                <div class="alert alert-info text-center">
+                    {{ session('message') }}
                 </div>
             @endif
             <div class="row">
@@ -43,12 +48,15 @@
                     </div>
 
                     <!-- Celebration Modal -->
-                    <div class="modal fade" id="celebrationModal{{$key}}" tabindex="-1" aria-labelledby="celebrationModal{{$key}}Label" aria-hidden="true">
+                    <div class="modal fade" id="celebrationModal{{$key}}" tabindex="-1"
+                         aria-labelledby="celebrationModal{{$key}}Label" aria-hidden="true">
                         <div class="modal-dialog modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="celebrationModal{{$key}}Label">{{ $celebration['name'] }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <h5 class="modal-title"
+                                        id="celebrationModal{{$key}}Label">{{ $celebration['name'] }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -74,36 +82,44 @@
                                                 @endforeach
                                             </ul>
                                             @if (Auth::check())
-                                                <form method="POST" action="{{ route('order.create', ['celebration' => $celebration['id']]) }}">
+                                                <form method="POST"
+                                                      action="{{ route('order.create', ['celebration' => $celebration['id']]) }}">
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="sum-{{ $key }}">{{ __('messages.budget') }}</label>
-                                                        <input type="number" name="sum" id="sum-{{ $key }}" class="form-control" placeholder="1000" required>
+                                                        <input type="number" name="sum" id="sum-{{ $key }}"
+                                                               class="form-control" placeholder="1000" required>
                                                         <div id="orderDetails-{{ $key }}"></div>
                                                     </div>
 
                                                     @if ($celebration['id'] !== 6)
                                                         <div class="form-group">
-                                                            <label for="gender">{{ __('messages.select_gender') }}</label>
-                                                            <select name="gender" id="gender" class="form-control" required>
+                                                            <label
+                                                                for="gender">{{ __('messages.select_gender') }}</label>
+                                                            <select name="gender" id="gender" class="form-control"
+                                                                    required>
                                                                 <option value="male">{{ __('messages.male') }}</option>
-                                                                <option value="female">{{ __('messages.female') }}</option>
+                                                                <option
+                                                                    value="female">{{ __('messages.female') }}</option>
                                                             </select>
                                                         </div>
                                                     @endif
                                                     <div class="form-group">
                                                         <label for="hobby">{{ __('messages.hobby') }}</label>
-                                                        <textarea name="hobby" id="hobby" class="form-control" placeholder="Занимается спортом, любит читать классику"></textarea>
+                                                        <textarea name="hobby" id="hobby" class="form-control"
+                                                                  placeholder="Занимается спортом, любит читать классику"></textarea>
                                                     </div>
                                                     @if ($ordersCount < 3)
-                                                        <button type="submit" class="btn btn-primary mt-1">{{ __('messages.order_button') }}</button>
+                                                        <button type="submit"
+                                                                class="btn btn-primary mt-1">{{ __('messages.order_button') }}</button>
                                                     @else
                                                         <p class="text-danger">{{ __('messages.order_limit_reached') }}</p>
                                                     @endif
                                                 </form>
 
                                             @else
-                                                <a href="{{ route('login') }}" class="btn btn-primary">{{ __('messages.inter_order') }}</a>
+                                                <a href="{{ route('login') }}"
+                                                   class="btn btn-primary">{{ __('messages.inter_order') }}</a>
                                             @endif
                                         </div>
                                     </div>
@@ -133,8 +149,8 @@
             }
         }
         @if(Auth::check())
-            const rating = {{ Auth::user()->role_user->where('role_id', 1)->first()->rating }};
-            const ratingLevel = Math.floor(rating);
+        const rating = {{ Auth::user()->role_user->where('role_id', 1)->first()->rating }};
+        const ratingLevel = Math.floor(rating);
         @endif
         document.querySelectorAll("[id^='sum-']").forEach((sumInput) => {
             sumInput.addEventListener("input", (event) => {

@@ -43,19 +43,19 @@ class AccountController extends Controller
         $deletionToken = AccountDeletionToken::where('token', hash('sha256', $token))->first();
 
         if (!$deletionToken) {
-            // Если токен не найден, возвращаем ошибку
-            return response()->json(['message' => 'Invalid token'], 400);
+            // Если токен не найден, перенаправляем на главную страницу с сообщением об ошибке
+            return redirect()->route('home')->with('message', 'Недействительный токен!');
         }
 
         if ($deletionToken->expires_at < now()) {
-            // Если токен истек, возвращаем ошибку
-            return response()->json(['message' => 'Token expired'], 400);
+            // Если токен истек, перенаправляем на главную страницу с сообщением об ошибке
+            return redirect()->route('home')->with('message', 'Токен просрочен!');
         }
 
         // Если все в порядке, удаляем аккаунт пользователя
         $deletionToken->user->delete();
 
-        // Возвращаем сообщение об успехе
-        return response()->json(['message' => 'Account deleted successfully']);
+        // Перенаправляем на главную страницу с сообщением об успешном удалении аккаунта
+        return redirect()->route('home')->with('message', 'Аккаунт успешно удален!');
     }
 }
