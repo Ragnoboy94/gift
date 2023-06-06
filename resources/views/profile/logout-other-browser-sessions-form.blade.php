@@ -53,40 +53,13 @@
         @endif
 
         <div class="flex items-center mt-5">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                {{ __('session.log_out_sessions') }}
-            </button>
+            <button type="button" class="btn btn-primary" wire:click="logoutOtherBrowserSessions" wire:loading.attr="disabled">{{ __('session.log_out_sessions') }}</button>
 
             <x-action-message class="ml-3" on="loggedOut">
                 {{ __('session.done') }}
             </x-action-message>
         </div>
 
-        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true" wire:model="confirmingLogout">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="logoutModalLabel">{{ __('session.log_out_sessions') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="$toggle('confirmingLogout')"></button>
-                    </div>
-                    <div class="modal-body">
-                        {{ __('session.confirm_logout_text') }}
 
-                        <div class="mt-4">
-                            <input type="password" class="form-control mt-1 w-75"
-                                   autocomplete="current-password"
-                                   placeholder="{{ __('session.password') }}"
-                                   wire:model.defer="password"
-                                   wire:keydown.enter="logoutOtherBrowserSessions" />
-                            <x-input-error for="password" class="mt-2" />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" wire:click="$toggle('confirmingLogout')">{{ __('session.cancel') }}</button>
-                        <button type="button" class="btn btn-primary" wire:click="logoutOtherBrowserSessions" wire:loading.attr="disabled">{{ __('session.log_out_sessions') }}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </x-slot>
 </x-action-section>
