@@ -11,7 +11,8 @@
         <!-- Карточки для мобильных устройств -->
         <div class="d-md-none">
             @foreach ($orders as $order)
-                <div class="card mb-3 text-white" style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
+                <div class="card mb-3 text-white"
+                     style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
                     <div class="card-body">
                         <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
                         <p class="card-text">
@@ -33,37 +34,42 @@
                                 <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
                                    class="btn btn-primary">Открыть чат</a>
                             @endif
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelOrderModal-{{ $order->id }}">
-                                    Отменить заказ
-                                </button>
-
-                                <div class="modal fade" id="cancelOrderModal-{{ $order->id }}" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel-{{ $order->id }}" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="cancelOrderModalLabel-{{ $order->id }}">Отмена заказа</h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body  text-black">
-                                                @if($order->status->name == 'created' || $order->status->name == 'active')
-                                                    Внимание: Отмена заказа может привести к снижению вашего рейтинга. Рейтинг уменьшается при отмене заказов в статусе 'В процессе' и 'Готов к доставке'. Убедитесь, что вы хотите отменить заказ перед продолжением.
-                                                @elseif($order->status->name == 'in_progress')
-                                                    Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.2, учитывая количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
-                                                @else
-                                                    Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.4, учитывая количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
-                                                @endif
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                                                <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger">Подтвердить отмену</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#cardcancelOrderModal-{{ $order->id }}">
+                                Отменить заказ
+                            </button>
 
                         @endif
+                    </div>
+                </div>
+                <div class="modal fade" id="cardcancelOrderModal-{{ $order->id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="cardcancelOrderModalLabel-{{ $order->id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cardcancelOrderModalLabel-{{ $order->id }}">Отмена
+                                    заказа</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body  text-black">
+                                @if($order->status->name == 'created' || $order->status->name == 'active')
+                                    Внимание: Отмена заказа может привести к снижению вашего рейтинга. Рейтинг
+                                    уменьшается при отмене заказов в статусе 'В процессе' и 'Готов к доставке'.
+                                    Убедитесь, что вы хотите отменить заказ перед продолжением.
+                                @elseif($order->status->name == 'in_progress')
+                                    Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.2, учитывая
+                                    количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                @else
+                                    Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.4, учитывая
+                                    количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                @endif
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger">Подтвердить
+                                    отмену</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endforeach
@@ -110,38 +116,45 @@
                                     <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
                                        class="btn btn-primary">Открыть чат</a>
                                 @endif
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelOrderModal-{{ $order->id }}">
-                                        Отменить заказ
-                                    </button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#cancelOrderModal-{{ $order->id }}">
+                                    Отменить заказ
+                                </button>
 
-                                    <div class="modal fade" id="cancelOrderModal-{{ $order->id }}" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel-{{ $order->id }}" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="cancelOrderModalLabel-{{ $order->id }}">Отмена заказа</h5>
-                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body text-black">
-                                                    @if($order->status->name == 'created' || $order->status->name == 'active')
-                                                        Внимание: Отмена заказа может привести к снижению вашего рейтинга. Рейтинг уменьшается при отмене заказов в статусе 'В процессе' и 'Готов к доставке'. Убедитесь, что вы хотите отменить заказ перед продолжением.
-                                                    @elseif($order->status->name == 'in_progress')
-                                                        Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.2, учитывая количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
-                                                    @else
-                                                        Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.4, учитывая количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
-                                                    @endif
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                                                    <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger">Подтвердить отмену</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                             @endif
                         </td>
                     </tr>
+                    <div class="modal fade" id="cancelOrderModal-{{ $order->id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="cancelOrderModalLabel-{{ $order->id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelOrderModalLabel-{{ $order->id }}">Отмена
+                                        заказа</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-black">
+                                    @if($order->status->name == 'created' || $order->status->name == 'active')
+                                        Внимание: Отмена заказа может привести к снижению вашего рейтинга. Рейтинг
+                                        уменьшается при отмене заказов в статусе 'В процессе' и 'Готов к доставке'.
+                                        Убедитесь, что вы хотите отменить заказ перед продолжением.
+                                    @elseif($order->status->name == 'in_progress')
+                                        Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.2, учитывая
+                                        количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                    @else
+                                        Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.4, учитывая
+                                        количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                    @endif
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
+                                    </button>
+                                    <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}"
+                                       class="btn btn-danger">Подтвердить отмену</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
                 </tbody>
             </table>
