@@ -7,6 +7,15 @@
                 {{ session()->get('message') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert text-danger text-center">
+                <ul class="list-unstyled">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <h1>Мои заказы</h1>
         <!-- Карточки для мобильных устройств -->
         <div class="d-md-none">
@@ -49,7 +58,8 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="cardcancelOrderModalLabel-{{ $order->id }}">Отмена
                                     заказа</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
                             <div class="modal-body  text-black">
                                 @if($order->status->name == 'created' || $order->status->name == 'active')
@@ -65,9 +75,9 @@
                                 @endif
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                                 <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger">Подтвердить
                                     отмену</a>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                             </div>
                         </div>
                     </div>
@@ -131,7 +141,8 @@
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="cancelOrderModalLabel-{{ $order->id }}">Отмена
                                         заказа</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-black">
                                     @if($order->status->name == 'created' || $order->status->name == 'active')
@@ -147,10 +158,10 @@
                                     @endif
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
-                                    </button>
                                     <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}"
                                        class="btn btn-danger">Подтвердить отмену</a>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
+                                    </button>
                                 </div>
                             </div>
                         </div>
