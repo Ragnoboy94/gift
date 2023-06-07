@@ -49,7 +49,9 @@
                         </div>
                     </div>
                     <div class="form-check form-group">
-                        <input class="form-check-input" type="checkbox" name="intercom" id="intercom" @if ($order->intercom)checked@end>
+                        <input class="form-check-input" type="checkbox" name="intercom" id="intercom" @if ($order->intercom)
+                            checked
+                            @endif>
                         <label class="form-check-label" for="intercom">{{ __('messages.intercom') }}</label>
                     </div>
                     <div class="row mb-2">
