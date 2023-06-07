@@ -243,7 +243,7 @@ class OrderController extends Controller
         }
 
         // Отмена заказа для заказчика
-        if (($order->status->name == 'created' || $order->status->name == 'active')) {
+        if (($order->status->name == 'created' || $order->status->name == 'active' || $order->status->name == 'cancelled_by_elf')) {
             $order->status_id = OrderStatus::where('name', 'cancelled_by_customer')->first()->id;
             $order->save();
         } elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
