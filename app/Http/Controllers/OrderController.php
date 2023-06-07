@@ -237,9 +237,8 @@ class OrderController extends Controller
         $user = Auth::user();
         $role_user = $user->role_user->first();
 
-
         // Проверка на соответствие пользователя или эльфа
-        if (($order->elf_id != $user->id) || ($order->user_id != $user->id)) {
+        if (($order->elf_id == $user->id && !is_null($order->elf_id)) || ($order->user_id != $user->id)) {
             return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
         }
 
