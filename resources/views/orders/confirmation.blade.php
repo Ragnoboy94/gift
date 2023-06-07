@@ -45,7 +45,7 @@
                         </div>
                         <div class="form-group col-md-2">
                             <label for="floor">{{ __('messages.floor') }}</label>
-                            <input type="number" name="floor" id="floor" class="form-control" value="{{ $order->floor }}>
+                            <input type="number" name="floor" id="floor" class="form-control" value="{{ $order->floor }}">
                         </div>
                     </div>
                     <div class="form-check form-group">
