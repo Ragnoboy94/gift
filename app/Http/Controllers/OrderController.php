@@ -7,6 +7,7 @@ use App\Models\Celebration;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -319,8 +320,30 @@ class OrderController extends Controller
         if (!in_array($order->status->name, $validStatuses)) {
             return redirect()->back()->with('error_message', 'Заказ не может быть завершен в текущем статусе');
         }
-
         $finishedStatus = OrderStatus::where('name', 'finished')->first();
+
+        // Увеличиваем рейтинг пользователя
+        $ratingIncrease = 0.2;
+
+        $elf = User::find($order->elf_id);
+        $role_elf = $elf->role_user()->where('role_id', 2)->first();
+
+        // Получаем количество заказов, завершенных этим эльфом в этом месяце
+        $completed_orders_this_monthelf = Order::where('elf_id', $elf->id)
+            ->where('status_id', $finishedStatus->id)
+            ->whereMonth('updated_at', now()->month)
+            ->count();
+
+        // Ограничиваем количество успешных заказов для увеличения рейтинга до 5
+        $completed_orders_this_monthelf = min($completed_orders_this_monthelf, 5);
+        if ($completed_orders_this_monthelf == 0) {
+            $completed_orders_this_monthelf = 1;
+        }
+        // Увеличиваем рейтинг эльфа
+        $role_elf->rating += $ratingIncrease * $completed_orders_this_monthelf;
+        $role_elf->save();
+
+
         $order->status_id = $finishedStatus->id;
         $order->save();
 
@@ -333,6 +356,26 @@ class OrderController extends Controller
 
         $order->paid = true;
         $order->save();
+
+        $finishedStatus = OrderStatus::where('name', 'finished')->first();
+        $user = User::find($order->user_id);
+        $role_user = $user->role_user->first();
+
+        // Получаем количество заказов, завершенных этим пользователем в этом месяце
+        $completed_orders_this_month = Order::where('user_id', $user->id)
+            ->where('status_id', $finishedStatus->id)
+            ->whereMonth('updated_at', now()->month)
+            ->count();
+
+        // Ограничиваем количество успешных заказов для увеличения рейтинга до 5
+        $completed_orders_this_month = min($completed_orders_this_month, 5);
+        if ($completed_orders_this_month == 0) {
+            $completed_orders_this_month = 1;
+        }
+        // Увеличиваем рейтинг пользователя
+        $ratingIncrease = 0.2;
+        $role_user->rating += $ratingIncrease * $completed_orders_this_month;
+        $role_user->save();
 
         return redirect()->route('elf-dashboard')->with('message', 'Заказ отмечен как оплаченный');
     }

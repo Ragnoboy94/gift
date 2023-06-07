@@ -80,7 +80,7 @@ class AuthController extends Controller
                     'role_id' => 1,
                 ],
                 [
-                    'rating' => '2.0',
+                    'rating' => '1.0',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]
@@ -97,6 +97,13 @@ class AuthController extends Controller
             $user->email_verified_at = null;
             $user->checked = true;
             $user->save();
+        }
+        if ($user && $user->created_at->diffInDays(Carbon::now()) > 2 && $user->checked && !is_null($user->email_verified_at) && !$user->rating_add) {
+            $user->rating_add = true;
+            $user->save();
+            $role_user = $user->role_user->first();
+            $role_user->rating += 0.6;
+            $role_user->save();
         }
         $socialAccount = SocialAccount::firstOrNew(
             [
