@@ -27,7 +27,6 @@
                                 <a href="{{ route('order.confirmation', ['orderId' => $order->id]) }}"
                                    class="btn btn-primary">Перейти к подтверждению</a>
                             @elseif ($order->status->name == 'cancelled_by_elf')
-                                {{dd($order->status->name)}}
                                 <a href="{{ route('order.confirmation', ['orderId' => $order->id]) }}"
                                    class="btn btn-primary">Повторить заказ</a>
                             @elseif ($order->status->name == 'ready_for_delivery')
