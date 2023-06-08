@@ -288,10 +288,10 @@
                     photosInput.click();
                 }
             });
-
+            let selectedFiles = [];
             photosInput.addEventListener('change', (e) => {
-                const files = e.target.files;
-                handleFiles(files);
+                selectedFiles = [...e.target.files];
+                handleFiles(selectedFiles);
                 photosInput.value = '';
             });
 
@@ -369,7 +369,11 @@
             photoUploadForm.addEventListener('submit', (e) => {
                 e.preventDefault();
 
-                const formData = new FormData(photoUploadForm);
+                const formData = new FormData();
+
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    formData.append('photos[]', selectedFiles[i]);
+                }
                 fetch('{{ route('upload_files', $order->id) }}', {
                     method: 'POST',
                     headers: {
@@ -385,7 +389,7 @@
                             messageElement.classList.add('alert-success');
                             messageElement.textContent = data.message;
 
-                            document.querySelectorAll('.upload-container .upload-box:not(#upload-box) .remove-icon').forEach(removeIcon => {
+                            document.querySelectorAll('.remove-icon').forEach(removeIcon => {
                                 removeIcon.remove();
                             });
                         }
