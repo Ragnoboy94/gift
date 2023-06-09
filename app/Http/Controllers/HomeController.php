@@ -98,4 +98,60 @@ class HomeController extends Controller
 
         return view('elf_dashboard', compact('city_name', 'orders'));
     }
+
+    public function apiIndex()
+    {
+        $celebrations = trans('celebrations');
+
+        $currentDate = new DateTime();
+        $oneWeekBefore = clone $currentDate;
+        $oneWeekBefore->modify('-1 week');
+        $threeWeeksAfter = clone $currentDate;
+        $threeWeeksAfter->modify('+4 weeks');
+
+        usort($celebrations, function ($a, $b) {
+            if ($a['date'] === null && $b['date'] === null) {
+                return 0;
+            }
+            if ($a['date'] === null) {
+                return 1;
+            }
+            if ($b['date'] === null) {
+                return -1;
+            }
+            return strcmp($a['date'], $b['date']);
+        });
+
+        $filteredHolidays = array_filter($celebrations, function ($holiday) use ($oneWeekBefore, $threeWeeksAfter) {
+            if ($holiday['date'] === null) {
+                return true;
+            }
+
+            $holidayDate = DateTime::createFromFormat('m-d', $holiday['date']);
+            return $holidayDate >= $oneWeekBefore && $holidayDate <= $threeWeeksAfter;
+        });
+
+        $displayedHolidays = array_slice($filteredHolidays, 0, 3);
+
+        // modify each holiday to include the image path
+        foreach ($displayedHolidays as $key => $holiday) {
+            $displayedHolidays[$key]['image'] = asset('images/' . pathinfo($holiday['image'], PATHINFO_FILENAME) . '_small.jpg');
+        }
+
+        return response()->json($displayedHolidays);
+    }
+
+    public function apiAllHolidays()
+    {
+        $celebrations = trans('celebrations');
+
+
+        // modify each holiday to include the image path
+        foreach ($celebrations as $key => $holiday) {
+            $celebrations[$key]['image'] = asset('images/' . pathinfo($holiday['image'], PATHINFO_FILENAME) . '_small.jpg');
+        }
+
+        return response()->json($celebrations);
+    }
+
 }
