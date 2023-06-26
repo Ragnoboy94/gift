@@ -150,11 +150,12 @@ class AuthController extends Controller
 
     public function authenticateToken(Request $request)
     {
-        $request->validate([
-            'token' => 'required|size:6',
-        ]);
+        $token = $request->json()->get('token');
 
-        $token = $request->input('token');
+        if (!$token || strlen($token) != 6) {
+            return response()->json(['message' => 'Token is required and should be 6 characters long.'], 422);
+        }
+
         $userToken = UserToken::where('token', $token)->where('active', true)->first();
 
         if (!$userToken) {
@@ -190,10 +191,12 @@ class AuthController extends Controller
             'token' => $token,
             'active' => true,
         ]);
+
         return response()->json([
-            'access_token' => $tokenResult->accessToken,
+            'access_token' => $tokenResult->plainTextToken,
             'token_type' => 'Bearer',
         ]);
     }
+
 
 }
