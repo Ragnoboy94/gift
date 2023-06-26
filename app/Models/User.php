@@ -83,4 +83,8 @@ class User extends Authenticatable
     {
         return $this->roles()->where('name', 'admin')->exists();
     }
+    public function tokens()
+    {
+        return $this->hasMany(UserToken::class);
+    }
 }

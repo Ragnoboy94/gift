@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\SocialAccount;
 use App\Models\User;
+use App\Models\UserToken;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -117,6 +118,29 @@ class AuthController extends Controller
 
         if (!$socialAccount->exists) {
             $socialAccount->save();
+        }
+        $userToken = UserToken::where('user_id', $user->id)->where('active', true)->first();
+
+        // Если у пользователя нет активного токена, создаем новый.
+        if (!$userToken) {
+            do {
+                // Генерируем новый случайный токен
+                $characters = "abcdefghijklmnopqrstuvwxyz";
+                $token = str_shuffle(
+                    substr(str_shuffle($characters), 0, 1) .
+                    substr(str_shuffle("0123456789"), 0, 5)
+                );
+
+                // Проверяем, существует ли уже активный токен с таким значением
+                $tokenExists = UserToken::where('token', $token)->where('active', true)->exists();
+            } while ($tokenExists);  // Если токен существует, генерируем новый и снова проверяем
+
+            // Создаем новый токен в БД
+            $userToken = UserToken::create([
+                'user_id' => $user->id,
+                'token' => $token,
+                'active' => true,
+            ]);
         }
 
         Auth::login($user, true);

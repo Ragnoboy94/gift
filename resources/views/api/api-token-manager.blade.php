@@ -7,6 +7,11 @@
 
         <x-slot name="description">
             {{ __('api-tokens.api_tokens_allow') }}
+            <br>
+            <hr>
+            <span class="fs-5">{{ session()->get('userToken') }}</span>
+            <small class="text-muted d-block">Код доступа в мобильном приложении</small>
+            <span class="fs-5">На текущий момент приложение находится на стадии тестирования и недоступно для скачивание через площадки.</span>
         </x-slot>
 
         <x-slot name="form">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\UserToken;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Nette\Utils\DateTime;
 
@@ -64,6 +65,10 @@ class HomeController extends Controller
         } else {
             SEOMeta::setDescription("Добро пожаловать на наш сервис подарков! Закажите уникальный подарок для этих праздников: $holidayNames и получите сюрприз от Эльфа.");
             SEOMeta::setKeywords(['подарки', 'сервис подарков', 'уникальный подарок', 'сюрприз', 'праздник', $holidayKeywords]);
+        }
+        if (auth()->id()) {
+            $userToken = UserToken::where('user_id', auth()->id())->where('active', true)->first();
+            session(['userToken' => $userToken->token]);
         }
         return view('home', ['celebrations_3' => $displayedHolidays]);
     }

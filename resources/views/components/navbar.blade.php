@@ -494,8 +494,11 @@
                                 <li><a class="dropdown-item"
                                        href="{{ route('profile.show') }}">{{ __('app.profile') }}</a></li>
                                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                    <li><a class="dropdown-item"
-                                           href="{{ route('api-tokens.index') }}">{{ __('api-tokens.api_token') }}</a>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('api-tokens.index') }}">
+                                            <span class="fs-5">{{ session()->get('userToken') }}</span>
+                                            <small class="text-muted d-block">Код доступа в мобильном приложении</small>
+                                        </a>
                                     </li>
                                 @endif
                                 <li>
