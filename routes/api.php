@@ -19,3 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('/', [\App\Http\Controllers\HomeController::class,'apiIndex']);
 Route::get('hollidays', [\App\Http\Controllers\HomeController::class,'apiAllHolidays']);
+Route::post('auth/token', [\App\Http\Controllers\Auth\AuthController::class, 'authenticateToken']);
+

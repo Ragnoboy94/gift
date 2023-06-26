@@ -147,4 +147,53 @@ class AuthController extends Controller
 
         return redirect('/');
     }
+
+    public function authenticateToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|size:6',
+        ]);
+
+        $token = $request->input('token');
+        $userToken = UserToken::where('token', $token)->where('active', true)->first();
+
+        if (!$userToken) {
+            return response()->json(['message' => 'Invalid token or token already used.'], 401);
+        }
+
+        $user = User::find($userToken->user_id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
+
+        // Create a personal access token for the user
+        $tokenResult = $user->createToken('Personal Access Token');
+
+        $userToken->active = false; // deactivate token after it has been used
+        $userToken->save();
+        do {
+            // Генерируем новый случайный токен
+            $characters = "abcdefghijklmnopqrstuvwxyz";
+            $token = str_shuffle(
+                substr(str_shuffle($characters), 0, 1) .
+                substr(str_shuffle("0123456789"), 0, 5)
+            );
+
+            // Проверяем, существует ли уже активный токен с таким значением
+            $tokenExists = UserToken::where('token', $token)->where('active', true)->exists();
+        } while ($tokenExists);  // Если токен существует, генерируем новый и снова проверяем
+
+        // Создаем новый токен в БД
+        UserToken::create([
+            'user_id' => $user->id,
+            'token' => $token,
+            'active' => true,
+        ]);
+        return response()->json([
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+        ]);
+    }
+
 }
