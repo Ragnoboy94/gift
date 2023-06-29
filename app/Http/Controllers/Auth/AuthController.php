@@ -167,9 +167,8 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User not found.'], 404);
         }
-
-        // Create a personal access token for the user
-        $tokenResult = $user->createToken('Personal Access Token');
+        $user->tokens()->where('name', 'Personal App Access Token')->delete();
+        $tokenResult = $user->createToken('Personal App Access Token');
 
         $userToken->active = false; // deactivate token after it has been used
         $userToken->save();
