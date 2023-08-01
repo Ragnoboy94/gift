@@ -45,7 +45,7 @@
                             @endif
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     data-bs-target="#cardcancelOrderModal-{{ $order->id }}">
-                                Отменить заказ
+                                {{__('trans.cancel_order')}}
                             </button>
 
                         @endif
@@ -77,7 +77,7 @@
                             <div class="modal-footer">
                                 <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger">Подтвердить
                                     отмену</a>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('api-tokens.close')}}</button>
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                                 @endif
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#cancelOrderModal-{{ $order->id }}">
-                                    Отменить заказ
+                                    {{__('trans.cancel_order')}}
                                 </button>
 
                             @endif
@@ -162,7 +162,7 @@
                                 <div class="modal-footer">
                                     <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}"
                                        class="btn btn-danger">Подтвердить отмену</a>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('api-tokens.close')}}
                                     </button>
                                 </div>
                             </div>

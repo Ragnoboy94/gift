@@ -116,7 +116,7 @@
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-primary">Отправить</button>
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                            Закрыть
+                                                            {{__('api-tokens.close')}}
                                                         </button>
                                                     </div>
                                                 </form>
@@ -125,7 +125,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Модальное окно -->
                                 <div class="modal fade" id="orderConfirmationModal" tabindex="-1"
                                      aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -147,7 +146,7 @@
                                                     <button type="submit" class="btn btn-primary">Подтвердить</button>
                                                 </form>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Закрыть
+                                                    {{__('api-tokens.close')}}
                                                 </button>
                                             </div>
 
@@ -215,7 +214,6 @@
                 }
             });
 
-            // Запуск цикла проверки каждые 3 секунды
             setInterval(checkForNewMessages, 3000);
 
             function getMessages() {
@@ -247,7 +245,6 @@
             }
 
             function addMessageToChat(message) {
-                // Если сообщение отправлено мной и уже отображается в чате, пропустите его
                 if (message.sent_by_me && message.user_id === {{ auth()->id() }}) {
                     return;
                 }
@@ -337,13 +334,12 @@
                     .then(data => {
                         data.forEach(image => {
                             const img = document.createElement('img');
-                            img.src = image.file_name; // Используйте image.file_name вместо image.url
+                            img.src = image.file_name;
                             img.classList.add('saved-image');
 
                             const newUploadBox = uploadBox.cloneNode(true);
                             newUploadBox.appendChild(img);
 
-                            // Удалить иконку удаления для сохраненных изображений
                             const removeIcon = newUploadBox.querySelector('.remove-icon');
                             if (removeIcon) {
                                 removeIcon.remove();

@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1>Дела для эльфа</h1>
+                <h1>{{__('app.work_elf')}}</h1>
                 @if(session()->has('message'))
                     <div class="text-success mt-3">
                         {{ session()->get('message') }}
@@ -13,7 +13,7 @@
                 @if (count($orders) > 0)
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>Активные заказы</h1>
+                            <h1>{{__('trans.active_order')}}</h1>
                             <div class="row">
                                 @foreach($orders as $order)
                                     <div class="col-md-6 col-lg-4 my-3">
@@ -21,42 +21,36 @@
                                              style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.webp'); background-size: cover; background-position: center;">
                                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
                                                 <h5 class="card-title text-white"
-                                                    style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Заказ
+                                                    style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.order')}}
                                                         ID: {{ $order->order_number }}</b></h5>
                                                 <div class="card-text text-white lead"
-                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Сумма на
-                                                        подарок: {{ round($order->sum_work) }} <span class="rublesText"
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.summa_gift1')}}: {{ round($order->sum_work) }} <span class="rublesText"
                                                                                                      data-sum="{{ $order->sum_work }}"></span></b>
                                                 </div>
                                                 <div class="card-text text-white"
-                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>За
-                                                        работу: {{ round($order->sum_elf) }} <span class="rublesText"
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.for_work')}}: {{ round($order->sum_elf) }} <span class="rublesText"
                                                                                                    data-sum="{{ $order->sum_elf }}"></span></b>
                                                 </div>
                                                 <div class="card-text text-white lead"
                                                      style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);">
-                                                    <b>Праздник: {{ $order->celebration->name }}</b></div>
+                                                    <b>{{__('trans.celebr')}}: {{ $order->celebration->name }}</b></div>
                                                 <div class="card-text text-white"
-                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Данные:
-                                                        Заказ для @if($order->gender == 'male')
-                                                            мужчины
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.data')}}:
+                                                        {{__('trans.order_for')}} @if($order->gender == 'male')
+                                                            {{__('trans.man')}}
                                                         @else
-                                                            женщины
+                                                            {{__('trans.woman')}}
                                                         @endif. {{ $order->hobby }}</b></div>
                                                 @if($order->status->name == 'cancelled_by_customer')
                                                     <div class="tooltip-container bg-primary text-white">
-                                                        Статус заказа: {{ $order->status->display_name }}
-                                                        <div class="tooltip-text" data-tooltip>Мы сожалеем, что клиент
-                                                            отменил заказ. Его рейтинг понижен. Свяжитесь с нами и
-                                                            предоставьте фотофиксацию чеков и подарка в разложенном
-                                                            виде. Постараемся компенсировать ваши траты.
+                                                        {{__('trans.status_order')}}: {{ $order->status->display_name }}
+                                                        <div class="tooltip-text" data-tooltip>{{__('trans.status_text1')}}
                                                         </div>
                                                     </div>
                                                 @elseif($order->status->name == 'finished')
                                                     <div class="tooltip-container bg-primary text-white">
-                                                        Статус заказа: {{ $order->status->display_name }}
-                                                        <div class="tooltip-text" data-tooltip>Спасибо, что завершили
-                                                            заказ. Ваш рейтинг увеличился!
+                                                        {{__('trans.status_order')}}: {{ $order->status->display_name }}
+                                                        <div class="tooltip-text" data-tooltip>{{__('trans.status_text2')}}
                                                         </div>
                                                     </div>
                                                     @if($order->status->name == 'finished' && !$order->paid &&
@@ -65,7 +59,7 @@
                                                             <button type="button" class="btn btn-success my-2"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#orderConfirmationModal">
-                                                                Деньги получены.
+                                                                {{__('trans.money_here')}}.
                                                             </button>
                                                             @endif
                                                         </div>
@@ -78,8 +72,7 @@
                                                                     <div class="modal-header">
                                                                         <h5 class="modal-title"
                                                                             id="orderConfirmationModalLabel">
-                                                                            Подтверждение
-                                                                            получения оплаты</h5>
+                                                                            {{__('trans.yes_money')}}</h5>
                                                                         <button type="button" class="btn-close"
                                                                                 data-bs-dismiss="modal"
                                                                                 aria-label="Close"></button>
@@ -88,22 +81,16 @@
                                                                           action="{{ route('orders.mark_as_paid', $order->id) }}">
                                                                         @csrf
                                                                         <div class="modal-body">
-                                                                            Пожалуйста, подтвердите, что вы, как эльф,
-                                                                            выполнивший этот заказ, получили оплату
-                                                                            согласно
-                                                                            обговоренной цене и условиям. Это важный шаг
-                                                                            для
-                                                                            подтверждения выполнения заказа и получения
-                                                                            оплаты.
+                                                                            {{__('trans.status_text3')}}
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button type="submit"
                                                                                     class="btn btn-primary">
-                                                                                Подтвердить получение оплаты
+                                                                                {{__('trans.yes_order')}}
                                                                             </button>
                                                                             <button type="button"
                                                                                     class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">Закрыть
+                                                                                    data-bs-dismiss="modal">{{__('api-tokens.close')}}
                                                                             </button>
                                                                         </div>
                                                                     </form>
@@ -113,19 +100,18 @@
                                                     @elseif($order->status->name == 'ready_for_delivery')
                                                         <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
                                                            class="btn btn-primary mb-2">
-                                                            Связь с заказчиком
+                                                            {{__('trans.connect')}}
                                                         </a>
                                                     @else
                                                         <a href="{{ route('send-order-ready', ['orderId' => $order->id]) }}"
                                                            class="btn btn-primary update-order mb-2"
-                                                           onclick="return confirm('Вы уверены, что заказ собран и готов к отправке? Отлично! Пожалуйста, учтите, что если заказ будет отменен после подтверждения, ваш рейтинг может снизиться на 0.4. Продолжаем радовать людей!')">
-                                                            Заказ собран
+                                                           onclick="return confirm('{{__('trans.order_done_text1')}}')">
+                                                            {{__('trans.order_done')}}
                                                         </a>
                                                         <br>
                                                         <a href="{{ route('elf.cancel', ['orderId' => $order->id]) }}"
                                                            class="btn btn-danger"
-                                                           onclick="return confirm('Отмена заказа приведет к снижению вашего рейтинга на 0.2 в этом месяце. Помните, что ваша работа эльфа заключается в радости, которую вы приносите людям. Вы уверены, что хотите отменить заказ?')">Отменить
-                                                            заказ</a>
+                                                           onclick="return confirm('{{__('trans.order_done_text2')}}')">{{__('trans.cancel_order')}}</a>
                                                     @endif
                                             </div>
                                         </div>
@@ -136,14 +122,13 @@
                     </div>
                 @endif
                 <div class="row">
-                    <h2>Доступные задачи</h2>
+                    <h2>{{__('trans.available')}}</h2>
                     <div class="col-md-7">
                         <div id="map" style="width: 100%; height: 70vh;"></div>
                     </div>
                     <div class="col-md-5">
                         <div id="orderInfo">
                             <div id="ordersContainer">
-                                <!-- Здесь будет отображаться список доступных заказов -->
                             </div>
                         </div>
                     </div>
@@ -155,7 +140,6 @@
 
 
     @push('scripts')
-        <!-- Подключаем API карт, например, Яндекс.Карты -->
         <script src="https://api-maps.yandex.ru/2.1/?apikey=470ab6bb-6d83-4388-8f3d-248d94a6a16f&lang=ru_RU"
                 type="text/javascript"></script>
         <script>
@@ -187,7 +171,6 @@
                 ymaps.ready(init);
 
                 function init() {
-                    // Создаем карту
                     ymaps.geocode('{{$city_name->name_ru}}')
                         .then(function (res) {
                             var firstGeoObject = res.geoObjects.get(0);
@@ -204,7 +187,6 @@
                                 showOrdersForCity(map.getCenter());
                             }, 300));
                             map.events.add('click', function (e) {
-                                // Если клик был на свободной области карты (не на метке), показываем список заказов
                                 if (e.get('target') === map) {
                                     showOrdersForCity(map.getCenter());
                                 }
@@ -214,26 +196,21 @@
                 }
 
                 function showOrdersForCity(centerCoords) {
-                    // Очистите список заказов и метки на карте
                     const ordersContainer = document.getElementById('ordersContainer');
                     ordersContainer.innerHTML = '';
                     map.geoObjects.removeAll();
 
-                    // Ищем город, основываясь на координатах центра карты
                     ymaps.geocode(centerCoords, {kind: 'locality'}).then(function (res) {
                         const city = res.geoObjects.get(0);
 
                         if (city) {
                             const cityName = city.properties.get('name');
 
-                            // Получаем заказы для найденного города
                             fetch(`/get-orders-by-city/${cityName}`)
                                 .then(response => response.json())
                                 .then(orders => {
                                     orders.forEach(function (order) {
-                                        // Добавляем метки заказов на карту
                                         addOrderPlacemark(order.address, order.id, map);
-                                        // Добавляем карточку заказа
                                         const ordersContainer = document.getElementById('ordersContainer');
                                         const orderCard = document.createElement('div');
                                         orderCard.id = `order-${order.id}`;
@@ -348,7 +325,6 @@
                                         cancelBtn.setAttribute('data-bs-dismiss', 'modal');
                                         cancelBtn.textContent = 'Отмена';
                                         modalFooter.appendChild(cancelBtn);
-                                        // Назначаем обработчик клика для каждого элемента списка
                                         orderCard.addEventListener('click', () => {
                                             showOrderInfo(order.id);
                                         });
@@ -386,8 +362,6 @@
                         currentOrderElement.classList.add('active');
                         activeOrderId = orderId;
 
-                        // Запрос информации о заказе и отображение справа от карты
-                        // Вместо этого вы можете запросить информацию с сервера, если вам нужны дополнительные данные
                         const orderInfoContainer = document.getElementById('ordersContainer');
                         orderInfoContainer.innerHTML = "";
                         for (let i = 0; i < currentOrderElement.children.length; i++) {
@@ -417,6 +391,5 @@
 
             });
         </script>
-
     @endpush
 @endsection
