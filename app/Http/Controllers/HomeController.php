@@ -140,7 +140,7 @@ class HomeController extends Controller
 
         // modify each holiday to include the image path
         foreach ($displayedHolidays as $key => $holiday) {
-            $displayedHolidays[$key]['image'] = asset('images/' . pathinfo($holiday['image'], PATHINFO_FILENAME) . '_small.jpg');
+            $displayedHolidays[$key]['image'] = asset('images/' . pathinfo($holiday['image'], PATHINFO_FILENAME) . '_small.webp');
             $displayedHolidays[$key]['img'] = $holiday['image'];
         }
 
@@ -154,7 +154,7 @@ class HomeController extends Controller
 
         // modify each holiday to include the image path
         foreach ($celebrations as $key => $holiday) {
-            $celebrations[$key]['image'] = asset('images/' . pathinfo($holiday['image'], PATHINFO_FILENAME) . '_small.jpg');
+            $celebrations[$key]['image'] = asset('images/' . pathinfo($holiday['image'], PATHINFO_FILENAME) . '_small.webp');
             $celebrations[$key]['img'] = $holiday['image'];
         }
 

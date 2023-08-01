@@ -8,8 +8,8 @@
                 <div class="col-md-4">
                     <picture>
                         <source media="(min-width: 768px)"
-                                srcset="{{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_medium.jpg') }} 768w,
-            {{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_large.jpg') }} 1200w"
+                                srcset="{{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_medium.webp') }} 768w,
+            {{ asset('images/' . pathinfo($celebration->image, PATHINFO_FILENAME) . '_large.webp') }} 1200w"
                                 sizes="(max-width: 1199px) 768px,
             1200px"
                         >

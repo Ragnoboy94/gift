@@ -18,7 +18,7 @@
                                 @foreach($orders as $order)
                                     <div class="col-md-6 col-lg-4 my-3">
                                         <div class="card"
-                                             style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center;">
+                                             style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.webp'); background-size: cover; background-position: center;">
                                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
                                                 <h5 class="card-title text-white"
                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>Заказ
@@ -248,7 +248,7 @@
                                         row.appendChild(colImage);
 
                                         const image = document.createElement('img');
-                                        image.src = 'images/' + order.celebration.image.replace(/\.[^/.]+$/, "") + '_small.jpg';
+                                        image.src = 'images/' + order.celebration.image.replace(/\.[^/.]+$/, "") + '_small.webp';
                                         image.alt = 'Order Image';
                                         image.classList.add('img-fluid', 'd-none', 'd-md-block');
                                         colImage.appendChild(image);

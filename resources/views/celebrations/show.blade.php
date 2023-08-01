@@ -7,9 +7,9 @@
                 <div class="col-md-6">
                     <img
                         src="{{ asset('images/' . $celebration['image']) }}"
-                        srcset="{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_small.jpg') }} 320w,
-{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_medium.jpg') }} 768w,
-{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_large.jpg') }} 1200w"
+                        srcset="{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_small.webp') }} 320w,
+{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_medium.webp') }} 768w,
+{{ asset('images/' . pathinfo($celebration['image'], PATHINFO_FILENAME) . '_large.webp') }} 1200w"
                         sizes="(max-width: 767px) 320px,
    (max-width: 1199px) 768px,
    1200px"

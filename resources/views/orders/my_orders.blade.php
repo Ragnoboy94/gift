@@ -21,7 +21,7 @@
         <div class="d-md-none">
             @foreach ($orders as $order)
                 <div class="card mb-3 text-white"
-                     style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
+                     style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.webp'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
                     <div class="card-body">
                         <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
                         <p class="card-text">
@@ -100,7 +100,7 @@
                 @foreach ($orders as $order)
                     <tr>
                         <th scope="row"
-                            style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.jpg'); background-size: cover; background-position: center; text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"
+                            style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.webp'); background-size: cover; background-position: center; text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"
                             class="text-center text-white">{{ $order->order_number }}</th>
                         <td>
                             {{ $order->sum }} {{ $order->sum_rubles }}<br>
