@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <label for="sum-{{ $celebration['id'] }}">{{ __('messages.budget') }}</label>
                                 <input type="number" name="sum" id="sum-{{ $celebration['id'] }}"
-                                       class="form-control" required>
+                                       class="form-control" placeholder="1000" required>
                                 <div id="orderDetails-{{ $celebration['id'] }}"></div>
                             </div>
                             @if ($celebration['id'] !== 6)
@@ -47,7 +47,7 @@
                             @endif
                             <div class="form-group">
                                 <label for="hobby">{{ __('messages.hobby') }}</label>
-                                <textarea name="hobby" id="hobby" class="form-control"></textarea>
+                                <textarea name="hobby" id="hobby" class="form-control" placeholder="{{__('app.hobby_example')}}"></textarea>
                             </div>
                             <button type="submit"
                                     class="btn btn-primary mt-1">{{ __('messages.order_button') }}</button>

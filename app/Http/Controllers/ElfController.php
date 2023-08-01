@@ -11,7 +11,12 @@ class ElfController extends Controller
     public function showBecomeElfForm()
     {
         if ($user = Auth::user()) {
-            return view('become_elf');
+            if ($user->is_elf){
+                return redirect()->route('elf-dashboard');
+            }else{
+                return view('become_elf');
+            }
+
         }else{
             return redirect()->route('login');
         }

@@ -16,7 +16,7 @@
                 </ul>
             </div>
         @endif
-        <h1>Мои заказы</h1>
+        <h1>{{ __('app.my_orders') }}</h1>
         <!-- Карточки для мобильных устройств -->
         <div class="d-md-none">
             @foreach ($orders as $order)

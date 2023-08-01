@@ -77,7 +77,7 @@
                 <li class="nav-item dropdown">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
-                            <a class="navbar-brand" href="{{ url('/') }}">Сервис подарков</a>
+                            <a class="navbar-brand" href="{{ url('/') }}">{{__('app.gift_secrets')}}</a>
                         </li>
                     </ul>
                     <a class="nav-link dropdown-toggle" href="#" id="celebrationDropdown" role="button"
@@ -474,7 +474,7 @@
                     @endif
                     <button class="btn btn-outline-light text-black mt-1" type="button" data-url="{{ route('orders.active_count') }}" onclick="location.href='{{ route('orders.my_orders') }}'">
 
-                        Мои заказы
+                        {{ __('app.my_orders') }}
                         <span class="badge rounded-pill bg-danger" id="activeOrdersBadge" style="top: -12px;left: -8px;right: 0px;"></span>
                         <span class="visually-hidden">Созданные заказы</span>
                     </button>
@@ -497,7 +497,7 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ route('api-tokens.index') }}">
                                             <span class="fs-5">{{ session()->get('userToken') }}</span>
-                                            <small class="text-muted d-block">Код доступа в мобильном приложении</small>
+                                            <small class="text-muted d-block">{{__('app.cod_access')}}</small>
                                         </a>
                                     </li>
                                 @endif

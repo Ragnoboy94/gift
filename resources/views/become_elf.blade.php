@@ -4,26 +4,22 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1>Стать эльфом</h1>
-                <h4>Присоединяйтесь к нам и помогайте создавать уникальные и незабываемые подарки для людей по всей
-                    России. Ваш талант и креативность помогут сделать каждый праздник особенным и неповторимым!</h4>
+                <h1>{{__('app.be_elf')}}</h1>
+                <h4>{{__('app.elf_text')}}</h4>
                 @auth
-                    @if (Auth::user()->is_elf)
-                        <p>Вы уже являетесь эльфом! Перейдите на вашу панель управления.</p>
-                        <a href="{{ route('elf-dashboard') }}" class="btn btn-primary">Панель эльфа</a>
-                    @else
+                    @if (!Auth::user()->is_elf)
                         @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! \Illuminate\Support\Facades\Auth::user()->hasVerifiedEmail())
-                            <p>Для того, чтобы стать эльфом, нужно подтвердить ваш Email</p>
+                            <p>{{__('app.elf_confirm')}}</p>
                             <button type="button" class="btn btn-sm btn-outline-primary rounded-md"
                                     data-bs-toggle="modal"
                                     data-bs-target="#emailVerificationModal">
                                 {{ __('auth.verify_email') }}
                             </button>
                         @else
-                            <p>Вы уверены, что хотите стать эльфом и присоединиться к нашей команде?</p>
+                            <p>{{__('app.elf_team_comfirm')}}</p>
                             <form method="POST" action="{{ route('become-elf.submit') }}">
                                 @csrf
-                                <button type="submit" class="btn btn-primary">Да, хочу стать эльфом</button>
+                                <button type="submit" class="btn btn-primary">{{__('app.elf_yes')}}</button>
                             </form>
                         @endif
                     @endif

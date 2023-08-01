@@ -10,8 +10,8 @@
             <br>
             <hr>
             <span class="fs-5">{{ session()->get('userToken') }}</span>
-            <small class="text-muted d-block">Код доступа в мобильном приложении</small>
-            <span class="fs-5">На текущий момент приложение находится на стадии тестирования и недоступно для скачивание через площадки.</span>
+            <small class="text-muted d-block">{{__('app.cod_access')}}</small>
+            <span class="fs-5">{{__('app.code_access_text')}}</span>
         </x-slot>
 
         <x-slot name="form">

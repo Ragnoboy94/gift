@@ -107,7 +107,7 @@
                                                     <div class="form-group">
                                                         <label for="hobby">{{ __('messages.hobby') }}</label>
                                                         <textarea name="hobby" id="hobby" class="form-control"
-                                                                  placeholder="Занимается спортом, любит читать классику"></textarea>
+                                                                  placeholder="{{__('app.hobby_example')}}"></textarea>
                                                     </div>
                                                     @if ($ordersCount < 3)
                                                         <button type="submit"
