@@ -10,6 +10,9 @@ class CelebrationController extends Controller
     {
         // Загрузка информации о празднике из базы данных или другого источника
         $celebrationData = $this->getCelebrationData($celebration);
+        if (is_null($celebrationData)){
+            return redirect()->route('home')->withErrors(['celeb' => 'Идентификатор праздника не найден.']);
+        }
         $currentLanguage = app()->getLocale();
         SEOMeta::setDescription($celebrationData['description']);
         if ($currentLanguage === 'en') {

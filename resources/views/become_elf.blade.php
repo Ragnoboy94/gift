@@ -23,14 +23,11 @@
                             </form>
                         @endif
                     @endif
-                @else
-                    <p>Чтобы стать эльфом, пожалуйста, зарегистрируйтесь на нашем сайте.</p>
-                    <a href="{{ route('register') }}" class="btn btn-primary">Зарегистрироваться</a>
                 @endauth
             </div>
         </div>
     </div>
-    <!-- Модальное окно подтверждения email -->
+
     <div class="modal fade" id="emailVerificationModal" tabindex="-1" aria-labelledby="emailVerificationModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">

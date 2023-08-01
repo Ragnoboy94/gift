@@ -113,17 +113,17 @@
                     const maxOrderAmount = getMaxOrderAmount(ratingLevel);
 
                     if (totalAmount < 700) {
-                        orderDetails.innerHTML = "<span class='text-danger'>Сумма должна быть не менее 700 рублей</span";
+                        orderDetails.innerHTML = "<span class='text-danger'>{{__('trans.summa700')}}</span";
                         return;
                     } else if (totalAmount > maxOrderAmount) {
-                        orderDetails.innerHTML = `<span class='text-danger'>Ваш уровень не позволяет заказывать на суммы выше ${maxOrderAmount} рублей</span>`;
+                        orderDetails.innerHTML = `<span class='text-danger'>{{__('trans.summabig1')}} ${maxOrderAmount} {{__('modal.rubles')}}</span>`;
                         return;
                     } else if (totalAmount >= 700) {
                         const feeAmount = 200 + ((totalAmount - 625) / 100 * 15);
                         const giftsAmount = totalAmount - feeAmount;
 
-                        orderDetails.innerHTML = `Сумма на подарки: <span class="lead">${Math.round(giftsAmount)}</span> рублей<br>
-Вознаграждение исполнителя: <span class="lead">${Math.round(feeAmount)}</span> рублей`;
+                        orderDetails.innerHTML = `{{__('trans.summa_gift')}}: <span class="lead">${Math.round(giftsAmount)}</span> {{__('modal.rubles')}}<br>
+{{__('trans.money_elf')}}: <span class="lead">${Math.round(feeAmount)}</span> {{__('modal.rubles')}}`;
                     } else {
                         orderDetails.innerHTML = "";
                         return;
