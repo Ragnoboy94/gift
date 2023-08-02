@@ -20,9 +20,9 @@
                     <div class="card-body">
                         <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
                         <p class="card-text">
-                            <b>Сумма:</b> {{ $order->sum }} {{ $order->sum_rubles }}<br>
-                            <b>Статус:</b> {{ $order->status->display_name }}<br>
-                            <b>Дата создания:</b> {{ $order->created_at }}<br>
+                            <b>{{__('order.summa')}}:</b> {{ $order->sum }} {{ $order->sum_rubles }}<br>
+                            <b>{{__('order.status')}}:</b> {{ $order->status->display_name }}<br>
+                            <b>{{__('order.date_create')}}:</b> {{ $order->created_at }}<br>
                         </p>
                     </div>
                 </div>

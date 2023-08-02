@@ -17,31 +17,31 @@
             </div>
         @endif
         <h1>{{ __('app.my_orders') }}</h1>
-        <!-- Карточки для мобильных устройств -->
+
         <div class="d-md-none">
             @foreach ($orders as $order)
                 <div class="card mb-3 text-white"
                      style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.webp'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
                     <div class="card-body">
-                        <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
+                        <h5 class="card-title">№ {{__('order.orders')}}: {{ $order->order_number }}</h5>
                         <p class="card-text">
-                            <b>Сумма:</b> {{ $order->sum }} {{ $order->sum_rubles }}<br>
-                            <b>Подарок:</b> {{ round($order->sum_work) }} {{ $order->sum_work_rubles }}<br>
-                            <b>Эльфу:</b> {{ round($order->sum_elf) }} {{ $order->sum_elf_rubles }}<br>
-                            <b>Статус:</b> {{ $order->status->display_name }}<br>
-                            <b>Дата создания:</b> {{ $order->created_at }}<br>
-                            <b>Срок выполнения:</b> {{ $order->deadline }}
+                            <b>{{__('order.summa')}}:</b> {{ $order->sum }} {{ $order->sum_rubles }}<br>
+                            <b>{{__('order.gift')}}:</b> {{ round($order->sum_work) }} {{ $order->sum_work_rubles }}<br>
+                            <b>{{__('order.elf')}}:</b> {{ round($order->sum_elf) }} {{ $order->sum_elf_rubles }}<br>
+                            <b>{{__('order.status')}}:</b> {{ $order->status->display_name }}<br>
+                            <b>{{__('order.date_create')}}:</b> {{ $order->created_at }}<br>
+                            <b>{{__('order.time_done')}}:</b> {{ $order->deadline }}
                         </p>
                         @if ($order->status->name == 'active' || $order->status->name == 'created' || $order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery' || $order->status->name == 'cancelled_by_elf')
                             @if ($order->status->name == 'created')
                                 <a href="{{ route('order.confirmation', ['orderId' => $order->id]) }}"
-                                   class="btn btn-primary">Перейти к подтверждению</a>
+                                   class="btn btn-primary">{{__('order.go_confirm')}}</a>
                             @elseif ($order->status->name == 'cancelled_by_elf')
                                 <a href="{{ route('order.confirmation', ['orderId' => $order->id]) }}"
-                                   class="btn btn-primary">Повторить заказ</a>
+                                   class="btn btn-primary">{{__('order.repeat_order')}}</a>
                             @elseif ($order->status->name == 'ready_for_delivery')
                                 <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
-                                   class="btn btn-primary">Открыть чат</a>
+                                   class="btn btn-primary">{{__('order.open_chat')}}</a>
                             @endif
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     data-bs-target="#cardcancelOrderModal-{{ $order->id }}">
@@ -56,27 +56,23 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="cardcancelOrderModalLabel-{{ $order->id }}">Отмена
-                                    заказа</h5>
+                                <h5 class="modal-title" id="cardcancelOrderModalLabel-{{ $order->id }}">{{__('order.cancel_order')}}</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body  text-black">
                                 @if($order->status->name == 'created' || $order->status->name == 'active')
-                                    Внимание: Отмена заказа может привести к снижению вашего рейтинга. Рейтинг
-                                    уменьшается при отмене заказов в статусе 'В процессе' и 'Готов к доставке'.
-                                    Убедитесь, что вы хотите отменить заказ перед продолжением.
+                                    {{__('order.status_text1')}}
+                                @elseif($order->status->name == 'cancelled_by_elf')
+                                    {{__('order.status_text4')}}
                                 @elseif($order->status->name == 'in_progress')
-                                    Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.2, учитывая
-                                    количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                    {{__('order.status_text2')}}
                                 @else
-                                    Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.4, учитывая
-                                    количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                    {{__('order.status_text3')}}
                                 @endif
                             </div>
                             <div class="modal-footer">
-                                <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger">Подтвердить
-                                    отмену</a>
+                                <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}" class="btn btn-danger">{{__('order.confirm_cancel')}}</a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('api-tokens.close')}}</button>
                             </div>
                         </div>
@@ -88,12 +84,12 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">№ заказа</th>
-                    <th scope="col">Сумма</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Дата создания</th>
-                    <th scope="col">Срок выполнения</th>
-                    <th scope="col">Действия</th>
+                    <th scope="col">№ {{__('order.orders')}}</th>
+                    <th scope="col">{{__('order.summa')}}</th>
+                    <th scope="col">{{__('order.status')}}</th>
+                    <th scope="col">{{__('order.date_create')}}</th>
+                    <th scope="col">{{__('order.time_done')}}</th>
+                    <th scope="col">{{__('order.action')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -105,8 +101,8 @@
                         <td>
                             {{ $order->sum }} {{ $order->sum_rubles }}<br>
                             <span class="d-none d-lg-inline">
-        <b>Подарок:</b> {{ round($order->sum_work) }} {{ $order->sum_work_rubles }}<br>
-        <b>Эльфу:</b> {{ round($order->sum_elf) }} {{ $order->sum_elf_rubles }}
+        <b>{{__('order.gift')}}:</b> {{ round($order->sum_work) }} {{ $order->sum_work_rubles }}<br>
+        <b>{{__('order.elf')}}:</b> {{ round($order->sum_elf) }} {{ $order->sum_elf_rubles }}
     </span>
                         </td>
 
@@ -118,13 +114,13 @@
                             @if ($order->status->name == 'active' || $order->status->name == 'created' || $order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery' || $order->status->name == 'cancelled_by_elf')
                                 @if ($order->status->name == 'created')
                                     <a href="{{ route('order.confirmation', ['orderId' => $order->id]) }}"
-                                       class="btn btn-primary">Перейти к подтверждению</a>
+                                       class="btn btn-primary">{{__('order.go_confirm')}}</a>
                                 @elseif ($order->status->name == 'cancelled_by_elf')
                                     <a href="{{ route('order.confirmation', ['orderId' => $order->id]) }}"
-                                       class="btn btn-primary">Повторить заказ</a>
+                                       class="btn btn-primary">{{__('order.repeat_order')}}</a>
                                 @elseif ($order->status->name == 'ready_for_delivery')
                                     <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
-                                       class="btn btn-primary">Открыть чат</a>
+                                       class="btn btn-primary">{{__('order.open_chat')}}</a>
                                 @endif
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#cancelOrderModal-{{ $order->id }}">
@@ -139,29 +135,24 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="cancelOrderModalLabel-{{ $order->id }}">Отмена
-                                        заказа</h5>
+                                    <h5 class="modal-title" id="cancelOrderModalLabel-{{ $order->id }}">{{__('order.cancel_order')}}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-black">
                                     @if($order->status->name == 'created' || $order->status->name == 'active')
-                                        Внимание: Отмена заказа может привести к снижению вашего рейтинга. Рейтинг
-                                        уменьшается при отмене заказов в статусе 'В процессе' и 'Готов к доставке'.
-                                        Убедитесь, что вы хотите отменить заказ перед продолжением.
+                                        {{__('order.status_text1')}}
                                     @elseif($order->status->name == 'cancelled_by_elf')
-                                        Жаль, что вы отменяете заказ, но мы обязаны уточнить. Вы уверены, что хотите отменить заказ?
+                                        {{__('order.status_text4')}}
                                     @elseif($order->status->name == 'in_progress')
-                                        Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.2, учитывая
-                                        количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                        {{__('order.status_text2')}}
                                     @else
-                                        Внимание: Отмена заказа приведет к снижению вашего рейтинга на 0.4, учитывая
-                                        количество отмен в этом месяце. Вы уверены, что хотите отменить заказ?
+                                        {{__('order.status_text3')}}
                                     @endif
                                 </div>
                                 <div class="modal-footer">
                                     <a href="{{ route('order.cancel', ['orderId' => $order->id]) }}"
-                                       class="btn btn-danger">Подтвердить отмену</a>
+                                       class="btn btn-danger">{{__('order.confirm_cancel')}}</a>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('api-tokens.close')}}
                                     </button>
                                 </div>

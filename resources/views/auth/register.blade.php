@@ -5,12 +5,12 @@
             <div class="col-md-12 lead">{{__('messages.enter_register')}}:</div>
             <div class="col-md-6 my-3">
                 <a id="vkButton" href="{{ route('auth.vk') }}" class="btn btn-primary form-control">
-                    <img src="{{ asset('images/vk.png') }}" alt="ВКонтакте" width="16" height="16" class="me-2 mb-1">{{ __('messages.vk') }}
+                    <img src="{{ asset('images/vk.png') }}" alt="{{ __('messages.vk') }}" width="16" height="16" class="me-2 mb-1">{{ __('messages.vk') }}
                 </a>
             </div>
             <div class="col-md-6 my-3">
                 <a id="yandexButton" href="{{ route('auth.yandex') }}" class="btn btn-primary form-control">
-                    <img src="{{ asset('images/yandex.png') }}" alt="Яндекс" width="16" height="16" class="me-2 mb-1">{{ __('messages.yandex') }}
+                    <img src="{{ asset('images/yandex.png') }}" alt="{{ __('messages.yandex') }}" width="16" height="16" class="me-2 mb-1">{{ __('messages.yandex') }}
                 </a>
             </div>
 
