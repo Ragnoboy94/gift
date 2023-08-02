@@ -149,13 +149,13 @@
                     const remainder10 = number % 10;
 
                     if (remainder100 >= 11 && remainder100 <= 19) {
-                        return 'рублей';
+                        return '{{__('trans.rubles')}}';
                     } else if (remainder10 === 1) {
-                        return 'рубль';
+                        return '{{__('trans.ruble')}}';
                     } else if (remainder10 >= 2 && remainder10 <= 4) {
-                        return 'рубля';
+                        return '{{__('trans.rublya')}}';
                     } else {
-                        return 'рублей';
+                        return '{{__('trans.rubles')}}';
                     }
                 }
 
@@ -234,7 +234,7 @@
                                         const feeAmount = 200 + ((`${order.sum}` - 625) / 100 * 15);
                                         const giftsAmount = `${order.sum}` - feeAmount;
 
-                                        price.innerHTML = `Сумма заказа: ${Math.round(giftsAmount)} ${pluralizeRubles(Math.round(giftsAmount))}<br><p>За работу: ${Math.round(feeAmount)} ${pluralizeRubles(Math.round(feeAmount))}</p>`;
+                                        price.innerHTML = `{{__('trans.summa_order')}}: ${Math.round(giftsAmount)} ${pluralizeRubles(Math.round(giftsAmount))}<br><p>{{__('trans.for_work')}}: ${Math.round(feeAmount)} ${pluralizeRubles(Math.round(feeAmount))}</p>`;
                                         colImage.appendChild(price);
 
                                         const colInfo = document.createElement('div');
@@ -247,12 +247,12 @@
 
                                         const listItemGender = document.createElement('li');
                                         listItemGender.classList.add('list-group-item');
-                                        listItemGender.textContent = `Для кого: ${order.gender}`;
+                                        listItemGender.textContent = `{{__('trans.for_why')}}: ${order.gender}`;
                                         listGroup.appendChild(listItemGender);
 
                                         const listItemHobby = document.createElement('li');
                                         listItemHobby.classList.add('list-group-item');
-                                        listItemHobby.textContent = `Его интересы: ${order.hobby}`;
+                                        listItemHobby.textContent = `{{__('trans.his_hobby')}}: ${order.hobby}`;
                                         listGroup.appendChild(listItemHobby);
 
                                         const cardAddress = document.createElement('p');
@@ -268,7 +268,7 @@
                                         takeOrderBtn.setAttribute('type', 'button');
                                         takeOrderBtn.setAttribute('data-bs-toggle', 'modal');
                                         takeOrderBtn.setAttribute('data-bs-target', `#order-${order.id}-modal`);
-                                        takeOrderBtn.textContent = 'Взять в работу';
+                                        takeOrderBtn.textContent = '{{__('trans.take_work')}}';
                                         colInfo.appendChild(takeOrderBtn);
                                         ordersContainer.appendChild(orderCard);
                                         const orderModal = document.createElement('div');
@@ -294,7 +294,7 @@
                                         const modalTitle = document.createElement('h5');
                                         modalTitle.classList.add('modal-title');
                                         modalTitle.id = `order-${order.id}-modalLabel`;
-                                        modalTitle.textContent = 'Подтверждение';
+                                        modalTitle.textContent = '{{__('trans.confirm')}}';
                                         modalHeader.appendChild(modalTitle);
 
                                         const modalCloseBtn = document.createElement('button');
@@ -306,7 +306,7 @@
 
                                         const modalBody = document.createElement('div');
                                         modalBody.classList.add('modal-body');
-                                        modalBody.innerHTML = `Взяв заказ, вы подтверждаете, что в случае отказа от него по своим причинам, ваш рейтинг будет снижен. Ожидается выполнение заказа вовремя, и сумма подарка должна быть равна или незначительно меньше объявленной. Также все покупки должны иметь подтверждение в виде чека. Оформление остается на ваше усмотрение и может быть включено в стоимость набора при предъявлении чека. Все, что сделано сверх данного, будет расцениваться как добрая воля, и требование за него плату с заказчика будет отражено на рейтинге.`;
+                                        modalBody.innerHTML = `{{__('confirm_text')}}`;
                                         modalContent.appendChild(modalBody);
 
                                         const modalFooter = document.createElement('div');
@@ -316,14 +316,14 @@
                                         const confirmBtn = document.createElement('a');
                                         confirmBtn.classList.add('btn', 'btn-primary');
                                         confirmBtn.setAttribute('href', `/elf/take-order/${order.id}`);
-                                        confirmBtn.textContent = 'Подтвердить';
+                                        confirmBtn.textContent = '{{__('app.confirm')}}';
                                         modalFooter.appendChild(confirmBtn);
 
                                         const cancelBtn = document.createElement('button');
                                         cancelBtn.classList.add('btn', 'btn-secondary');
                                         cancelBtn.setAttribute('type', 'button');
                                         cancelBtn.setAttribute('data-bs-dismiss', 'modal');
-                                        cancelBtn.textContent = 'Отмена';
+                                        cancelBtn.textContent = '{{__('session.cancel')}}';
                                         modalFooter.appendChild(cancelBtn);
                                         orderCard.addEventListener('click', () => {
                                             showOrderInfo(order.id);

@@ -27,4 +27,13 @@ return [
     'order_done_text2'=>'Canceling the order will result in a 0.2 decrease in your rating this month. Remember that your job as an elf is to bring joy to people. Are you sure you want to cancel the order?',
     'cancel_order'=>'Cancel the order',
     'available'=>'Available tasks',
+    'rubles'=>'rubles',
+    'ruble'=>'ruble',
+    'rublya'=>'rubles',
+    'summa_order'=>'Order amount',
+    'for_why'=>'Who is it for',
+    'his_hobby'=>'His hobby\'s',
+    'take_work'=>'Take to work',
+    'confirm'=>'Confirmation',
+    'confirm_text'=>'By taking an order, you confirm that if you refuse it for your own reasons, your rating will be lowered. The order is expected to be completed on time, and the gift amount should be equal to or slightly less than the announced amount. Also, all purchases must have confirmation in the form of a receipt. Registration remains at your discretion and can be included in the cost of the set upon presentation of the receipt. Everything that is done in excess of this will be regarded as goodwill, and the demand for payment from the customer for it will be reflected in the rating.',
 ];
