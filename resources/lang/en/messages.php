@@ -11,7 +11,9 @@ return [
     'celebration_not_found' => 'Celebration not found',
     'celebration_not_found_description' => 'The requested celebration could not be found.',
     'inter_order' => 'Sign in to place an order.',
-    'i_agree_to_terms_and_privacy_policy' => 'I agree to the :terms_of_service and :privacy_policy',
+    'i_agree_to_terms_and_privacy_policy' => 'By accessing the resource through any of the Vkontakte or Yandex services, you confirm that you have read :terms_of_service_d and :privacy_policy_d',
+    'terms_of_service_d' => 'Terms of Service',
+    'privacy_policy_d' => 'Privacy Policy',
     'terms_of_service' => 'Terms of Service',
     'privacy_policy' => 'Privacy Policy',
     'email' => 'Email',
@@ -59,5 +61,7 @@ return [
     'no_due_date_info' => 'Without specifying a due date, the execution period is one month.',
     'order_created' => 'Order successfully created.',
     'order_limit_reached' => 'You have already placed the maximum number of orders (3).',
-
+    'enter_register'=>'Login and registration via the buttons',
+    'yandex'=>'Yandex',
+    'vk'=>'VKontakte',
 ];
