@@ -14,11 +14,11 @@
                 </div>
             @endif
             @if ($order->status_id != 3)
-                <h2 class="text-center"> Заказ {{$order->status->display_name}}</h2>
+                <h2 class="text-center"> {{__('trans.order')}} {{$order->status->display_name}}</h2>
                 <div class="card col-6 mx-auto mb-3 text-white"
                      style="background-image: url('../images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.webp'); background-size: cover; background-position: center; text-shadow: 1px 1px 2px rgb(0, 0, 0,1);">
                     <div class="card-body">
-                        <h5 class="card-title">№ заказа: {{ $order->order_number }}</h5>
+                        <h5 class="card-title">№ {{__('order.orders')}}: {{ $order->order_number }}</h5>
                         <p class="card-text">
                             <b>{{__('order.summa')}}:</b> {{ $order->sum }} {{ $order->sum_rubles }}<br>
                             <b>{{__('order.status')}}:</b> {{ $order->status->display_name }}<br>
@@ -31,7 +31,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            Чат
+                            {{__('order.chat')}}
                         </div>
                         <div class="card-body">
                             <div class="chat-messages" id="chat-messages" style="height: 400px; overflow-y: scroll;">
@@ -41,8 +41,8 @@
                             <form id="chat-form" autocomplete="off">
                                 <div class="input-group">
                                     <input type="text" id="chat-input" class="form-control"
-                                           placeholder="Введите ваше сообщение..." required>
-                                    <button type="submit" class="btn btn-primary">Отправить</button>
+                                           placeholder="{{__('order.inter_mass')}}..." required>
+                                    <button type="submit" class="btn btn-primary">{{__('order.send')}}</button>
                                 </div>
                             </form>
                         </div>
@@ -51,70 +51,66 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            Информация о заказе:
+                            {{__('order.order_info')}}:
                         </div>
                         <div class="card-body">
                             <div id="message" class="alert" role="alert" style="display: none;"></div>
                             @if (Auth::user()->id == $order->user_id)
                                 <p><img width="48" class="h-8 w-8 rounded-full object-cover"
                                         src="{{ $elf->profile_photo_url }}"
-                                        alt="{{ $elf->name }}"/><strong>Исполнитель:</strong> {{ $elf->name }}</p>
+                                        alt="{{ $elf->name }}"/><strong>{{__('order.elf1')}}:</strong> {{ $elf->name }}</p>
                                 @if(!$order->phone_visible)
                                     <form method="POST"
                                           action="{{ route('orders.update_phone_visibility', $order->id) }}">
                                         @csrf
                                         @method('PUT')
                                         <div class="alert alert-warning" role="alert">
-                                            Ваш номер телефона скрыт от эльфа. Если вы хотите показать свой номер
-                                            телефона
-                                            эльфу, нажмите кнопку ниже. Обратите внимание, что ваш номер телефона будет
-                                            виден в открытом виде.
+                                            {{__('order.phone_info')}}
                                         </div>
-                                        <button type="submit" class="btn btn-success form-control my-2">Показать номер телефона эльфу
+                                        <button type="submit" class="btn btn-success form-control my-2">{{__('order.show_phone')}}
                                         </button>
                                     </form>
                                 @else
 
                                     <div class="alert alert-info" role="alert">
-                                        Ваш номер телефона виден эльфу.
+                                        {{__('order.phone_info2')}}.
                                     </div>
                                 @endif
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <button type="button" class="btn btn-primary form-control mb-1" data-bs-toggle="modal"
                                                 data-bs-target="#orderConfirmationModal">
-                                            Заказ получен
+                                            {{__('order.order_taken')}}
                                         </button>
                                     </div>
                                     <div class="col-lg-6">
                                         <button type="button" class="btn btn-danger form-control mb-1" data-bs-toggle="modal"
                                                 data-bs-target="#orderProblemModal">
-                                            Проблема с заказом
+                                            {{__('order.problem')}}
                                         </button>
                                     </div>
                                 </div>
-                                <!-- Модальное окно -->
                                 <div class="modal fade" id="orderProblemModal" tabindex="-1"
                                      aria-labelledby="orderProblemModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="orderProblemModalLabel">Сообщить о проблеме с заказом</h5>
+                                                <h5 class="modal-title" id="orderProblemModalLabel">{{__('order.send_problem')}}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="alert alert-danger" role="alert">
-                                                    Заказ будет заблокирован до завершения проверки.
+                                                    {{__('order.order_block')}}.
                                                 </div>
                                                 <form method="POST" action="{{ route('order-problem.store', $order->id) }}">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <label for="problemDescription">Описание проблемы</label>
+                                                        <label for="problemDescription">{{__('order.problem_desc')}}</label>
                                                         <textarea class="form-control" id="problemDescription" name="description" rows="3"></textarea>
                                                     </div>
                                                     <input type="hidden" name="order_id" id="orderId" value="">
                                                     <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary">Отправить</button>
+                                                        <button type="submit" class="btn btn-primary">{{__('order.send')}}</button>
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                             {{__('api-tokens.close')}}
                                                         </button>
@@ -130,20 +126,17 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="orderConfirmationModalLabel">Подтверждение
-                                                    получения заказа</h5>
+                                                <h5 class="modal-title" id="orderConfirmationModalLabel">{{__('order.confirm_taken')}}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                Пожалуйста, подтвердите, что заказ соответствует обговоренной цене, были
-                                                получены чеки, и вы передали деньги с учетом работы. Это важный шаг для
-                                                подтверждения выполнения заказа.
+                                                {{__('order.order_info2')}}
                                             </div>
                                             <div class="modal-footer">
                                                 <form method="POST" action="{{ route('orders.finish', $order->id) }}">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-primary">Подтвердить</button>
+                                                    <button type="submit" class="btn btn-primary">{{__('app.confirm')}}</button>
                                                 </form>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                     {{__('api-tokens.close')}}
@@ -154,18 +147,18 @@
                                     </div>
                                 </div>
                             @else
-                                <p><strong>Адрес:</strong> {{ $order->address }}
+                                <p><strong>{{__('messages.address')}}:</strong> {{ $order->address }}
                                     @if ($order->apartment)
-                                        , квартира: {{$order->apartment}}
+                                        , {{__('messages.apartment')}}: {{$order->apartment}}
                                     @endif
                                     @if ($order->floor)
-                                        , этаж: {{$order->floor}}
+                                        , {{__('messages.floor')}}: {{$order->floor}}
                                     @endif
                                     @if ($order->intercom)
-                                        , домофон работает
+                                        , {{__('order.inter_work')}}
                                     @endif</p>
                                 @if($order->phone_visible)
-                                    <p><strong>Телефон для связи:</strong> {{ $user->phone }}</p>
+                                    <p><strong>{{__('order.phone')}}:</strong> {{ $user->phone }}</p>
                                 @endif
                                 <form id="photo-upload-form" enctype="multipart/form-data">
                                     <div class="upload-container" id="upload-container">
@@ -180,12 +173,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="description">Описание:</label>
-                                        <textarea placeholder="Пришла идея собрать набор футбольного фаната..."
+                                        <label for="description">{{__('order.description')}}:</label>
+                                        <textarea placeholder="{{__('order.idea')}}..."
                                                   class="form-control" id="description" name="description"
                                                   rows="3">{{$order->description}}</textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Отправить</button>
+                                    <button type="submit" class="btn btn-primary">{{__('order.send')}}</button>
                                 </form>
                             @endif
                         </div>

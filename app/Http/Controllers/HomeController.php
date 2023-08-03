@@ -99,6 +99,9 @@ class HomeController extends Controller
 
             $order->sum_elf = $sum_elf;
             $order->sum_work = $sum_work;
+            if (session()->get('app_locale') == 'en') {
+                $order->celebration->name = app(CelebrationController::class)->getCelebrationData($order->celebration_id)['name'];
+            }
         }
 
         return view('elf_dashboard', compact('city_name', 'orders'));

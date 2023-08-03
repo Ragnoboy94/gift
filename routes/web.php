@@ -77,3 +77,4 @@ Route::middleware([
 Route::get('/order/confirm/{orderId}', function () {
     return view('errors.403');
 })->name('error.403');
+
