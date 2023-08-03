@@ -194,7 +194,6 @@
                         });
 
                 }
-
                 function showOrdersForCity(centerCoords) {
                     const ordersContainer = document.getElementById('ordersContainer');
                     ordersContainer.innerHTML = '';
@@ -252,7 +251,7 @@
 
                                         const listItemHobby = document.createElement('li');
                                         listItemHobby.classList.add('list-group-item');
-                                        listItemHobby.textContent = `{{__('trans.his_hobby')}}: ${order.hobby}`;
+                                        listItemHobby.textContent = `{{__('trans.his_hobby')}}: ${order.hobby}`.replace('&#039;', "'");
                                         listGroup.appendChild(listItemHobby);
 
                                         const cardAddress = document.createElement('p');
@@ -306,7 +305,7 @@
 
                                         const modalBody = document.createElement('div');
                                         modalBody.classList.add('modal-body');
-                                        modalBody.innerHTML = `{{__('confirm_text')}}`;
+                                        modalBody.innerHTML = `{{__('trans.confirm_text')}}`;
                                         modalContent.appendChild(modalBody);
 
                                         const modalFooter = document.createElement('div');

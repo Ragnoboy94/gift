@@ -24,7 +24,7 @@ class CelebrationController extends Controller
         return view('celebrations.show', ['celebration' => $celebrationData]);
     }
 
-    private function getCelebrationData($celebration)
+    public function getCelebrationData($celebration)
     {
         // Загружаем данные о празднике из языкового файла
         $celebrations = __('celebrations');

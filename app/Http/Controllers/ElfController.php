@@ -48,7 +48,7 @@ class ElfController extends Controller
             $order->elf_id = $user->id;
             $order->save();
 
-            return redirect()->route('elf-dashboard')->with('message', 'Заказ успешно взят в работу!');
+            return redirect()->route('elf-dashboard')->with('message', __('order.order_take_success'));
         }
 
         return redirect()->route('elf-dashboard')->with('message','Заказ уже взят в работу или недоступен.');

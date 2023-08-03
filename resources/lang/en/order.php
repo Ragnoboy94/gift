@@ -18,4 +18,5 @@ return [
     'confirm_cancel'=>'Confirm cancellation',
     'action'=>'Actions',
     'status_text4'=>'Sorry you\'re canceling the order, but we need to clarify. Are you sure you want to cancel the order?',
+    'order_take_success'=>'The order has been successfully taken into operation!',
     ];

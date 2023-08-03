@@ -14,19 +14,20 @@ class StatusSeeder extends Seeder
     public function run(): void
     {
         $status = [
-            ['name' => 'active', 'display_name' => 'Активный'],
-            ['name' => 'in_progress', 'display_name' => 'В процессе'],
-            ['name' => 'ready_for_delivery', 'display_name' => 'Готов к доставке'],
-            ['name' => 'cancelled_by_customer', 'display_name' => 'Отменен клиентом'],
-            ['name' => 'cancelled_by_elf', 'display_name' => 'Отменен исполнителем'],
-            ['name' => 'created', 'display_name' => 'Создан'],
-            ['name' => 'finished', 'display_name' => 'Завершен'],
+            ['name' => 'active', 'display_name' => 'Активный', 'display_name_en' => 'Active'],
+            ['name' => 'in_progress', 'display_name' => 'В процессе', 'display_name_en' => 'In progress'],
+            ['name' => 'ready_for_delivery', 'display_name' => 'Готов к доставке', 'display_name_en' => 'Ready for delivery'],
+            ['name' => 'cancelled_by_customer', 'display_name' => 'Отменен клиентом', 'display_name_en' => 'Cancelled by customer'],
+            ['name' => 'cancelled_by_elf', 'display_name' => 'Отменен исполнителем', 'display_name_en' => 'Cancelled by Elf'],
+            ['name' => 'created', 'display_name' => 'Создан', 'display_name_en' => 'Created'],
+            ['name' => 'finished', 'display_name' => 'Завершен', 'display_name_en' => 'Finished'],
         ];
 
         foreach ($status as $stat) {
             DB::table('order_statuses')->insert([
                 'name' => $stat['name'],
                 'display_name' => $stat['display_name'],
+                'display_name_en' => $stat['display_name_en'],
             ]);
         }
     }

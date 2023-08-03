@@ -74,6 +74,9 @@ class OrderController extends Controller
         $city_name = City::find($city_id);
         $order = Order::findOrFail($orderId);
         $celebration = Celebration::findOrFail($order->celebration_id);
+        if (session()->get('app_locale') == 'en') {
+            $celebration->description = app(CelebrationController::class)->getCelebrationData($order->celebration_id)['description'];
+        }
         $user = Auth::user();
         return view('orders.confirmation', compact('order', 'celebration', 'user', 'city_name'));
     }
@@ -110,16 +113,7 @@ class OrderController extends Controller
             'phone' => 'required',
             'due_date' => 'nullable|date',
         ]);
-        $phoneUtil = PhoneNumberUtil::getInstance();
-        try {
-            $phoneNumber = $phoneUtil->parse($request->input('phone'), 'RU');
-            if (!$phoneUtil->isValidNumber($phoneNumber)) {
-                return redirect()->back()->withErrors(['phone' => 'Неверный формат номера телефона']);
-            }
-        } catch (NumberParseException $e) {
-            return redirect()->back()->withErrors(['phone' => 'Неверный формат номера телефона']);
-        }
-        // Найти заказ по orderId
+
         $order = Order::findOrFail($orderId);
         $order->updated_at = now();
         $order->status_id = OrderStatus::where('name', 'active')->first()->id;
@@ -137,8 +131,15 @@ class OrderController extends Controller
         $order->save();
 
 
-        // Здесь добавьте логику для перехода к оплате
-        // Например, в зависимости от вашей системы оплаты, вы можете создать платеж и получить URL-адрес платежной страницы
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        try {
+            $phoneNumber = $phoneUtil->parse($request->input('phone'), 'RU');
+            if (!$phoneUtil->isValidNumber($phoneNumber)) {
+                return redirect()->back()->withErrors(['phone' => 'Неверный формат номера телефона']);
+            }
+        } catch (NumberParseException $e) {
+            return redirect()->back()->withErrors(['phone' => 'Неверный формат номера телефона']);
+        }
         $user = Auth::user();
         $user->phone = $request->input('phone');
         $user->save();
@@ -184,13 +185,13 @@ class OrderController extends Controller
         $remainder10 = $number % 10;
 
         if ($remainder100 >= 11 && $remainder100 <= 19) {
-            return 'рублей';
+            return __('trans.rubles');
         } elseif ($remainder10 == 1) {
-            return 'рубль';
+            return __('trans.ruble');
         } elseif ($remainder10 >= 2 && $remainder10 <= 4) {
-            return 'рубля';
+            return __('trans.rublya');
         } else {
-            return 'рублей';
+            return __('trans.rubles');
         }
     }
 
@@ -208,7 +209,7 @@ class OrderController extends Controller
                 });
             })
             ->with(['status' => function ($query) {
-                $query->addSelect(['id', 'name', 'display_name']);
+                $query->addSelect(['id', 'name', 'display_name','display_name_en']);
             }])
             ->with(['celebration' => function ($query) {
                 $query->select(['id', 'image']);
@@ -225,6 +226,9 @@ class OrderController extends Controller
             $order->sum_rubles = $this->pluralizeRubles($sum_order);
             $order->sum_elf_rubles = $this->pluralizeRubles($sum_elf);
             $order->sum_work_rubles = $this->pluralizeRubles($sum_work);
+            if (session()->get('app_locale') == 'en') {
+                $order->status->display_name = $order->status->display_name_en;
+            }
         }
 
         return view('orders.my_orders', compact('orders'));
@@ -297,12 +301,13 @@ class OrderController extends Controller
             $order->status_id = $readyForDeliveryStatus;
             $order->save();
             return redirect()->route('chat.show', ['orderId' => $orderId]);
-        }else{
+        } else {
             return redirect()->back()->with('message', 'Ошибка с отправкой сообщения пользователю. Пока чиним, простите.');
         }
 
 
     }
+
     public function updatePhoneVisibility(Request $request, Order $order)
     {
         $order->update(['phone_visible' => true]);
