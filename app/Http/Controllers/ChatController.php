@@ -50,7 +50,7 @@ class ChatController extends Controller
     public function uploadFiles(Request $request, $orderId)
     {
         $request->validate([
-            'photos.*' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'photos.*' => 'file|mimes:jpg,jpeg,png,webp|max:2048',
             'description' => 'nullable|string',
         ]);
 
