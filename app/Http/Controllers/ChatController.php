@@ -76,13 +76,13 @@ class ChatController extends Controller
                 $uploadedPhotos[] = $url;
             }
 
-            $message = 'Фото получено!';
+            $message = __('cont.photo_taken');
         } else {
             $uploadedPhotos[] = '';
-            $message = 'Описание получено!';
+            $message = __('cont.desc_taken');
         }
         if ($request->input('description') && $request->file('photos')) {
-            $message = "Фото и описание получены!";
+            $message = __('cont.taken_all');
         }
 
         // Верните ответ, например, со списком загруженных файлов или просто статусом успеха

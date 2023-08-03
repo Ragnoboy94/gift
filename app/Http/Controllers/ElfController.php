@@ -32,7 +32,7 @@ class ElfController extends Controller
         $user->is_elf = true;
         $user->save();
 
-        return redirect()->route('elf-dashboard')->with('status', 'Поздравляем, теперь вы эльф!');
+        return redirect()->route('elf-dashboard')->with('status', __('elf_yee'));
     }
 
     public function takeOrder($order_id)
@@ -51,7 +51,7 @@ class ElfController extends Controller
             return redirect()->route('elf-dashboard')->with('message', __('order.order_take_success'));
         }
 
-        return redirect()->route('elf-dashboard')->with('message','Заказ уже взят в работу или недоступен.');
+        return redirect()->route('elf-dashboard')->with('message',__('cont.order_in_work'));
     }
 
     public function cancel($orderId)
@@ -70,12 +70,12 @@ class ElfController extends Controller
             });
 
         }else{
-            return redirect()->back()->with('message','Вы не являетесь эльфом почему-то:(');
+            return redirect()->back()->with('message',__('cont.text3'));
         }
 
         // Проверка на соответствие пользователя или эльфа
         if ($order->elf_id != $user->id || $order->user_id == $user->id) {
-            return redirect()->back()->with('message','Вы не можете отменить этот заказ');
+            return redirect()->back()->with('message',__('cont.can_not_cancel'));
         }
         // Отмена заказа для эльфа и заказчика в статусе 'in_progress' или 'ready_for_delivery'
         elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
@@ -99,6 +99,6 @@ class ElfController extends Controller
             $order->save();
         }
 
-        return redirect()->route('elf-dashboard')->with('message', 'Заказ успешно отменен');
+        return redirect()->route('elf-dashboard')->with('message', __('cont.cancel_success'));
     }
 }

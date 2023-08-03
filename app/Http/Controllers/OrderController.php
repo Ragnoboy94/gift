@@ -44,8 +44,8 @@ class OrderController extends Controller
                 "max:$maxOrderAmount",
             ],
         ], [
-            'sum.max' => 'Ваш уровень не позволяет заказывать на суммы выше ' . $maxOrderAmount . ' рублей',
-            'sum.min' => 'Минимальная сумма заказа 700 рублей.',
+            'sum.max' => __('trans.summabig1') . $maxOrderAmount . __('modal.rubles'),
+            'sum.min' => __('cont.min_sum'),
         ]);
         $order = new Order([
             'sum' => $request->input('sum'),
@@ -62,7 +62,7 @@ class OrderController extends Controller
 
         $result = $order->save();
         if (!$result) {
-            dd($order->withErrors()); // Выведет ошибки, если они есть
+            dd($order->withErrors());
         }
 
         return redirect()->route('order.confirmation', ['orderId' => $order->id]);
@@ -135,10 +135,10 @@ class OrderController extends Controller
         try {
             $phoneNumber = $phoneUtil->parse($request->input('phone'), 'RU');
             if (!$phoneUtil->isValidNumber($phoneNumber)) {
-                return redirect()->back()->withErrors(['phone' => 'Неверный формат номера телефона']);
+                return redirect()->back()->withErrors(['phone' => __('cont.wrong_phone')]);
             }
         } catch (NumberParseException $e) {
-            return redirect()->back()->withErrors(['phone' => 'Неверный формат номера телефона']);
+            return redirect()->back()->withErrors(['phone' => __('cont.wrong_phone')]);
         }
         $user = Auth::user();
         $user->phone = $request->input('phone');
@@ -243,7 +243,7 @@ class OrderController extends Controller
 
         // Проверка на соответствие пользователя или эльфа
         if (($order->elf_id == $user->id && !is_null($order->elf_id)) || ($order->user_id != $user->id)) {
-            return redirect()->back()->withErrors(['message' => 'Вы не можете отменить этот заказ']);
+            return redirect()->back()->withErrors(['message' => __('cont.can_not_cancel')]);
         }
 
         // Отмена заказа для заказчика
@@ -267,7 +267,7 @@ class OrderController extends Controller
             $order->save();
         }
 
-        return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно отменен');
+        return redirect()->route('orders.my_orders')->with('message', __('cont.cancel_success'));
     }
 
     public function showDataPage($orderId)
@@ -291,7 +291,7 @@ class OrderController extends Controller
 
         $inProgressStatus = OrderStatus::where('name', 'in_progress')->first()->id;
         if ($order->status_id !== $inProgressStatus) {
-            return redirect()->back()->with('message', 'Заказ не находится в статусе "в процессе"');
+            return redirect()->back()->with('message', __('cont.text1'));
         }
 
 
@@ -302,7 +302,7 @@ class OrderController extends Controller
             $order->save();
             return redirect()->route('chat.show', ['orderId' => $orderId]);
         } else {
-            return redirect()->back()->with('message', 'Ошибка с отправкой сообщения пользователю. Пока чиним, простите.');
+            return redirect()->back()->with('message', __('cont.error_send'));
         }
 
 
@@ -312,7 +312,7 @@ class OrderController extends Controller
     {
         $order->update(['phone_visible' => true]);
 
-        return redirect()->back()->with('message', 'Номер телефона теперь виден эльфу');
+        return redirect()->back()->with('message', __('cont.text2'));
     }
 
     public function finishOrder($orderId)
@@ -322,7 +322,7 @@ class OrderController extends Controller
         // Убедитесь, что заказ в правильном статусе перед окончанием
         $validStatuses = ['ready_for_delivery'];
         if (!in_array($order->status->name, $validStatuses)) {
-            return redirect()->back()->with('error_message', 'Заказ не может быть завершен в текущем статусе');
+            return redirect()->back()->with('error_message', __('cont.order_not_done'));
         }
         $finishedStatus = OrderStatus::where('name', 'finished')->first();
 
@@ -351,7 +351,7 @@ class OrderController extends Controller
         $order->status_id = $finishedStatus->id;
         $order->save();
 
-        return redirect()->route('orders.my_orders')->with('message', 'Заказ успешно завершен');
+        return redirect()->route('orders.my_orders')->with('message', __('cont.order_success'));
     }
 
     public function markAsPaid($orderId)
@@ -381,6 +381,6 @@ class OrderController extends Controller
         $role_user->rating += $ratingIncrease * $completed_orders_this_month;
         $role_user->save();
 
-        return redirect()->route('elf-dashboard')->with('message', 'Заказ отмечен как оплаченный');
+        return redirect()->route('elf-dashboard')->with('message', __('cont.order_payed'));
     }
 }
