@@ -21,7 +21,8 @@ class Order extends Model
         'status_id',
         'elf_id',
         'created_at',
-        'phone_visible'
+        'phone_visible',
+        'cancel_elf_id'
     ];
 
     public function user()

@@ -79,17 +79,20 @@ class ElfController extends Controller
         }
         // Отмена заказа для эльфа и заказчика в статусе 'in_progress' или 'ready_for_delivery'
         elseif ($order->status->name == 'in_progress' || $order->status->name == 'ready_for_delivery') {
+            $order->cancel_elf_id = $user->id;
+            $order->save();
             $statusName = 'cancelled_by_elf';
             $ratingDecrease = $order->status->name == 'in_progress' ? 0.2 : 0.4;
 
-            $cancellations_this_month = Order::where('user_id', $user->id)
+            $cancellations_this_month = Order::where('cancel_elf_id', $user->id)
                 ->where('status_id', OrderStatus::where('name', $statusName)->first()->id)
                 ->whereMonth('updated_at', now()->month)
                 ->count();
             if ($cancellations_this_month == 0){
                 $cancellations_this_month = 1;
+            }else{
+                $cancellations_this_month++;
             }
-
 
 
             $role_user->rating -= $ratingDecrease * $cancellations_this_month;

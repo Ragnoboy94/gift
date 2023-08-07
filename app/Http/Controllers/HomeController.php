@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\UserToken;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Nette\Utils\DateTime;
 
 class HomeController extends Controller
@@ -75,6 +77,17 @@ class HomeController extends Controller
 
     public function elfDashboard()
     {
+        $user = Auth::user();
+        $role_users = $user->role_user;
+        $role_user = $role_users->first(function ($role_user) {
+            return $role_user->role->name === 'elf';
+        });
+        if ($role_user->rating < 0) {
+            return redirect()->route('home')->withErrors(['error' => __('new.error')]);
+        }
+        if ($user && $user->created_at->diffInDays(Carbon::now()) > 2 && $user->checked && is_null($user->email_verified_at)){
+            return view('become_elf');
+        }
         $city_id = session('city_id');
         $city_name = City::find($city_id);
         $user_id = auth()->id();

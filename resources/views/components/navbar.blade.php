@@ -553,13 +553,13 @@
                     <p>{{ __('modal.description_elf') }}</p>
                     <ol class="list-group">
                         <li class="list-group-item">{{ __('modal.level') }} 1 - {{ __('modal.order') }}
-                            2 {{ __('modal.order_after') }}</li>
+                            2 {{ __('modal.order_after') }}. {{__('new.can_take')}} 1 {{__('new.order_one')}}</li>
                         <li class="list-group-item">{{ __('modal.level') }} 2 - {{ __('modal.order') }}
-                            3 {{ __('modal.order_after') }}</li>
+                            3 {{ __('modal.order_after') }}. {{__('new.can_take')}} 1 {{__('new.order_one')}}</li>
                         <li class="list-group-item">{{ __('modal.level') }} 3 - {{ __('modal.order') }}
-                            4 {{ __('modal.order_after') }}</li>
-                        <li class="list-group-item">{{ __('modal.level') }} 4 - {{ __('modal.all') }}</li>
-                        <li class="list-group-item">{{ __('modal.level') }} 5 - {{ __('modal.all_5') }}</li>
+                            4 {{ __('modal.order_after') }}. {{__('new.can_take')}} 2 {{__('new.orders_one')}}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 4 - {{ __('modal.all') }}. {{__('new.can_take')}} 2 {{__('new.orders_one')}}</li>
+                        <li class="list-group-item">{{ __('modal.level') }} 5 - {{ __('modal.all_5') }}. {{__('new.can_take')}} 3 {{__('new.orders_one')}}</li>
                     </ol>
                     <p>{{ __('modal.note') }}</p>
                 </div>

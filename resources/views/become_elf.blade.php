@@ -4,10 +4,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1>{{__('app.be_elf')}}</h1>
-                <h4>{{__('app.elf_text')}}</h4>
                 @auth
                     @if (!Auth::user()->is_elf)
+                        <h1>{{__('app.be_elf')}}</h1>
+                        <h4>{{__('app.elf_text')}}</h4>
                         @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! \Illuminate\Support\Facades\Auth::user()->hasVerifiedEmail())
                             <p>{{__('app.elf_confirm')}}</p>
                             <button type="button" class="btn btn-sm btn-outline-primary rounded-md"
@@ -22,6 +22,14 @@
                                 <button type="submit" class="btn btn-primary">{{__('app.elf_yes')}}</button>
                             </form>
                         @endif
+                    @else
+                        <h1>{{__('new.be_elf')}}</h1>
+                        <h4>{{__('new.elf_text')}}</h4>
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-md"
+                                data-bs-toggle="modal"
+                                data-bs-target="#emailVerificationModal">
+                            {{ __('auth.verify_email') }}
+                        </button>
                     @endif
                 @endauth
             </div>
