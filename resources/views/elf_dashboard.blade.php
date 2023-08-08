@@ -141,7 +141,7 @@
                                                                         {{__('new.problem_text')}}
                                                                         <div class="form-group">
                                                                             <label for="problemDescription"><b>{{__('order.problem_desc')}}</b></label>
-                                                                            <textarea class="form-control" id="problemDescription" name="description" placeholder="{{__('new.problem')}}" rows="3"></textarea>
+                                                                            <textarea class="form-control" id="problemDescription" required name="description" placeholder="{{__('new.problem')}}" rows="3"></textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">

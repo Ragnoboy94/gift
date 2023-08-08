@@ -102,11 +102,12 @@
                                                 <div class="alert alert-danger" role="alert">
                                                     {{__('order.order_block')}}.
                                                 </div>
+                                                {{__('new.problem_text1')}}
                                                 <form method="POST" action="{{ route('order-problem.store', $order->id) }}">
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="problemDescription">{{__('order.problem_desc')}}</label>
-                                                        <textarea class="form-control" id="problemDescription" name="description" rows="3"></textarea>
+                                                        <textarea class="form-control" id="problemDescription" required name="description" placeholder="{{__('order.problem')}}" rows="3"></textarea>
                                                     </div>
                                                     <input type="hidden" name="order_id" id="orderId" value="">
                                                     <div class="modal-footer">
