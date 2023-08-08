@@ -38,15 +38,25 @@ class ElfController extends Controller
     public function takeOrder($order_id)
     {
         $user = Auth::user();
-
+        $role_users = $user->role_user;
+        $role_user = $role_users->first(function ($role_user) {
+            return $role_user->role->name === 'elf';
+        });
+        $order_count = Order::where('elf_id' , $user->id)->whereIN('status_id', [
+            OrderStatus::where('name', 'in_progress')->first()->id,
+            OrderStatus::where('name', 'ready_for_delivery')->first()->id])->count();
         $order = Order::findOrFail($order_id);
         $activeStatus = OrderStatus::where('name', 'active')->first();
 
         if ($order->status_id == $activeStatus->id && !$order->elf_id) {
-            $inProgressStatus = OrderStatus::where('name', 'in_progress')->first();
-            $order->status_id = $inProgressStatus->id;
-            $order->elf_id = $user->id;
-            $order->save();
+            if ($order_count == 0 || ($order_count == 1 && $role_user->rating >= 3) || ($order_count == 2 && $role_user->rating >= 5)){
+                $inProgressStatus = OrderStatus::where('name', 'in_progress')->first();
+                $order->status_id = $inProgressStatus->id;
+                $order->elf_id = $user->id;
+                $order->save();
+            }else{
+                return redirect()->route('elf-dashboard')->withErrors(['error' => __('new.error1')]);
+            }
 
             return redirect()->route('elf-dashboard')->with('message', __('order.order_take_success'));
         }

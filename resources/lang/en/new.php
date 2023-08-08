@@ -7,4 +7,5 @@ return [
     'can_take'=>'You can take',
     'order_one'=>'order at a time',
     'orders_one'=>'order at a time',
+    'error1'=>'Your level does not allow you to take more orders.',
 ];
