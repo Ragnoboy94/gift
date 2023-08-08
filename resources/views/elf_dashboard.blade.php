@@ -30,21 +30,27 @@
                                              style="background-image: url('images/{{ pathinfo($order->celebration->image, PATHINFO_FILENAME)}}_small.webp'); background-size: cover; background-position: center;">
                                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5);">
                                                 <h5 class="card-title text-white"
-                                                    style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.order')}}
+                                                    style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);">
+                                                    <b>{{__('trans.order')}}
                                                         ID: {{ $order->order_number }}</b></h5>
                                                 <div class="card-text text-white lead"
-                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.summa_gift1')}}: {{ round($order->sum_work) }} <span class="rublesText"
-                                                                                                     data-sum="{{ $order->sum_work }}"></span></b>
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);">
+                                                    <b>{{__('trans.summa_gift1')}}: {{ round($order->sum_work) }} <span
+                                                            class="rublesText"
+                                                            data-sum="{{ $order->sum_work }}"></span></b>
                                                 </div>
                                                 <div class="card-text text-white"
-                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.for_work')}}: {{ round($order->sum_elf) }} <span class="rublesText"
-                                                                                                   data-sum="{{ $order->sum_elf }}"></span></b>
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);">
+                                                    <b>{{__('trans.for_work')}}: {{ round($order->sum_elf) }} <span
+                                                            class="rublesText"
+                                                            data-sum="{{ $order->sum_elf }}"></span></b>
                                                 </div>
                                                 <div class="card-text text-white lead"
                                                      style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);">
                                                     <b>{{__('trans.celebr')}}: {{ $order->celebration->name }}</b></div>
                                                 <div class="card-text text-white"
-                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);"><b>{{__('trans.data')}}:
+                                                     style="text-shadow: 3px 3px 4px rgba(2, 2, 2, 0.7);">
+                                                    <b>{{__('trans.data')}}:
                                                         {{__('trans.order_for')}} @if($order->gender == 'male')
                                                             {{__('trans.man')}}
                                                         @else
@@ -53,75 +59,121 @@
                                                 @if($order->status->name == 'cancelled_by_customer')
                                                     <div class="tooltip-container bg-primary text-white">
                                                         {{__('trans.status_order')}}: {{ $order->status->display_name }}
-                                                        <div class="tooltip-text" data-tooltip>{{__('trans.status_text1')}}
+                                                        <div class="tooltip-text"
+                                                             data-tooltip>{{__('trans.status_text1')}}
                                                         </div>
                                                     </div>
                                                 @elseif($order->status->name == 'finished')
                                                     <div class="tooltip-container bg-primary text-white">
                                                         {{__('trans.status_order')}}: {{ $order->status->display_name }}
-                                                        <div class="tooltip-text" data-tooltip>{{__('trans.status_text2')}}
+                                                        <div class="tooltip-text"
+                                                             data-tooltip>{{__('trans.status_text2')}}
                                                         </div>
                                                     </div>
                                                     @if($order->status->name == 'finished' && !$order->paid &&
                                                     Auth::user()->id == $order->elf_id)
                                                         <div class="row">
-                                                            <button type="button" class="btn btn-success my-2"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#orderConfirmationModal">
-                                                                {{__('trans.money_here')}}.
-                                                            </button>
-                                                            @endif
-                                                        </div>
-                                                        <div class="modal fade" id="orderConfirmationModal"
-                                                             tabindex="-1"
-                                                             aria-labelledby="orderConfirmationModalLabel"
-                                                             aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title"
-                                                                            id="orderConfirmationModalLabel">
-                                                                            {{__('trans.yes_money')}}</h5>
-                                                                        <button type="button" class="btn-close"
-                                                                                data-bs-dismiss="modal"
-                                                                                aria-label="Close"></button>
-                                                                    </div>
-                                                                    <form method="POST"
-                                                                          action="{{ route('orders.mark_as_paid', $order->id) }}">
-                                                                        @csrf
-                                                                        <div class="modal-body">
-                                                                            {{__('trans.status_text3')}}
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <button type="submit"
-                                                                                    class="btn btn-primary">
-                                                                                {{__('trans.yes_order')}}
-                                                                            </button>
-                                                                            <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">{{__('api-tokens.close')}}
-                                                                            </button>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
+                                                            <div class="col-lg-6">
+                                                                <button type="button"
+                                                                        class="btn btn-success my-2  form-control"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#orderConfirmationModal">{{__('trans.money_here')}}</button>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <button type="button"
+                                                                        class="btn btn-warning my-2 form-control"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#orderproblemModal">{{__('new.problem')}}</button>
                                                             </div>
                                                         </div>
-                                                    @elseif($order->status->name == 'ready_for_delivery')
-                                                        <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
-                                                           class="btn btn-primary mb-2">
-                                                            {{__('trans.connect')}}
-                                                        </a>
-                                                    @else
-                                                        <a href="{{ route('send-order-ready', ['orderId' => $order->id]) }}"
-                                                           class="btn btn-primary update-order mb-2"
-                                                           onclick="return confirm('{{__('trans.order_done_text1')}}')">
-                                                            {{__('trans.order_done')}}
-                                                        </a>
-                                                        <br>
-                                                        <a href="{{ route('elf.cancel', ['orderId' => $order->id]) }}"
-                                                           class="btn btn-danger"
-                                                           onclick="return confirm('{{__('trans.order_done_text2')}}')">{{__('trans.cancel_order')}}</a>
                                                     @endif
+                                                    <div class="modal fade" id="orderConfirmationModal"
+                                                         tabindex="-1"
+                                                         aria-labelledby="orderConfirmationModalLabel"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="orderConfirmationModalLabel">
+                                                                        {{__('trans.yes_money')}}</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <form method="POST"
+                                                                      action="{{ route('orders.mark_as_paid', $order->id) }}">
+                                                                    @csrf
+                                                                    <div class="modal-body">
+                                                                        {{__('trans.status_text3')}}
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit"
+                                                                                class="btn btn-primary">
+                                                                            {{__('trans.yes_order')}}
+                                                                        </button>
+                                                                        <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-bs-dismiss="modal">{{__('api-tokens.close')}}
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal fade" id="orderproblemModal"
+                                                         tabindex="-1"
+                                                         aria-labelledby="orderproblemModalLabel"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="orderproblemModalLabel">
+                                                                        {{__('new.problem')}}</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <form method="POST" action="{{ route('order-problem.store', $order->id) }}">
+                                                                    @csrf
+                                                                    <div class="modal-body">
+                                                                        {{__('new.problem_text')}}
+                                                                        <div class="form-group">
+                                                                            <label for="problemDescription"><b>{{__('order.problem_desc')}}</b></label>
+                                                                            <textarea class="form-control" id="problemDescription" name="description" placeholder="{{__('new.problem')}}" rows="3"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit"
+                                                                                class="btn btn-primary">
+                                                                            {{__('order.send_problem')}}
+                                                                        </button>
+                                                                        <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-bs-dismiss="modal">{{__('api-tokens.close')}}
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @elseif($order->status->name == 'ready_for_delivery')
+                                                    <a href="{{ route('chat.show', ['orderId' => $order->id]) }}"
+                                                       class="btn btn-primary mb-2">
+                                                        {{__('trans.connect')}}
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('send-order-ready', ['orderId' => $order->id]) }}"
+                                                       class="btn btn-primary update-order mb-2"
+                                                       onclick="return confirm('{{__('trans.order_done_text1')}}')">
+                                                        {{__('trans.order_done')}}
+                                                    </a>
+                                                    <br>
+                                                    <a href="{{ route('elf.cancel', ['orderId' => $order->id]) }}"
+                                                       class="btn btn-danger"
+                                                       onclick="return confirm('{{__('trans.order_done_text2')}}')">{{__('trans.cancel_order')}}</a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -203,6 +255,7 @@
                         });
 
                 }
+
                 function showOrdersForCity(centerCoords) {
                     const ordersContainer = document.getElementById('ordersContainer');
                     ordersContainer.innerHTML = '';

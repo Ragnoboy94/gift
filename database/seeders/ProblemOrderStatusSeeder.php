@@ -16,6 +16,7 @@ class ProblemOrderStatusSeeder extends Seeder
         DB::table('order_statuses')->insert([
             'name' => 'problem_with_order',
             'display_name' => 'Проблема с заказом',
+            'display_name_en' => 'Problem with order',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
