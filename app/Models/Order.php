@@ -43,4 +43,8 @@ class Order extends Model
     {
         return $this->hasMany(OrderFile::class);
     }
+    public function problems()
+    {
+        return $this->hasMany(OrderProblem::class);
+    }
 }

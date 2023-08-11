@@ -470,7 +470,7 @@
                     </li>
                 @else
                     @if (Auth::user() && Auth::user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                        <a class="btn btn-outline-light text-black mt-2" href="{{ route('admin.dashboard') }}">Панель</br>Администратора</a>
                     @endif
                     <button class="btn btn-outline-light text-black mt-1" type="button" data-url="{{ route('orders.active_count') }}" onclick="location.href='{{ route('orders.my_orders') }}'">
 

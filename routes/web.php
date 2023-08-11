@@ -72,6 +72,11 @@ Route::middleware([
 ])->group(function () {
     Route::get('/admin-dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/translate/{sourceLanguage}', [\App\Http\Controllers\AdminController::class, 'generateLanguagePacks'])->name('translate.generate');
+    Route::get('/admin/unresolved-problems', [\App\Http\Controllers\OrderProblemListController::class, 'index'])->name('problem.list_unresolved');
+    Route::get('/admin/conversations', [\App\Http\Controllers\AdminController::class, 'conversations'])->name('admin.conversations');
+    Route::get('/admin/statistics', [\App\Http\Controllers\AdminController::class, 'allStatistics'])->name('admin.statistics');
+    Route::post('/admin/problem/{problem}/resolve', [\App\Http\Controllers\OrderProblemListController::class, 'resolve'])->name('problem.resolve');
+
 });
 
 Route::get('/order/confirm/{orderId}', function () {
