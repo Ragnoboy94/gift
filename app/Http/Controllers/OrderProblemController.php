@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderProblem;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderProblemController extends Controller
 {
@@ -28,7 +29,11 @@ class OrderProblemController extends Controller
             'resolved' => false,
         ]);
 
-        // Перенаправление на страницу моих заказов
-        return redirect()->route('orders.my_orders')->with('message', 'Проблема зарегистрирована. Ожидайте решения');;
+        if ($order->user_id == Auth::user()->id) {
+            // Перенаправление на страницу моих заказов
+            return redirect()->route('orders.my_orders')->with('message', 'Проблема зарегистрирована. Ожидайте решения');
+        }else{
+            return redirect()->route('elf-dashboard')->with('message', 'Проблема зарегистрирована. Ожидайте решения');
+        }
     }
 }
