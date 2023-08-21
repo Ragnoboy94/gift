@@ -229,7 +229,7 @@ class OrderController extends Controller
             if (session()->get('app_locale') == 'en') {
                 $order->status->display_name = $order->status->display_name_en;
             }
-            $order->user_id =  $user->id;
+            $order->user_t_id = $user->id;
             if ($order->status_id == 8 && $order->problems->resolved && $order->problems->user_id == $user->id){
                 $order->comment = $order->problems->comments->comment;
             }

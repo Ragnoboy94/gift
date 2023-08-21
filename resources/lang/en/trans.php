@@ -36,4 +36,5 @@ return [
     'take_work'=>'Take to work',
     'confirm'=>'Confirmation',
     'confirm_text'=>'By taking an order, you confirm that if you refuse it for your own reasons, your rating will be lowered. The order is expected to be completed on time, and the gift amount should be equal to or slightly less than the announced amount. Also, all purchases must have confirmation in the form of a receipt. Registration remains at your discretion and can be included in the cost of the set upon presentation of the receipt. Everything that is done in excess of this will be regarded as goodwill, and the demand for payment from the customer for it will be reflected in the rating.',
-];
+    'status_text 4'=>'Wait for the administration\'s decision.',
+    ];

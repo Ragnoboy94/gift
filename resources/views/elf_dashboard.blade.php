@@ -63,6 +63,65 @@
                                                              data-tooltip>{{__('trans.status_text1')}}
                                                         </div>
                                                     </div>
+                                                @elseif($order->status->name == 'problem_with_order')
+                                                    <div class="tooltip-container bg-primary text-white">
+                                                        {{__('trans.status_order')}}: {{ $order->status->display_name }}
+                                                        <div class="tooltip-text"
+                                                             data-tooltip>{{__('trans.status_text4')}}
+                                                        </div>
+                                                    </div>
+                                                    @if($order->problems->resolved && $order->problems->user_id == $order->user_t_id)
+                                                        <p class="p-1 bg-primary rounded text-white"><b>{{__('order.answer_to_problem')}}:</b> {{$order->comment}}</p>
+                                                        @if (!$order->paid && $order->user_t_id == $order->elf_id)
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <button type="button"
+                                                                            class="btn btn-success my-2  form-control"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#orderConfirmationModal">{{__('trans.money_here')}}</button>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <a href="{{ route('elf.cancel', ['orderId' => $order->id]) }}"
+                                                                       class="btn btn-danger my-2  form-control"
+                                                                       onclick="return confirm('{{__('trans.order_done_text2')}}')">{{__('trans.cancel_order')}}</a>
+                                                                </div>
+                                                            </div>
+                                                        <div class="modal fade" id="orderConfirmationModal"
+                                                             tabindex="-1"
+                                                             aria-labelledby="orderConfirmationModalLabel"
+                                                             aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="orderConfirmationModalLabel">
+                                                                            {{__('trans.yes_money')}}</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                    </div>
+                                                                    <form method="POST"
+                                                                          action="{{ route('orders.mark_as_paid', $order->id) }}">
+                                                                        @csrf
+                                                                        <div class="modal-body">
+                                                                            {{__('trans.status_text3')}}
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary">
+                                                                                {{__('trans.yes_order')}}
+                                                                            </button>
+                                                                            <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">{{__('api-tokens.close')}}
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endif
+                                                    @endif
                                                 @elseif($order->status->name == 'finished')
                                                     <div class="tooltip-container bg-primary text-white">
                                                         {{__('trans.status_order')}}: {{ $order->status->display_name }}

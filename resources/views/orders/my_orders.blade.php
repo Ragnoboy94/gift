@@ -47,7 +47,7 @@
                                     data-bs-target="#cardcancelOrderModal-{{ $order->id }}">
                                 {{__('trans.cancel_order')}}
                             </button>
-                        @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                        @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_t_id)
                             <p class="bg-dark rounded p-1">{{__('order.answer_to_problem')}}: {{$order->comment}}</p>
                             <button type="button" class="btn btn-primary form-control" data-bs-toggle="modal"
                                     data-bs-target="#CardorderConfirmationModal-{{ $order->id }}">
@@ -102,7 +102,7 @@
                                     {{__('order.status_text4')}}
                                 @elseif($order->status->name == 'in_progress')
                                     {{__('order.status_text2')}}
-                                @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                                @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_t_id)
                                     {{__('order.status_text5')}}
                                 @else
                                     {{__('order.status_text3')}}
@@ -164,7 +164,7 @@
                                     {{__('trans.cancel_order')}}
                                 </button>
 
-                            @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                            @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_t_id)
                                 <p class="p-1"><b>{{__('order.answer_to_problem')}}:</b> {{$order->comment}}</p>
                                     <button type="button" class="btn btn-primary form-control" data-bs-toggle="modal"
                                             data-bs-target="#orderConfirmationModal-{{ $order->id }}">
@@ -219,7 +219,7 @@
                                         {{__('order.status_text4')}}
                                     @elseif($order->status->name == 'in_progress')
                                         {{__('order.status_text2')}}
-                                    @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                                    @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_t_id)
                                         {{__('order.status_text5')}}
                                     @else
                                         {{__('order.status_text3')}}

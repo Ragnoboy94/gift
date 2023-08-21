@@ -101,6 +101,7 @@ class HomeController extends Controller
             ->with(['user', 'celebration'])->get();
         $recentOrders = Order::whereIn('status_id', [
             OrderStatus::where('name', 'cancelled_by_customer')->first()->id,
+            OrderStatus::where('name', 'problem_with_order')->first()->id,
         ])->where('elf_id', $user_id)
             ->where('updated_at', '>', now()->subDays(3))
             ->with(['user', 'celebration'])->get();
@@ -112,8 +113,15 @@ class HomeController extends Controller
 
             $order->sum_elf = $sum_elf;
             $order->sum_work = $sum_work;
+            $order->user_t_id = $user_id;
+            if (session()->get('app_locale') == 'en') {
+                $order->status->display_name = $order->status->display_name_en;
+            }
             if (session()->get('app_locale') == 'en') {
                 $order->celebration->name = app(CelebrationController::class)->getCelebrationData($order->celebration_id)['name'];
+            }
+            if ($order->status_id == 8 && $order->problems->resolved && $order->problems->user_id == $user->id){
+                $order->comment = $order->problems->comments->comment;
             }
         }
 
