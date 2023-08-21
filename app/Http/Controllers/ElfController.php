@@ -111,7 +111,7 @@ class ElfController extends Controller
             $order->elf_id = null;
             $order->save();
         }elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved){
-            $statusName = 'cancelled_by_customer';
+            $statusName = 'cancelled_by_elf';
             $order->status_id = OrderStatus::where('name', $statusName)->first()->id;
             $order->save();
         }

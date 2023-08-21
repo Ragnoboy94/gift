@@ -57,14 +57,14 @@
                                                             {{__('trans.woman')}}
                                                         @endif. {{ $order->hobby }}</b></div>
                                                 @if($order->status->name == 'cancelled_by_customer')
-                                                    <div class="tooltip-container bg-primary text-white">
+                                                    <div class="tooltip-container bg-primary text-white rounded p-1">
                                                         {{__('trans.status_order')}}: {{ $order->status->display_name }}
                                                         <div class="tooltip-text"
                                                              data-tooltip>{{__('trans.status_text1')}}
                                                         </div>
                                                     </div>
                                                 @elseif($order->status->name == 'problem_with_order')
-                                                    <div class="tooltip-container bg-primary text-white">
+                                                    <div class="tooltip-container bg-primary text-white rounded p-1">
                                                         {{__('trans.status_order')}}: {{ $order->status->display_name }}
                                                         <div class="tooltip-text"
                                                              data-tooltip>{{__('trans.status_text4')}}
@@ -83,7 +83,7 @@
                                                                 <div class="col-lg-6">
                                                                     <a href="{{ route('elf.cancel', ['orderId' => $order->id]) }}"
                                                                        class="btn btn-danger my-2  form-control"
-                                                                       onclick="return confirm('{{__('trans.order_done_text2')}}')">{{__('trans.cancel_order')}}</a>
+                                                                       onclick="return confirm('{{__('trans.order_done_text3')}}')">{{__('trans.cancel_order')}}</a>
                                                                 </div>
                                                             </div>
                                                         <div class="modal fade" id="orderConfirmationModal"
@@ -104,7 +104,7 @@
                                                                           action="{{ route('orders.mark_as_paid', $order->id) }}">
                                                                         @csrf
                                                                         <div class="modal-body">
-                                                                            {{__('trans.status_text3')}}
+                                                                            {{__('trans.status_text5')}}
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <button type="submit"
@@ -123,7 +123,7 @@
                                                         @endif
                                                     @endif
                                                 @elseif($order->status->name == 'finished')
-                                                    <div class="tooltip-container bg-primary text-white">
+                                                    <div class="tooltip-container bg-primary text-white rounded  p-1">
                                                         {{__('trans.status_order')}}: {{ $order->status->display_name }}
                                                         <div class="tooltip-text"
                                                              data-tooltip>{{__('trans.status_text2')}}

@@ -368,27 +368,30 @@ class OrderController extends Controller
 
         $order->paid = true;
         $order->save();
-
         $finishedStatus = OrderStatus::where('name', 'finished')->first();
-        $user = User::find($order->user_id);
-        $role_user = $user->role_user->first();
+        if ($order->status->name != 'problem_with_order') {
+            $user = User::find($order->user_id);
+            $role_user = $user->role_user->first();
 
-        // Получаем количество заказов, завершенных этим пользователем в этом месяце
-        $completed_orders_this_month = Order::where('user_id', $user->id)
-            ->where('status_id', $finishedStatus->id)
-            ->whereMonth('updated_at', now()->month)
-            ->count();
+            // Получаем количество заказов, завершенных этим пользователем в этом месяце
+            $completed_orders_this_month = Order::where('user_id', $user->id)
+                ->where('status_id', $finishedStatus->id)
+                ->whereMonth('updated_at', now()->month)
+                ->count();
 
-        // Ограничиваем количество успешных заказов для увеличения рейтинга до 5
-        $completed_orders_this_month = min($completed_orders_this_month, 5);
-        if ($completed_orders_this_month == 0) {
-            $completed_orders_this_month = 1;
+            // Ограничиваем количество успешных заказов для увеличения рейтинга до 5
+            $completed_orders_this_month = min($completed_orders_this_month, 5);
+            if ($completed_orders_this_month == 0) {
+                $completed_orders_this_month = 1;
+            }
+            // Увеличиваем рейтинг пользователя
+            $ratingIncrease = 0.2;
+            $role_user->rating += $ratingIncrease * $completed_orders_this_month;
+            $role_user->save();
+        }else{
+            $order->status_id = $finishedStatus->id;
+            $order->save();
         }
-        // Увеличиваем рейтинг пользователя
-        $ratingIncrease = 0.2;
-        $role_user->rating += $ratingIncrease * $completed_orders_this_month;
-        $role_user->save();
-
         return redirect()->route('elf-dashboard')->with('message', __('cont.order_payed'));
     }
 }
