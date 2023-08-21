@@ -229,8 +229,11 @@ class OrderController extends Controller
             if (session()->get('app_locale') == 'en') {
                 $order->status->display_name = $order->status->display_name_en;
             }
+            $order->user_id =  $user->id;
+            if ($order->status_id == 8 && $order->problems->resolved && $order->problems->user_id == $user->id){
+                $order->comment = $order->problems->comments->comment;
+            }
         }
-
         return view('orders.my_orders', compact('orders'));
     }
 
@@ -263,6 +266,10 @@ class OrderController extends Controller
             }
             $role_user->rating -= $ratingDecrease * $cancellations_this_month;
             $role_user->save();
+            $order->status_id = OrderStatus::where('name', $statusName)->first()->id;
+            $order->save();
+        }elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved){
+            $statusName = 'cancelled_by_customer';
             $order->status_id = OrderStatus::where('name', $statusName)->first()->id;
             $order->save();
         }
@@ -320,34 +327,35 @@ class OrderController extends Controller
         $order = Order::findOrFail($orderId);
 
         // Убедитесь, что заказ в правильном статусе перед окончанием
-        $validStatuses = ['ready_for_delivery'];
+        $validStatuses = ['ready_for_delivery','problem_with_order'];
         if (!in_array($order->status->name, $validStatuses)) {
             return redirect()->back()->with('error_message', __('cont.order_not_done'));
         }
         $finishedStatus = OrderStatus::where('name', 'finished')->first();
+        if ($order->status->name != 'problem_with_order'){
 
-        // Увеличиваем рейтинг пользователя
-        $ratingIncrease = 0.2;
 
-        $elf = User::find($order->elf_id);
-        $role_elf = $elf->role_user()->where('role_id', 2)->first();
+            // Увеличиваем рейтинг пользователя
+            $ratingIncrease = 0.2;
 
-        // Получаем количество заказов, завершенных этим эльфом в этом месяце
-        $completed_orders_this_monthelf = Order::where('elf_id', $elf->id)
-            ->where('status_id', $finishedStatus->id)
-            ->whereMonth('updated_at', now()->month)
-            ->count();
+            $elf = User::find($order->elf_id);
+            $role_elf = $elf->role_user()->where('role_id', 2)->first();
 
-        // Ограничиваем количество успешных заказов для увеличения рейтинга до 5
-        $completed_orders_this_monthelf = min($completed_orders_this_monthelf, 5);
-        if ($completed_orders_this_monthelf == 0) {
-            $completed_orders_this_monthelf = 1;
+            // Получаем количество заказов, завершенных этим эльфом в этом месяце
+            $completed_orders_this_monthelf = Order::where('elf_id', $elf->id)
+                ->where('status_id', $finishedStatus->id)
+                ->whereMonth('updated_at', now()->month)
+                ->count();
+
+            // Ограничиваем количество успешных заказов для увеличения рейтинга до 5
+            $completed_orders_this_monthelf = min($completed_orders_this_monthelf, 5);
+            if ($completed_orders_this_monthelf == 0) {
+                $completed_orders_this_monthelf = 1;
+            }
+            // Увеличиваем рейтинг эльфа
+            $role_elf->rating += $ratingIncrease * $completed_orders_this_monthelf;
+            $role_elf->save();
         }
-        // Увеличиваем рейтинг эльфа
-        $role_elf->rating += $ratingIncrease * $completed_orders_this_monthelf;
-        $role_elf->save();
-
-
         $order->status_id = $finishedStatus->id;
         $order->save();
 

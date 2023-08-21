@@ -4,29 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderProblem;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class OrderProblemListController extends Controller
 {
     public function index()
     {
-        $unresolvedProblems = OrderProblem::with('order')->where('resolved', false)->get();
+        $unresolvedProblems = OrderProblem::with('order', 'comments')
+            ->where('resolved', false)
+            ->orderByDesc('created_at') // Сначала самые свежие по дате
+            ->get();
 
-        $problemData = collect($unresolvedProblems)->map(function ($problem) {
+        $resolvedProblems = OrderProblem::with('order', 'comments')
+            ->where('resolved', true)
+            ->orderByDesc('created_at') // Сначала самые свежие по дате
+            ->get();
+
+        $problemData = collect([...$unresolvedProblems, ...$resolvedProblems])->map(function ($problem) {
             $timeAndVariation = $this->getTimeAndVariation($problem->order->created_at, $problem->created_at);
+
+            $comment = null;
+            $resolvedBy = null;
+            $resolvedAt = null;
+
+            if ($problem->resolved) {
+                $comment = $problem->comments;
+                $resolvedBy = $comment->resolved_by;
+                $resolvedAt = $comment->created_at->format('d-m-Y H:i:s');
+
+            }
 
             return [
                 'order' => $problem->order,
                 'description' => $problem->description,
                 'sum' => $problem->order->sum,
-                'orderCreatedAt' => $problem->order->created_at,
-                'problemCreatedAt' => $problem->created_at,
+                'orderCreatedAt' => $problem->order->created_at->format('d-m-Y H:i:s'),
+                'problemCreatedAt' => $problem->created_at->format('d-m-Y H:i:s'),
                 'time' => $timeAndVariation['0'],
                 'variation' => $timeAndVariation['1'],
+                'comments' => $comment ? $comment->comment : null,
+                'resolved' => $problem->resolved,
+                'resolvedBy' => $resolvedBy,
+                'resolvedAt' => $resolvedAt,
             ];
         });
 
         return view('admin.problems.list', compact('problemData'));
     }
+
 
 
     // Метод для вычисления времени и вариации языкового отображения
@@ -85,12 +110,22 @@ class OrderProblemListController extends Controller
 
 
 
-    public function resolve(OrderProblem $problem)
+    public function resolve(OrderProblem $problem, Request $request)
     {
         // Помечаем проблему как решенную
         $problem->resolved = true;
         $problem->save();
 
+        // Сохраняем комментарий
+        $comment = $request->input('comment');
+        if ($comment) {
+            $problem->comments()->create([
+                'comment' => $comment,
+                'resolved_by' => auth()->user()->id,
+            ]);
+        }
+
         return redirect()->back()->with('message', 'Проблема помечена как решенная.');
     }
+
 }

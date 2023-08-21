@@ -45,6 +45,6 @@ class Order extends Model
     }
     public function problems()
     {
-        return $this->hasMany(OrderProblem::class);
+        return $this->hasOne(OrderProblem::class);
     }
 }

@@ -28,12 +28,24 @@
                         {{ $data['time'] }} {{ $data['variation'] }}
                     </td>
                     <td>
-                        @if (!$data['order']->resolved)
+                        @if (!$data['resolved'])
                             <form action="{{ route('problem.resolve', $data['order']->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-success">Пометить как решенную</button>
+                                <div class="input-group">
+                                    <input type="text" name="comment" class="form-control" required placeholder="Введите комментарий">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-success">Пометить как решенную</button>
+                                    </div>
+                                </div>
                             </form>
+                        @else
+                            <div>
+                                <p>Комментарий: {{ $data['comments'] }}</p>
+                                <p>Решено пользователем: {{ $data['resolvedBy'] }}</p>
+                                <p>Дата решения: {{ $data['resolvedAt'] }}</p>
+                            </div>
                         @endif
+
                     </td>
                 </tr>
             @endforeach

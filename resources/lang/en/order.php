@@ -38,4 +38,7 @@ return [
     'description'=>'Description',
     'idea'=>'I came up with an idea for a football fan kit',
     'inter_mass'=>'Enter your message',
+    'order_info3'=>'Please confirm that the product has been received, albeit with identified problems.',
+    'status_text5'=>'You confirm that you refuse the order due to the identified problem. In this case, the collected order must be returned to the contractor, if such an action took place.',
+    'answer_to_problem'=>'The answer to the problem',
     ];

@@ -110,6 +110,10 @@ class ElfController extends Controller
             $order->status_id = OrderStatus::where('name', $statusName)->first()->id;
             $order->elf_id = null;
             $order->save();
+        }elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved){
+            $statusName = 'cancelled_by_customer';
+            $order->status_id = OrderStatus::where('name', $statusName)->first()->id;
+            $order->save();
         }
 
         return redirect()->route('elf-dashboard')->with('message', __('cont.cancel_success'));

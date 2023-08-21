@@ -47,8 +47,43 @@
                                     data-bs-target="#cardcancelOrderModal-{{ $order->id }}">
                                 {{__('trans.cancel_order')}}
                             </button>
+                        @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                            <p class="bg-dark rounded p-1">{{__('order.answer_to_problem')}}: {{$order->comment}}</p>
+                            <button type="button" class="btn btn-primary form-control" data-bs-toggle="modal"
+                                    data-bs-target="#CardorderConfirmationModal-{{ $order->id }}">
+                                {{__('order.order_taken')}}
+                            </button>
+                            <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal"
+                                    data-bs-target="#cardcancelOrderModal-{{ $order->id }}">
+                                {{__('trans.cancel_order')}}
+                            </button>
 
                         @endif
+                    </div>
+                </div>
+                <div class="modal fade" id="CardorderConfirmationModal-{{ $order->id }}" tabindex="-1"
+                     aria-labelledby="CardorderConfirmationModalLabel-{{ $order->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="CardorderConfirmationModalLabel">{{__('order.confirm_taken')}}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{__('order.order_info3')}}
+                            </div>
+                            <div class="modal-footer">
+                                <form method="POST" action="{{ route('orders.finish', $order->id) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">{{__('app.confirm')}}</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    {{__('api-tokens.close')}}
+                                </button>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
                 <div class="modal fade" id="cardcancelOrderModal-{{ $order->id }}" tabindex="-1" role="dialog"
@@ -67,6 +102,8 @@
                                     {{__('order.status_text4')}}
                                 @elseif($order->status->name == 'in_progress')
                                     {{__('order.status_text2')}}
+                                @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                                    {{__('order.status_text5')}}
                                 @else
                                     {{__('order.status_text3')}}
                                 @endif
@@ -127,6 +164,42 @@
                                     {{__('trans.cancel_order')}}
                                 </button>
 
+                            @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                                <p class="p-1"><b>{{__('order.answer_to_problem')}}:</b> {{$order->comment}}</p>
+                                    <button type="button" class="btn btn-primary form-control" data-bs-toggle="modal"
+                                            data-bs-target="#orderConfirmationModal-{{ $order->id }}">
+                                        {{__('order.order_taken')}}
+                                    </button>
+                                <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal"
+                                        data-bs-target="#cancelOrderModal-{{ $order->id }}">
+                                    {{__('trans.cancel_order')}}
+                                </button>
+
+                                <div class="modal fade" id="orderConfirmationModal-{{ $order->id }}" tabindex="-1"
+                                     aria-labelledby="orderConfirmationModalLabel-{{ $order->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="orderConfirmationModalLabel">{{__('order.confirm_taken')}}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {{__('order.order_info3')}}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form method="POST" action="{{ route('orders.finish', $order->id) }}">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary">{{__('app.confirm')}}</button>
+                                                </form>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    {{__('api-tokens.close')}}
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
                         </td>
                     </tr>
@@ -146,6 +219,8 @@
                                         {{__('order.status_text4')}}
                                     @elseif($order->status->name == 'in_progress')
                                         {{__('order.status_text2')}}
+                                    @elseif ($order->status->name == 'problem_with_order' && $order->problems->resolved && $order->problems->user_id == $order->user_id)
+                                        {{__('order.status_text5')}}
                                     @else
                                         {{__('order.status_text3')}}
                                     @endif
