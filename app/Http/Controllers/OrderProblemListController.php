@@ -35,6 +35,7 @@ class OrderProblemListController extends Controller
             }
 
             return [
+                'problem_id' => $problem->id,
                 'order' => $problem->order,
                 'description' => $problem->description,
                 'sum' => $problem->order->sum,
@@ -113,6 +114,7 @@ class OrderProblemListController extends Controller
     public function resolve(OrderProblem $problem, Request $request)
     {
         // Помечаем проблему как решенную
+
         $problem->resolved = true;
         $problem->save();
 
