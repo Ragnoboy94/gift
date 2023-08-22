@@ -47,6 +47,7 @@ class OrderProblemListController extends Controller
                 'resolved' => $problem->resolved,
                 'resolvedBy' => $resolvedBy,
                 'resolvedAt' => $resolvedAt,
+                'images'=>$problem->order->files,
             ];
         });
 
