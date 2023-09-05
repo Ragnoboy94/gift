@@ -49,13 +49,15 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
-                                                @foreach ($data['images'] as $image)
+                                                @forelse ($data['images'] as $image)
                                                     <div class="col-2">
                                                         <a href="{{ $image }}" target="_blank">
                                                             <img src="{{ $image }}" alt="Фото" class="img-thumbnail">
                                                         </a>
                                                     </div>
-                                                @endforeach
+                                                @empty
+                                                    <p>Фотографий нет</p>
+                                                @endforelse
                                             </div>
                                         </div>
                                         <div class="modal-footer">

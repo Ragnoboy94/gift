@@ -22,8 +22,10 @@ Route::get('/celebrations/{celebration}', [\App\Http\Controllers\CelebrationCont
 Route::get('/terms', [\App\Http\Controllers\LegalController::class, 'showTerms'])->name('terms1.show');
 Route::get('/privacy-policy', [\App\Http\Controllers\LegalController::class, 'showPrivacyPolicy'])->name('policy.show');
 Route::get('/become-elf', [\App\Http\Controllers\ElfController::class,'showBecomeElfForm'])->name('become-elf');
-Route::get('/account/delete/confirm/{token}', [\App\Http\Controllers\AccountController::class, 'confirmDeletion'])
-    ->name('confirm-delete');
+Route::get('/account/delete/confirm/{token}', [\App\Http\Controllers\AccountController::class, 'confirmDeletion'])->name('confirm-delete');
+Route::post('/contact', [\App\Http\Controllers\ContactMessageController::class, 'store'])->name('contact.store');
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -76,7 +78,7 @@ Route::middleware([
     Route::get('/admin/conversations', [\App\Http\Controllers\AdminController::class, 'conversations'])->name('admin.conversations');
     Route::get('/admin/statistics', [\App\Http\Controllers\AdminController::class, 'allStatistics'])->name('admin.statistics');
     Route::post('/admin/problem/{problem}/resolve', [\App\Http\Controllers\OrderProblemListController::class, 'resolve'])->name('problem.resolve');
-
+    Route::get('/messages', [\App\Http\Controllers\ContactMessageController::class, 'index'])->name('messages.index');
 });
 
 Route::get('/order/confirm/{orderId}', function () {
