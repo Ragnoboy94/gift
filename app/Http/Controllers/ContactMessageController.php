@@ -22,7 +22,7 @@ class ContactMessageController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect()->back()->with('success', 'Сообщение успешно отправлено!');
+        return redirect()->back()->with('message', 'Сообщение успешно отправлено!');
     }
 
     public function index()

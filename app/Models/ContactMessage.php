@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ContactMessage extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $fillable = ['email', 'message', 'created_at', 'replied'];
 }
