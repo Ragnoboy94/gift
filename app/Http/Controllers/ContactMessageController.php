@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContentEmailMail;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ContactMessageController extends Controller
 {
@@ -16,13 +19,21 @@ class ContactMessageController extends Controller
         ]);
 
         // Создание записи в базе данных
-        ContactMessage::create([
+        $content = ContactMessage::create([
             'email' => $validatedData['email'],
             'message' => $validatedData['message'],
             'created_at' => now(),
         ]);
 
-        return redirect()->back()->with('message', 'Сообщение успешно отправлено!');
+        try {
+            Mail::to("help@gift-secrets.ru")->send(new ContentEmailMail($content));
+            return redirect()->back()->with('message', 'Сообщение успешно отправлено!');
+        } catch (\Exception $e) {
+            Log::error('Error sending email for ID: ' . $content->id . ' - ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Сообщение зарегистрировано!');
+        }
+
+
     }
 
     public function index()
