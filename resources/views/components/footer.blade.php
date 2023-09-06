@@ -15,7 +15,7 @@
             </div>
             <div class="col-auto">
                 <button class="btn btn-outline-secondary btn-sm my-2" data-bs-toggle="modal"
-                        data-bs-target="#contactModal">Связаться с разработчиками
+                        data-bs-target="#contactModal">{{__("cont.contact")}}
                 </button>
             </div>
         </div>
@@ -26,7 +26,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="contactModalLabel">Связаться с разработчиками</h5>
+                <h5 class="modal-title" id="contactModalLabel">{{__("cont.contact")}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
 
             </div>
@@ -37,17 +37,17 @@
 
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="email" required="" placeholder="Email" name="email">
-                        <label for="email">Email адрес</label>
+                        <label for="email">{{__('cont.email')}}</label>
                     </div>
                     <div class="mb-3">
-                        <label for="Description" class="form-label">Введите сообщение</label>
+                        <label for="Description" class="form-label">{{__('cont.input_message')}}</label>
                         <textarea class="form-control" name="message" id="Description" rows="4" required></textarea>
                     </div>
 
                 </div>
                 <div class="modal-header">
                     <div class="text-muted text-sm">
-                        Поддержи проект: хостинг, обновление функционала.
+                        {{__('cont.help')}}
                     </div>
                     <div class="mt-4">
                         <iframe src="https://yoomoney.ru/quickpay/fundraise/button?billNumber=fXL67ACxoEU.230905&"
@@ -57,8 +57,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Отправить</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">{{__('order.send')}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('api-tokens.close')}}</button>
                 </div>
             </form>
         </div>

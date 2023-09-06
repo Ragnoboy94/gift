@@ -17,4 +17,8 @@ return [
 'photo_taken'=>'Photo received!',
     'desc_taken'=>'Description received!',
     'taken_all'=>'Photo and description received!',
+    'contact'=>'Contact the developers',
+    'email'=>'Email address',
+    'input_message'=>'Enter a message',
+    'help'=>'Support the project: hosting, updating functionality.',
   ];
