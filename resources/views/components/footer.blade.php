@@ -49,10 +49,8 @@
                     <div class="text-muted text-sm">
                         {{__('cont.help')}}
                     </div>
-                    <div class="mt-4">
-                        <iframe src="https://yoomoney.ru/quickpay/fundraise/button?billNumber=fXL67ACxoEU.230905&"
-                                width="330" height="50" frameborder="0" allowtransparency="true"
-                                scrolling="no"></iframe>
+                    <div class="mt-4" id="iframeContainer">
+
                     </div>
                 </div>
 
@@ -64,3 +62,25 @@
         </div>
     </div>
 </div>
+<script>
+    var iframeLoaded = false;
+
+
+    document.getElementById('contactModal').addEventListener('show.bs.modal', function () {
+        if (!iframeLoaded) {
+
+            var iframe = document.createElement('iframe');
+            iframe.src = 'https://yoomoney.ru/quickpay/fundraise/button?billNumber=fXL67ACxoEU.230905&';
+            iframe.width = '330';
+            iframe.height = '50';
+            iframe.frameborder = '0';
+            iframe.allowtransparency = 'true';
+            iframe.scrolling = 'no';
+
+
+            document.getElementById('iframeContainer').appendChild(iframe);
+
+            iframeLoaded = true;
+        }
+    });
+</script>
