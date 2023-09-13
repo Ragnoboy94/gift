@@ -34,7 +34,7 @@ return [
     'resend_verification_email' => 'Resend Verification Email',
     'edit_profile' => 'Edit Profile',
     'log_out' => 'Log Out',
-    'hello' => 'Welcome to our gift service!',
+    'hello' => 'Welcome to our Gift secrets!',
     'welcome_text' => 'Order a unique gift for any holiday and get a surprise from the Elf.',
     'order_button' => 'Place an order',
     'login_button' => 'Log in',

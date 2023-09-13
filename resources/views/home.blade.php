@@ -6,7 +6,6 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h1>{{ __('messages.hello') }}</h1>
-                    <p>{{ __('messages.welcome_text') }}</p>
                 </div>
             </div>
             @php
@@ -26,7 +25,46 @@
                     {{ session('message') }}
                 </div>
             @endif
-            <div class="row">
+            <div id="carouselExampleIndicators" class="carousel carousel-dark slide" >
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{asset('images/ord-slide.webp')}}"
+                             srcset="{{asset('images/ord-slide-large.webp')}} 768w, {{asset('images/ord-slide.webp')}} 1920w"
+                             class="d-block w-100" alt="Заказчик">
+                        <div class="carousel-caption d-none d-md-block text-white">
+                            <h2 class="lead">Заказчик</h2>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{asset('images/elf-slide.webp')}}"
+                             srcset="{{asset('images/elf-slide-large.webp')}} 768w, {{asset('images/elf-slide.webp')}} 1920w"
+                             class="d-block w-100" alt="Эльф - исполнитель">
+                        <div class="carousel-caption d-none d-md-block text-white">
+                            <h2 class="lead">Эльф - исполнитель</h2>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{asset('images/gift-slide.webp')}}"
+                             srcset="{{asset('images/gift-slide-large.webp')}} 768w, {{asset('images/gift-slide.webp')}} 1920w"
+                             class="d-block w-100" alt="Сайт">
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <div class="row mt-2">
                 @foreach ($celebrations_3 as $key => $celebration)
                     <div class="col-md-4">
                         <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#celebrationModal{{$key}}">
