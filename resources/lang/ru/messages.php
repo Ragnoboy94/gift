@@ -10,7 +10,7 @@ return [
     'Register' => 'Регистрация',
     'celebration_not_found' => 'Праздник не найден',
     'celebration_not_found_description' => 'Запрашиваемый праздник не был найден.',
-    'inter_order' => 'Войти для оформления заказа.',
+    'inter_order' => 'Войти для оформления заказа',
     'i_agree_to_terms_and_privacy_policy' => 'Получая доступ к ресурсу через любой из сервисов ВКонтаркте или Яндекс вы подтверждаете, что ознакомились с :terms_of_service_d и :privacy_policy_d',
     'terms_of_service_d' => 'Условием использования',
     'privacy_policy_d' => 'Политикой конфиденциальности',
