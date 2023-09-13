@@ -35,23 +35,26 @@
                     <div class="carousel-item active">
                         <img src="{{asset('images/ord-slide.webp')}}"
                              srcset="{{asset('images/ord-slide-large.webp')}} 768w, {{asset('images/ord-slide.webp')}} 1920w"
-                             class="d-block w-100" alt="Заказчик">
-                        <div class="carousel-caption d-none d-md-block text-white">
-                            <h2 class="lead">Заказчик</h2>
+                             class="d-block w-100" alt="{{__('trans.ord_slide')}}">
+                        <div class="carousel-caption d-none d-lg-block text-white">
+                            <h2 class="lead">{{__('trans.ord_slide')}}</h2>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <img src="{{asset('images/elf-slide.webp')}}"
                              srcset="{{asset('images/elf-slide-large.webp')}} 768w, {{asset('images/elf-slide.webp')}} 1920w"
-                             class="d-block w-100" alt="Эльф - исполнитель">
-                        <div class="carousel-caption d-none d-md-block text-white">
-                            <h2 class="lead">Эльф - исполнитель</h2>
+                             class="d-block w-100" alt="{{__('trans.eld_slide')}}">
+                        <div class="carousel-caption d-none d-lg-block text-white">
+                            <h2 class="lead">{{__('trans.eld_slide')}}</h2>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <img src="{{asset('images/gift-slide.webp')}}"
                              srcset="{{asset('images/gift-slide-large.webp')}} 768w, {{asset('images/gift-slide.webp')}} 1920w"
-                             class="d-block w-100" alt="Сайт">
+                             class="d-block w-100" alt="{{__('trans.gift_slide')}}">
+                        <div class="carousel-caption d-none d-lg-block text-white">
+                            <h2 class="lead">{{__('trans.gift_slide')}}</h2>
+                        </div>
                     </div>
                 </div>
 
